@@ -6,6 +6,15 @@ Este repositório organiza o projeto em formato de monorepo para facilitar o des
 
 A ideia deste template e manter cada servico bem separado, mas ainda assim compartilhando configuracoes e processos comuns como lint, formatacao, testes, build e integracao continua.
 
+### Stack inicial
+
+- [![github][github-shield]][github-url]
+- [![github-actions][github-actions-shield]][github-actions-url]
+- [![docker][docker-shield]][docker-url]
+- [![nx][nx-shield]][nx-url]
+- [![node][node-shield]][node-url]
+- [![pnpm][pnpm-shield]][pnpm-url]
+
 ## Estrutura do projeto
 
 A base do projeto esta organizada assim:
@@ -143,3 +152,20 @@ pnpm start
 - Codigo de cada servico fica em `packages/<nome-do-servico>`.
 
 Este README serve como guia inicial para novos colaboradores.
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[github-shield]: https://img.shields.io/badge/github-versioning-000000?style=for-the-badge&logo=github&logoColor=ffffff&labelColor=181717
+[github-url]: https://docs.github.com/en/actions/
+[github-actions-shield]: https://img.shields.io/badge/github%20actions-ci/cd%20pipeline-000000?style=for-the-badge&logo=githubactions&logoColor=ffffff&labelColor=2088FF
+[github-actions-url]: https://docs.github.com/en/actions/
+[nx-shield]: https://img.shields.io/badge/nx-build%20platform-000000?style=for-the-badge&logo=nx&logoColor=ffffff&labelColor=143055
+[nx-url]: https://nx.dev/
+[node-shield]: https://img.shields.io/badge/node-javascript%20runtime%20environment-000000?style=for-the-badge&logo=nodedotjs&logoColor=ffffff&labelColor=5FA04E
+[node-url]: https://pnpm.io/installation/
+[pnpm-shield]: https://img.shields.io/badge/pnpm-node%20package%20manager-000000?style=for-the-badge&logo=pnpm&logoColor=ffffff&labelColor=f69220
+[pnpm-url]: https://pnpm.io/installation/
+[gcp-shield]: https://img.shields.io/badge/google%20cloud-cloud%20provider-000000?style=for-the-badge&logo=googlecloud&logoColor=ffffff&labelColor=4285F4
+[gcp-url]: https://cloud.google.com/
+[docker-shield]: https://img.shields.io/badge/docker-containerization%20platform-000000?style=for-the-badge&logo=docker&logoColor=ffffff&labelColor=2496ED
+[docker-url]: https://docker.com/
