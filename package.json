@@ -1,0 +1,47 @@
+{
+  "name": "@ft_trancendence/root",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@10.6.2",
+  "description": "ecole 42 ft_trancendence project.",
+  "author": "Luiz Henrique <https://github.com/lhenriqu42>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": ">=10.6.2"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint": "nx run-many --target=lint --all",
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+    "commit:check": "commitlint --edit",
+    "test": "nx run-many --target=test --all",
+    "test:watch": "nx run-many --target=test --all --watch",
+    "test:coverage": "nx run-many --target=test --all --code-coverage",
+    "test:ci": "nx run-many --target=test --all --ci --code-coverage",
+    "build": "nx run-many --target=build --all",
+    "build:ci": "nx run-many --target=build --all --ci",
+    "start": "nx run-many --target=start --all",
+    "start:ci": "nx run-many --target=start --all --ci",
+    "start:prod": "nx run-many --target=start --all --prod",
+    "start:prod:ci": "nx run-many --target=start --all --prod --ci",
+    "start:dev": "nx run-many --target=start --all --dev",
+    "start:dev:ci": "nx run-many --target=start --all --dev --ci",
+    "start:debug": "nx run-many --target=start --all --debug",
+    "start:debug:ci": "nx run-many --target=start --all --debug --ci",
+    "start:debug:prod": "nx run-many --target=start --all --debug --prod",
+    "start:debug:prod:ci": "nx run-many --target=start --all --debug --prod --ci",
+    "start:debug:dev": "nx run-many --target=start --all --debug --dev",
+    "start:debug:dev:ci": "nx run-many --target=start --all --debug --dev --ci"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "eslint": "^9.24.0",
+    "eslint-plugin-format": "^1.0.1",
+    "husky": "^9.1.7",
+    "nx": "^20.8.0"
+  }
+}
