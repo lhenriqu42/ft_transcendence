@@ -1,0 +1,4 @@
+CREATE DATABASE auth_db;
+CREATE DATABASE user_db;
+CREATE DATABASE media_db;
+CREATE DATABASE post_db;

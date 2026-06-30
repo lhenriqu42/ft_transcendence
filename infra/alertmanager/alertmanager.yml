@@ -1,0 +1,13 @@
+route:
+  receiver: default
+  group_by: [alertname]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+  - name: default
+    # Exemplo de integração com PagerDuty (conforme diagrama):
+    # pagerduty_configs:
+    #   - service_key: "<SUA_INTEGRATION_KEY_AQUI>"
+    webhook_configs: []
