@@ -42,16 +42,17 @@ services:
     image: redis:7.4-alpine
     container_name: redis-sessions
     <<: *restart_policy
-    command: >
-      redis-server
-      --requirepass ${REDIS_SESSIONS_PASSWORD:-changeme_sessions}
-      --maxmemory 256mb
-      --maxmemory-policy noeviction
-      --appendonly yes
+    environment:
+      REDIS_SESSIONS_AUTH_USERNAME: "${REDIS_SESSIONS_AUTH_USERNAME}"
+      REDIS_SESSIONS_AUTH_PASSWORD: "${REDIS_SESSIONS_AUTH_PASSWORD}"
+      REDIS_SESSIONS_BFF_USERNAME: "${REDIS_SESSIONS_BFF_USERNAME}"
+      REDIS_SESSIONS_BFF_PASSWORD: "${REDIS_SESSIONS_BFF_PASSWORD}"
+    entrypoint: ["/bin/sh", "/usr/local/etc/redis/init-redis.sh"]
     ports:
       - "${REDIS_SESSIONS_PORT:-6379}:6379"
     volumes:
       - redis_sessions_data:/data
+      - ./infra/redis/init-redis.sh:/usr/local/etc/redis/init-redis.sh
     networks:
       - backend
     healthcheck:
