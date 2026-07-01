@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { SessionValidatorService } from './SessionValidator.service';
-import { JwtVerifier } from '../security/jwt-verifier.service';
+import { JwtVerifier } from './jwt-verifier.service';
 import { FastifyRequest } from 'fastify';
 
 function extractBearer(req: FastifyRequest) {
