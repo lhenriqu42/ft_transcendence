@@ -1,0 +1,472 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider      = "prisma-client"
+  output        = "../src/.shared/prisma/generated"
+  moduleFormat  = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ///////////////////////////////////////////////////////////
+// USERS
+// ///////////////////////////////////////////////////////////
+
+model User {
+  id String @id @default(uuid()) @db.Uuid
+
+  email String @unique @db.VarChar(320) // unique já cria índice, não duplicar
+
+  passwordHash String @map("password_hash") @db.VarChar(255)
+
+  emailVerified Boolean @default(false) @map("email_verified")
+
+  accountLocked Boolean @default(false) @map("account_locked")
+
+  failedLoginCount Int @default(0) @map("failed_login_count")
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  updatedAt DateTime @map("updated_at") @db.Timestamptz(6)
+
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz(6)
+
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  devices         Device[]
+  sessions        Session[]
+  refreshTokens   RefreshToken[]
+  oauthAccounts   OauthAccount[]
+  loginHistory    LoginHistory[]
+  mfaCredentials  MfaCredential[]
+  recoveryCodes   RecoveryCode[]
+  apiKeys         ApiKey[]
+  passwordHistory PasswordHistory[]
+
+  @@index([emailVerified])
+  @@index([accountLocked])
+  @@index([deletedAt])
+  // perf: cobre o fluxo de login "email existe? está verificado e não bloqueado?"
+  // sem precisar de dois index scans separados
+  @@index([email, deletedAt])
+  @@map("users")
+}
+
+// ///////////////////////////////////////////////////////////
+// DEVICES
+// ///////////////////////////////////////////////////////////
+
+model Device {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  fingerprintHash String @map("fingerprint_hash") @db.VarChar(64)
+
+  name String? @db.VarChar(100)
+
+  firstSeenAt DateTime @map("first_seen_at") @db.Timestamptz(6)
+
+  lastSeenAt DateTime @map("last_seen_at") @db.Timestamptz(6)
+
+  loginCount Int @default(1) @map("login_count")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  trustedDevices TrustedDevice[]
+  sessions       Session[]
+  loginHistory   LoginHistory[]
+
+  @@unique([userId, fingerprintHash])
+  @@index([userId])
+  @@index([lastSeenAt])
+  // perf: tela "dispositivos ativos" ordenada por uso recente, por usuário
+  @@index([userId, lastSeenAt])
+  @@map("devices")
+}
+
+// ///////////////////////////////////////////////////////////
+// TRUSTED DEVICES
+// ///////////////////////////////////////////////////////////
+
+model TrustedDevice {
+  id String @id @default(uuid()) @db.Uuid
+
+  deviceId String @map("device_id") @db.Uuid
+
+  trustedUntil DateTime? @map("trusted_until") @db.Timestamptz(6)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  reason String? @db.VarChar(100)
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([deviceId])
+  @@index([trustedUntil])
+  // perf: checagem "esse device ainda é confiável?" (ativo, não revogado, não expirado)
+  @@index([deviceId, revokedAt, trustedUntil])
+  @@map("trusted_devices")
+}
+
+// ///////////////////////////////////////////////////////////
+// SESSIONS (histórico / revogação — NÃO é estado vivo)
+// ///////////////////////////////////////////////////////////
+
+model Session {
+  id String @id @default(uuid()) @db.Uuid // mesmo id usado como sufixo de session:{id} no Redis
+
+  userId String @map("user_id") @db.Uuid
+
+  deviceId String @map("device_id") @db.Uuid
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  revokedReason String? @map("revoked_reason") @db.VarChar(100)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  refreshTokens RefreshToken[]
+  loginHistory  LoginHistory[]
+
+  @@index([userId])
+  @@index([deviceId])
+  @@index([revokedAt])
+  // perf: "listar sessões ativas do usuário" (tela de segurança / logout-all)
+  // é a query mais quente desta tabela — vale inclusive considerar um
+  // índice parcial `WHERE revoked_at IS NULL` via SQL raw na migration
+  @@index([userId, revokedAt])
+  @@map("sessions")
+}
+
+// ///////////////////////////////////////////////////////////
+// REFRESH TOKENS
+// ///////////////////////////////////////////////////////////
+
+model RefreshToken {
+  id String @id @default(uuid()) @db.Uuid
+
+  jti String @unique @db.Uuid // JWT ID
+
+  userId String @map("user_id") @db.Uuid
+
+  sessionId String @map("session_id") @db.Uuid
+
+  tokenHash String @map("token_hash") @db.VarChar(255)
+
+  // Rotação de refresh token (detecção de reuse)
+  familyId String @map("family_id") @db.Uuid
+
+  parentTokenId String? @map("parent_token_id") @db.Uuid
+
+  consumed Boolean @default(false)
+
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
+
+  revoked Boolean @default(false)
+
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
+
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  parentToken RefreshToken?  @relation("RefreshTokenRotation", fields: [parentTokenId], references: [id])
+  childTokens RefreshToken[] @relation("RefreshTokenRotation")
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([familyId])
+  @@index([parentTokenId])
+  @@index([revoked, expiresAt])
+  // perf: token_hash é o campo usado no lookup do fluxo de refresh
+  // (a query mais quente e mais sensível a latência desta tabela)
+  @@index([tokenHash])
+  // perf: detecção de reuse percorre a família inteira ordenando por criação
+  @@index([familyId, createdAt])
+  @@map("refresh_tokens")
+}
+
+// ///////////////////////////////////////////////////////////
+// OAUTH
+// ///////////////////////////////////////////////////////////
+
+enum OauthProvider {
+  GOOGLE
+  GITHUB
+  MICROSOFT
+  APPLE
+  DISCORD
+
+  @@map("oauth_provider")
+}
+
+model OauthAccount {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  provider OauthProvider
+
+  providerUserId String @map("provider_user_id") @db.VarChar(255)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId]) // já cria índice único, cobre buscas por provider isolado também
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+// ///////////////////////////////////////////////////////////
+// LOGIN HISTORY
+//
+// Tende a crescer rápido (toda tentativa, sucesso ou falha).
+// Vale particionar por created_at (ex: partição mensal) e/ou
+// política de retenção/arquivamento quando for pra produção.
+// ///////////////////////////////////////////////////////////
+
+enum LoginFailureReason {
+  INVALID_EMAIL
+  INVALID_PASSWORD
+  ACCOUNT_LOCKED
+  EMAIL_NOT_VERIFIED
+  MFA_REQUIRED
+  CAPTCHA_REQUIRED
+  TOKEN_EXPIRED
+  TOKEN_REVOKED
+  UNKNOWN
+
+  @@map("login_failure_reason")
+}
+
+model LoginHistory {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  deviceId String? @map("device_id") @db.Uuid
+
+  sessionId String? @map("session_id") @db.Uuid
+
+  success Boolean
+
+  failureReason LoginFailureReason? @map("failure_reason")
+
+  ip String @db.Inet
+
+  country String? @db.VarChar(100)
+
+  city String? @db.VarChar(100)
+
+  asn String? @db.VarChar(100)
+
+  userAgent String @map("user_agent") @db.Text
+
+  riskScore Int @default(0) @map("risk_score")
+
+  captchaRequired Boolean @default(false) @map("captcha_required")
+
+  mfaRequired Boolean @default(false) @map("mfa_required")
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+
+  session Session? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([deviceId])
+  @@index([sessionId])
+  @@index([success])
+  @@index([createdAt])
+  @@index([ip])
+  // perf: "histórico do usuário" paginado por data — a query mais comum de tela
+  @@index([userId, createdAt])
+  // perf: rate limiting / detecção de brute force por IP em janela de tempo
+  @@index([ip, createdAt])
+  // perf: contagem de falhas recentes por usuário (bloqueio de conta, alertas)
+  // considerar índice parcial `WHERE success = false` via SQL raw na migration
+  @@index([userId, success, createdAt])
+  @@map("login_history")
+}
+
+// ///////////////////////////////////////////////////////////
+// MFA
+// ///////////////////////////////////////////////////////////
+
+enum MfaType {
+  TOTP
+  WEBAUTHN
+
+  @@map("mfa_type")
+}
+
+model MfaCredential {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  type MfaType
+
+  enabled Boolean @default(false)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  updatedAt DateTime @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totpCredential     TotpCredential?
+  webauthnCredential WebauthnCredential?
+
+  @@index([userId])
+  @@index([userId, type])
+  // perf: "quais fatores MFA ativos o usuário tem" — checagem feita a cada login
+  @@index([userId, enabled])
+  @@map("mfa_credentials")
+}
+
+model TotpCredential {
+  id String @id @default(uuid()) @db.Uuid
+
+  credentialId String @unique @map("credential_id") @db.Uuid
+
+  secret String @db.Text
+
+  algorithm String @default("SHA1") @db.VarChar(20)
+
+  digits Int @default(6)
+
+  period Int @default(30)
+
+  credential MfaCredential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+
+  @@map("totp_credentials")
+}
+
+model WebauthnCredential {
+  id String @id @default(uuid()) @db.Uuid
+
+  credentialId String @unique @map("credential_id") @db.Uuid
+
+  webauthnId String @unique @map("webauthn_id") @db.Text
+
+  publicKey String @map("public_key") @db.Text
+
+  signCount BigInt @default(0) @map("sign_count")
+
+  transports String? @db.VarChar(255)
+
+  aaguid String? @db.Uuid
+
+  backedUp Boolean @default(false) @map("backed_up")
+
+  discoverable Boolean @default(true)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  credential MfaCredential @relation(fields: [credentialId], references: [id], onDelete: Cascade)
+
+  @@map("webauthn_credentials")
+}
+
+// ///////////////////////////////////////////////////////////
+// RECOVERY CODES
+//
+// Ligado a user_id (não a uma credencial MFA específica): fallback
+// do usuário como um todo, independente de ter TOTP, WebAuthn ou
+// os dois cadastrados.
+// ///////////////////////////////////////////////////////////
+
+model RecoveryCode {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  codeHash String @map("code_hash") @db.VarChar(255)
+
+  used Boolean @default(false)
+
+  usedAt DateTime? @map("used_at") @db.Timestamptz(6)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  // perf: "quantos códigos não usados restam" — checado no fluxo de MFA fallback
+  @@index([userId, used])
+  @@map("recovery_codes")
+}
+
+// ///////////////////////////////////////////////////////////
+// API KEYS
+// ///////////////////////////////////////////////////////////
+
+model ApiKey {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  name String @db.VarChar(100)
+
+  keyHash String @unique @map("key_hash") @db.VarChar(255) // lookup principal de autenticação por API key
+
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
+
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
+
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  // perf: "listar chaves ativas do usuário" na tela de gerenciamento
+  @@index([userId, revokedAt])
+  @@map("api_keys")
+}
+
+// ///////////////////////////////////////////////////////////
+// PASSWORD HISTORY
+// ///////////////////////////////////////////////////////////
+
+model PasswordHistory {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @map("user_id") @db.Uuid
+
+  passwordHash String @map("password_hash") @db.VarChar(255)
+
+  createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // perf: checagem de "as N últimas senhas" é sempre por usuário + mais recente
+  @@index([userId, createdAt])
+  @@map("password_history")
+}

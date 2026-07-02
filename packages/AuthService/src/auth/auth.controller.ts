@@ -8,16 +8,13 @@ import {
 } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { SecretAuthGuard } from '../.shared/security/auth.guard';
-import * as authServiceInterface from './auth.service.interface';
-import * as authContracts from '../contracts/auth.contracts';
+import * as CI from './contracts/auth.contracts';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 @UseGuards(SecretAuthGuard)
 export class AuthController {
-  constructor(
-    @Inject(authServiceInterface.AUTH_SERVICE)
-    private readonly authService: authServiceInterface.IAuthService,
-  ) {}
+  constructor(@Inject(AuthService) private readonly authService: AuthService) {}
 
   /**
    * Passo 1 do login — BFF chama antes de mostrar o campo de senha.
@@ -25,10 +22,8 @@ export class AuthController {
    */
   @Post('login/challenge')
   @HttpCode(HttpStatus.OK)
-  challenge(
-    @Body() body: authContracts.ChallengeRequest,
-  ): Promise<authContracts.ChallengeResponse> {
-    return this.authService.createChallenge(body);
+  challenge(@Body() body: CI.ChallengeRequest): Promise<CI.ChallengeResponse> {
+    return this.authService.challenge(body);
   }
 
   /**
@@ -37,9 +32,7 @@ export class AuthController {
    */
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(
-    @Body() body: authContracts.LoginRequest,
-  ): Promise<authContracts.LoginResponse> {
+  login(@Body() body: CI.LoginRequest): Promise<CI.LoginResponse> {
     return this.authService.login(body);
   }
 
@@ -48,13 +41,11 @@ export class AuthController {
    * Usa rotation strategy: cada refresh token só pode ser usado uma vez.
    * Se um refresh token já usado aparecer → sinal de roubo → revoga tudo.
    */
-  @Post('refresh')
-  @HttpCode(HttpStatus.OK)
-  refresh(
-    @Body() body: authContracts.RefreshRequest,
-  ): Promise<authContracts.RefreshResponse> {
-    return this.authService.refresh(body);
-  }
+  // @Post('refresh')
+  // @HttpCode(HttpStatus.OK)
+  // refresh(@Body() body: CI.RefreshRequest): Promise<CI.RefreshResponse> {
+  //   return this.authService.refresh(body);
+  // }
 
   /**
    * allDevices omitido ou false → logout da sessão atual
@@ -62,7 +53,13 @@ export class AuthController {
    */
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Body() body: authContracts.LogoutRequest): Promise<void> {
+  logout(@Body() body: CI.LogoutRequest): Promise<void> {
     return this.authService.logout(body);
+  }
+
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  register(@Body() body: CI.RegisterRequest): Promise<CI.RegisterResponse> {
+    return this.authService.register(body);
   }
 }

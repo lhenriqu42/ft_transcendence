@@ -1,7 +1,10 @@
 export interface ChallengeRequest {
   email: string;
+
   userAgent: string;
   ip: string;
+
+  deviceFingerprint?: string;
 }
 
 export interface ChallengeResponse {
@@ -42,6 +45,7 @@ export interface RefreshRequest {
 
 export interface RefreshResponse {
   accessToken: string;
+  refreshToken: string;
   expiresIn: number;
 }
 
@@ -49,4 +53,13 @@ export interface LogoutRequest {
   sessionId: string;
   userId: string;
   allDevices?: boolean; // false → encerra só a sessão atual
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterResponse {
+  userId: string;
 }

@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { FastifyRequest } from 'fastify';
 
@@ -10,8 +15,9 @@ export class SecretAuthGuard implements CanActivate {
 
     const secret = req.headers['x-internal-secret'];
 
-    if (!secret) return false;
-    if (secret !== this.config.get('BFF_SIGNATURE_KEY')) return false;
+    if (!secret) throw new UnauthorizedException();
+    if (secret !== this.config.get('BFF_SIGNATURE_KEY'))
+      throw new UnauthorizedException();
 
     return true;
   }
