@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "oauth_provider" AS ENUM ('GOOGLE', 'GITHUB', 'MICROSOFT', 'APPLE', 'DISCORD');
+CREATE TYPE "oauth_provider" AS ENUM ('GOOGLE', 'GITHUB', 'MICROSOFT', 'APPLE', 'DISCORD', 'ECOLE42');
 
 -- CreateEnum
-CREATE TYPE "login_failure_reason" AS ENUM ('INVALID_EMAIL', 'INVALID_PASSWORD', 'ACCOUNT_LOCKED', 'EMAIL_NOT_VERIFIED', 'MFA_REQUIRED', 'CAPTCHA_REQUIRED', 'TOKEN_EXPIRED', 'TOKEN_REVOKED', 'UNKNOWN');
+CREATE TYPE "login_failure_reason" AS ENUM ('INVALID_CREDENTIALS', 'ACCOUNT_LOCKED', 'MFA_INVALID', 'MFA_REQUIRED', 'MFA_NOT_CONFIGURED', 'INVALID_EMAIL', 'CAPTCHA_REQUIRED', 'CAPTCHA_INVALID', 'UNKNOWN');
 
 -- CreateEnum
 CREATE TYPE "mfa_type" AS ENUM ('TOTP', 'WEBAUTHN');
@@ -102,7 +102,12 @@ CREATE TABLE "login_history" (
     "ip" INET NOT NULL,
     "country" VARCHAR(100),
     "city" VARCHAR(100),
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
     "asn" VARCHAR(100),
+    "org" VARCHAR(100),
+    "isp" VARCHAR(100),
+    "domain" VARCHAR(100),
     "user_agent" TEXT NOT NULL,
     "risk_score" INTEGER NOT NULL DEFAULT 0,
     "captcha_required" BOOLEAN NOT NULL DEFAULT false,

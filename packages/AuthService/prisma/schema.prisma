@@ -215,6 +215,7 @@ enum OauthProvider {
   MICROSOFT
   APPLE
   DISCORD
+  ECOLE42
 
   @@map("oauth_provider")
 }
@@ -246,14 +247,14 @@ model OauthAccount {
 // ///////////////////////////////////////////////////////////
 
 enum LoginFailureReason {
-  INVALID_EMAIL
-  INVALID_PASSWORD
+  INVALID_CREDENTIALS
   ACCOUNT_LOCKED
-  EMAIL_NOT_VERIFIED
+  MFA_INVALID
   MFA_REQUIRED
+  MFA_NOT_CONFIGURED
+  INVALID_EMAIL
   CAPTCHA_REQUIRED
-  TOKEN_EXPIRED
-  TOKEN_REVOKED
+  CAPTCHA_INVALID
   UNKNOWN
 
   @@map("login_failure_reason")
@@ -278,7 +279,17 @@ model LoginHistory {
 
   city String? @db.VarChar(100)
 
+  latitude Float? @db.DoublePrecision
+
+  longitude Float? @db.DoublePrecision
+
   asn String? @db.VarChar(100)
+
+  org String? @db.VarChar(100)
+
+  isp String? @db.VarChar(100)
+
+  domain String? @db.VarChar(100)
 
   userAgent String @map("user_agent") @db.Text
 

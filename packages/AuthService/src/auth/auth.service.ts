@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  HttpException,
   Inject,
   Injectable,
   UnauthorizedException,
@@ -29,6 +30,46 @@ interface AccessTokenPayload {
   roles: string[];
 }
 
+interface IpCtxSuccess {
+  ip: string;
+  sucess: true;
+  connection: {
+    asn: number;
+    isp: string;
+    org: string;
+    domain: string;
+  };
+  country: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+}
+
+interface IpCtxFailure {
+  ip: string;
+  success: false;
+  message: string;
+}
+
+type LoginIpContext = IpCtxSuccess | IpCtxFailure;
+
+interface ChallengePayload {
+  user: {
+    id: string;
+    email: string;
+    passwordHash: string;
+    accountLocked: boolean;
+    failedLoginCount: number;
+    deletedAt: Date | null;
+  };
+  ipContext: LoginIpContext;
+  riskScore: number;
+  requiresCaptcha: boolean;
+  requiresMFA: boolean;
+  userAgent: string;
+  deviceFingerprint?: string;
+}
+
 enum RiskValues {
   // --- CATEGORIA 1: DADOS AUSENTES OU INCOMPLETOS (Sinal de automação/bot) ---
   MISSING_FINGERPRINT = 20,
@@ -52,6 +93,16 @@ enum RiskValues {
   REUSE_REFRESH_TOKEN = 90, // Tentativa de usar um Refresh Token que já foi consumido (indício de roubo de sessão)
 }
 
+class LoginError extends Error {
+  constructor(
+    public httpException: HttpException,
+    public reason: LoginFailureReason,
+    public challengeData: ChallengePayload,
+  ) {
+    super(httpException.message);
+  }
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -67,6 +118,7 @@ export class AuthService {
       where: { email: body.email },
       select: {
         id: true,
+        passwordHash: true,
         accountLocked: true,
         failedLoginCount: true,
         deletedAt: true,
@@ -82,6 +134,7 @@ export class AuthService {
     }
 
     // ------------ RiskScore Calculation ------------
+    const ipContext: LoginIpContext = await this.getIpContext(body.ip);
     let riskScore = 0;
 
     if (!body.ip) riskScore += RiskValues.MISSING_IP;
@@ -145,15 +198,17 @@ export class AuthService {
 
     // Criamos o payload que o método `login` precisará validar na Etapa 2.
     // Guardamos no Redis com TTL nativo de 5 minutos.
-    const challengePayload = {
-      userId: user.id,
-      email: body.email,
+    const challengePayload: ChallengePayload = {
+      user: {
+        ...user,
+        email: body.email,
+      },
       riskScore,
       requiresCaptcha,
       requiresMFA,
-      ip: body.ip,
       userAgent: body.userAgent,
       deviceFingerprint: body.deviceFingerprint,
+      ipContext,
     };
     console.log('challengePayload', challengePayload);
     console.log('redis key', `challenge:${challengeId}`);
@@ -175,124 +230,188 @@ export class AuthService {
   }
 
   async login(body: CI.LoginRequest): Promise<CI.LoginResponse> {
-    // TODO: validar body.challengeId contra o que createChallenge emitiu
-    // (existe? não expirou? captcha/mfa exigidos foram satisfeitos?)
+    const challengeDataRaw = await this.redis.get(
+      `challenge:${body.challengeId}`,
+    );
 
-    const user = await this.prismaService.user.findUnique({
-      where: { email: body.email },
-    });
-
-    // Não revela se o problema foi email inexistente ou senha errada
-    // (evita user enumeration). Também não dá pra logar em login_history
-    // aqui porque a tabela exige user_id not null.
-    if (!user || user.deletedAt) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!challengeDataRaw) {
+      throw new UnauthorizedException('Challenge expired or invalid');
     }
 
-    if (user.accountLocked) {
-      await this.recordLoginHistory({
-        userId: user.id,
-        success: false,
-        failureReason: LoginFailureReason.ACCOUNT_LOCKED,
-        ip: body.ip,
-        userAgent: body.userAgent,
-      });
-      throw new ForbiddenException('Account locked');
-    }
+    try {
+      const challengeData = JSON.parse(challengeDataRaw) as ChallengePayload;
 
-    const passwordValid = await argon2.verify(user.passwordHash, body.password);
+      if (challengeData.user.accountLocked) {
+        throw new LoginError(
+          new ForbiddenException('Account is temporarily locked'),
+          LoginFailureReason.ACCOUNT_LOCKED,
+          challengeData,
+        );
+      }
 
-    if (!passwordValid) {
-      const failedLoginCount = user.failedLoginCount + 1;
-      const shouldLock = failedLoginCount >= MAX_FAILED_LOGIN_ATTEMPTS;
+      // Valida se o email do challenge bate com o email do login
+      if (challengeData.user.email !== body.email) {
+        throw new LoginError(
+          new UnauthorizedException('Invalid challenge for this email'),
+          LoginFailureReason.INVALID_EMAIL,
+          challengeData,
+        );
+      }
 
-      await this.prismaService.user.update({
-        where: { id: user.id },
+      // Valida se o risco do challenge exige captcha e se o token foi fornecido
+      if (challengeData.requiresCaptcha && !body.captchaToken) {
+        throw new LoginError(
+          new UnauthorizedException('Captcha required but not provided'),
+          LoginFailureReason.CAPTCHA_REQUIRED,
+          challengeData,
+        );
+      }
+
+      // Valida se o risco do challenge exige MFA e se o código foi fornecido
+      if (challengeData.requiresMFA && !body.mfaCode) {
+        throw new LoginError(
+          new UnauthorizedException('MFA required but not provided'),
+          LoginFailureReason.MFA_REQUIRED,
+          challengeData,
+        );
+      }
+
+      // Valida se o risco do challenge exige MFA e se o código fornecido é válido
+      if (challengeData.requiresMFA && body.mfaCode) {
+        const mfaCredential = await this.prismaService.mfaCredential.findFirst({
+          where: { userId: challengeData.user.id, enabled: true },
+        });
+
+        if (!mfaCredential) {
+          throw new LoginError(
+            new UnauthorizedException('MFA required but not configured'),
+            LoginFailureReason.UNKNOWN,
+            challengeData,
+          );
+        }
+
+        // Implementar validação real de MFA aqui, por enquanto apenas loga
+        console.log('Validating MFA code:', body.mfaCode);
+      }
+
+      // Valida se o risco do challenge exige captcha e se o token fornecido é válido
+      if (challengeData.requiresCaptcha && body.captchaToken) {
+        // Implementar validação real de captcha aqui, por enquanto apenas loga
+        console.log('Validating captcha token:', body.captchaToken);
+      }
+
+      const passwordValid = await argon2.verify(
+        challengeData.user.passwordHash,
+        body.password,
+      );
+
+      if (!passwordValid) {
+        const failedLoginCount = challengeData.user.failedLoginCount + 1;
+        const shouldLock = failedLoginCount >= MAX_FAILED_LOGIN_ATTEMPTS;
+
+        await this.prismaService.user.update({
+          where: { id: challengeData.user.id },
+          data: {
+            failedLoginCount,
+            accountLocked: shouldLock,
+          },
+        });
+
+        throw new LoginError(
+          new UnauthorizedException('Invalid credentials'),
+          LoginFailureReason.INVALID_CREDENTIALS,
+          challengeData,
+        );
+      }
+
+      // ---------------------------------------------
+      //              LOGIN SUCCESS
+      // ---------------------------------------------
+
+      const device = await this.findOrCreateDevice(
+        challengeData.user.id,
+        body.ip,
+        body.userAgent,
+      );
+
+      const sessionId = randomUUID();
+
+      await this.prismaService.session.create({
         data: {
-          failedLoginCount,
-          accountLocked: shouldLock,
+          id: sessionId,
+          userId: challengeData.user.id,
+          deviceId: device.id,
+          createdAt: new Date(),
         },
       });
 
+      await this.redis.del(`challenge:${body.challengeId}`); // remove o challenge do Redis, não precisa mais
+
+      await this.redis.set(
+        `session:${sessionId}`,
+        JSON.stringify({ userId: challengeData.user.id, deviceId: device.id }),
+        'EX',
+        SESSION_TTL_SECONDS,
+      );
+
+      const refreshToken = await this.issueRefreshToken({
+        userId: challengeData.user.id,
+        sessionId,
+        familyId: randomUUID(), // nova família de rotation
+        parentTokenId: null,
+      });
+
+      const accessToken = await this.signAccessToken({
+        sub: challengeData.user.id,
+        sid: sessionId,
+        roles: [], // TODO: roles ainda não estão modeladas no schema
+      });
+
+      await this.prismaService.user.update({
+        where: { id: challengeData.user.id },
+        data: { failedLoginCount: 0, lastLoginAt: new Date() },
+      });
+
       await this.recordLoginHistory({
-        userId: user.id,
-        success: false,
-        failureReason: LoginFailureReason.INVALID_PASSWORD,
+        userId: challengeData.user.id,
+        deviceId: device.id,
+        sessionId,
+        riskScore: challengeData.riskScore,
+        success: true,
         ip: body.ip,
         userAgent: body.userAgent,
       });
 
-      throw new UnauthorizedException('Invalid credentials');
+      return {
+        accessToken,
+        refreshToken,
+        sessionId,
+        expiresIn: ACCESS_TOKEN_TTL_SECONDS,
+        user: {
+          id: challengeData.user.id,
+          email: challengeData.user.email,
+          roles: [],
+        },
+      };
+    } catch (error) {
+      if (error instanceof LoginError) {
+        await this.recordLoginHistory({
+          userId: error.challengeData.user.id,
+          deviceId: error.challengeData.deviceFingerprint
+            ? createHash('sha256')
+                .update(error.challengeData.deviceFingerprint)
+                .digest('hex')
+            : undefined,
+          sessionId: undefined,
+          success: false,
+          riskScore: error.challengeData.riskScore,
+          failureReason: error.reason,
+          ip: body.ip,
+          userAgent: body.userAgent,
+        });
+      }
+      throw error;
     }
-
-    // TODO: se user tiver MFA habilitado (mfa_credentials.enabled = true) e
-    // body.mfaCode não bater, retornar/lançar erro pedindo MFA aqui.
-
-    // ---------------------------------------------
-    //              LOGIN SUCCESS
-    // ---------------------------------------------
-    const device = await this.findOrCreateDevice(
-      user.id,
-      body.ip,
-      body.userAgent,
-    );
-
-    const sessionId = randomUUID();
-
-    await this.prismaService.session.create({
-      data: {
-        id: sessionId,
-        userId: user.id,
-        deviceId: device.id,
-        createdAt: new Date(),
-      },
-    });
-
-    await this.redis.set(
-      `session:${sessionId}`,
-      JSON.stringify({ userId: user.id, deviceId: device.id }),
-      'EX',
-      SESSION_TTL_SECONDS,
-    );
-
-    const refreshToken = await this.issueRefreshToken({
-      userId: user.id,
-      sessionId,
-      familyId: randomUUID(), // nova família de rotation
-      parentTokenId: null,
-    });
-
-    const accessToken = await this.signAccessToken({
-      sub: user.id,
-      sid: sessionId,
-      roles: [], // TODO: roles ainda não estão modeladas no schema
-    });
-
-    await this.prismaService.user.update({
-      where: { id: user.id },
-      data: { failedLoginCount: 0, lastLoginAt: new Date() },
-    });
-
-    await this.recordLoginHistory({
-      userId: user.id,
-      deviceId: device.id,
-      sessionId,
-      success: true,
-      ip: body.ip,
-      userAgent: body.userAgent,
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-      sessionId,
-      expiresIn: ACCESS_TOKEN_TTL_SECONDS,
-      user: {
-        id: user.id,
-        email: user.email,
-        roles: [],
-      },
-    };
   }
 
   // async refresh(body: CI.RefreshRequest): Promise<CI.RefreshResponse> {
@@ -428,14 +547,11 @@ export class AuthService {
 
   private async findOrCreateDevice(
     userId: string,
-    ip: string,
     userAgent: string,
+    fingerprint?: string,
   ) {
-    // TODO: fingerprint simplificado (só userAgent). Idealmente incorporar
-    // um device-id gerado no client (cookie/localStorage) pra não colidir
-    // usuários com o mesmo browser/versão.
     const fingerprintHash = createHash('sha256')
-      .update(userAgent)
+      .update(fingerprint ?? userAgent)
       .digest('hex');
 
     const existing = await this.prismaService.device.findUnique({
@@ -507,6 +623,7 @@ export class AuthService {
     deviceId?: string;
     sessionId?: string;
     success: boolean;
+    riskScore: number;
     failureReason?: LoginFailureReason;
     ip: string;
     userAgent: string;
@@ -521,8 +638,15 @@ export class AuthService {
         failureReason: params.failureReason,
         ip: params.ip,
         userAgent: params.userAgent,
+        riskScore: params.riskScore,
+
         createdAt: new Date(),
       },
     });
+  }
+
+  private async getIpContext(ip: string): Promise<LoginIpContext> {
+    const response = await fetch(`https://ipwho.is/${ip}`);
+    return response.json() as Promise<LoginIpContext>;
   }
 }
