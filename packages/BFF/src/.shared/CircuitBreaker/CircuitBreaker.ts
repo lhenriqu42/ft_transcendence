@@ -15,6 +15,7 @@ import {
   CircuitBreakerPolicy,
   IDefaultPolicyContext,
 } from 'cockatiel';
+import { ServiceUnavailableException } from '@nestjs/common';
 
 export interface Policy {
   maxAttempts: number; // Total attempts before giving up
@@ -47,6 +48,10 @@ export class CircuitBreaker {
   }
 
   public async execute<T>(fn: () => Promise<T>): Promise<T> {
-    return await this.resilientPolicy.execute(fn);
+    try {
+      return await this.resilientPolicy.execute(fn);
+    } catch {
+      throw new ServiceUnavailableException();
+    }
   }
 }
