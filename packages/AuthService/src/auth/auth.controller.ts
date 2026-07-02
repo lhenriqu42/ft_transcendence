@@ -51,15 +51,15 @@ export class AuthController {
    * allDevices omitido ou false → logout da sessão atual
    * allDevices: true           → logout de todos os dispositivos
    */
-  @Post('logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Body() body: CI.LogoutRequest): Promise<void> {
-    return this.authService.logout(body);
-  }
+  // @Post('logout')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // logout(@Body() body: CI.LogoutRequest): Promise<void> {
+  //   return this.authService.logout(body);
+  // }
 
-  @Post('register')
-  @HttpCode(HttpStatus.CREATED)
-  register(@Body() body: CI.RegisterRequest): Promise<CI.RegisterResponse> {
-    return this.authService.register(body);
-  }
+  // @Post('register')
+  // @HttpCode(HttpStatus.CREATED)
+  // register(@Body() body: CI.RegisterRequest): Promise<CI.RegisterResponse> {
+  //   return this.authService.register(body);
+  // }
 }

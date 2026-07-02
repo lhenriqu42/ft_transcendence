@@ -247,14 +247,25 @@ model OauthAccount {
 // ///////////////////////////////////////////////////////////
 
 enum LoginFailureReason {
+  
+  // 1. Comum: falha de autenticação (senha, MFA, captcha, bloqueio de conta)
   INVALID_CREDENTIALS
+  MFA_NOT_CONFIGURED
+  CAPTCHA_INVALID
   ACCOUNT_LOCKED
   MFA_INVALID
+
+
+  // 2. Pouco comum: falha de autenticação por falta de informação
   MFA_REQUIRED
-  MFA_NOT_CONFIGURED
-  INVALID_EMAIL
   CAPTCHA_REQUIRED
-  CAPTCHA_INVALID
+
+
+  // 3. Perigoso: Tentativa de Login Inconsistente com Challenge 
+  INVALID_CHALLENGE_EMAIL
+  
+
+  // 4. Desconhecido: falha de autenticação por motivo não identificado
   UNKNOWN
 
   @@map("login_failure_reason")
@@ -283,7 +294,7 @@ model LoginHistory {
 
   longitude Float? @db.DoublePrecision
 
-  asn String? @db.VarChar(100)
+  asn Int? @db.Integer
 
   org String? @db.VarChar(100)
 
