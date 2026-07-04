@@ -1,20 +1,16 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Inject,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { SecretAuthGuard } from '../.shared/security/auth.guard';
-import * as CI from './contracts/auth.contracts';
-import { AuthService } from './auth.service';
+import * as CI from './application/contracts/auth.contracts';
+import { LoginService, ChallengeService } from './application';
 
 @Controller('auth')
 @UseGuards(SecretAuthGuard)
 export class AuthController {
-  constructor(@Inject(AuthService) private readonly authService: AuthService) {}
+  constructor(
+    private readonly loginService: LoginService,
+    private readonly challengeService: ChallengeService,
+  ) {}
 
   /**
    * Passo 1 do login — BFF chama antes de mostrar o campo de senha.
@@ -23,7 +19,7 @@ export class AuthController {
   @Post('login/challenge')
   @HttpCode(HttpStatus.OK)
   challenge(@Body() body: CI.ChallengeRequest): Promise<CI.ChallengeResponse> {
-    return this.authService.challenge(body);
+    return this.challengeService.execute(body);
   }
 
   /**
@@ -33,7 +29,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() body: CI.LoginRequest): Promise<CI.LoginResponse> {
-    return this.authService.login(body);
+    return this.loginService.execute(body);
   }
 
   /**

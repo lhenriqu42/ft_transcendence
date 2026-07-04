@@ -1,12 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { PrismaModule } from '../.shared/prisma/prisma.module';
-import { RedisModule } from '../.shared/redis/redis.module';
+import { InfraModule } from '../infra/infra.module';
+import { ChallengeService, LoginService } from './application';
+import { RiskEngineService } from './domain/risk-engine.service';
+import { IpInfoService } from './application/providers/ip-info.service';
+import { SessionService } from './application/providers/session.service';
 
 @Module({
-  imports: [PrismaModule, RedisModule],
+  imports: [InfraModule],
+  providers: [
+    LoginService,
+    IpInfoService,
+    SessionService,
+    ChallengeService,
+    RiskEngineService,
+  ],
   controllers: [AuthController],
-  providers: [AuthService],
 })
 export class AuthModule {}

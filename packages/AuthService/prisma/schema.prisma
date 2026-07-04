@@ -5,7 +5,7 @@
 
 generator client {
   provider      = "prisma-client"
-  output        = "../src/.shared/prisma/generated"
+  output        = "../src/infra/prisma/generated"
   moduleFormat  = "cjs"
 }
 
@@ -63,58 +63,24 @@ model User {
 // ///////////////////////////////////////////////////////////
 
 model Device {
-  id String @id @default(uuid()) @db.Uuid
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
 
-  userId String @map("user_id") @db.Uuid
+  lastUserAgent   String?  @map("last_user_agent") @db.Text
+  fingerprintHash String?  @map("fingerprint_hash") @db.VarChar(64) // opcional, não-único
+  name            String?  @db.VarChar(100)
+ 
+  firstSeenAt     DateTime @map("first_seen_at") @db.Timestamptz(6)
+  lastSeenAt      DateTime @map("last_seen_at") @db.Timestamptz(6)
+  loginCount      Int      @default(1) @map("login_count")
 
-  fingerprintHash String @map("fingerprint_hash") @db.VarChar(64)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions        Session[]
+  loginHistory    LoginHistory[]
 
-  name String? @db.VarChar(100)
-
-  firstSeenAt DateTime @map("first_seen_at") @db.Timestamptz(6)
-
-  lastSeenAt DateTime @map("last_seen_at") @db.Timestamptz(6)
-
-  loginCount Int @default(1) @map("login_count")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  trustedDevices TrustedDevice[]
-  sessions       Session[]
-  loginHistory   LoginHistory[]
-
-  @@unique([userId, fingerprintHash])
   @@index([userId])
-  @@index([lastSeenAt])
-  // perf: tela "dispositivos ativos" ordenada por uso recente, por usuário
   @@index([userId, lastSeenAt])
   @@map("devices")
-}
-
-// ///////////////////////////////////////////////////////////
-// TRUSTED DEVICES
-// ///////////////////////////////////////////////////////////
-
-model TrustedDevice {
-  id String @id @default(uuid()) @db.Uuid
-
-  deviceId String @map("device_id") @db.Uuid
-
-  trustedUntil DateTime? @map("trusted_until") @db.Timestamptz(6)
-
-  createdAt DateTime @map("created_at") @db.Timestamptz(6)
-
-  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
-
-  reason String? @db.VarChar(100)
-
-  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
-
-  @@index([deviceId])
-  @@index([trustedUntil])
-  // perf: checagem "esse device ainda é confiável?" (ativo, não revogado, não expirado)
-  @@index([deviceId, revokedAt, trustedUntil])
-  @@map("trusted_devices")
 }
 
 // ///////////////////////////////////////////////////////////
@@ -180,8 +146,6 @@ model RefreshToken {
   revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
 
   createdAt DateTime @map("created_at") @db.Timestamptz(6)
-
-  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
 
   expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
 

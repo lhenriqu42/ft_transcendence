@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { createHash } from 'crypto';
-import { PrismaService } from '../../.shared/prisma/prisma.service';
-import { LoginIpContext } from './geo-ip.service';
+import { Device } from './entities/device.entity';
+import { LoginIpContext } from '../application/ports/IpLookup';
 
 enum RiskValues {
   // --- CATEGORIA 1: DADOS AUSENTES OU INCOMPLETOS (Sinal de automação/bot) ---
@@ -19,6 +18,7 @@ enum RiskValues {
   RECENT_FAILED_LOGINS_LOW = 10, // 1 a 3 tentativas falhas recentes
   RECENT_FAILED_LOGINS_HIGH = 31, // Mais de 3 tentativas falhas recentes (alerta de brute-force)
   PASSWORD_RECENTLY_CHANGED = 21, // Login logo após troca de senha em outro contexto
+  IMPOSSIBLE_FETCH_DEVICE = 38, // Nao foi enviado nem userAgent nem fingerprint, impossibilitando identificar o dispositivo
 
   // --- CATEGORIA 4: REGRAS CRÍTICAS (Gatilhos imediatos de fraude) ---
   IMPOSSIBLE_TRAVEL = 80, // Login no Brasil e 15 minutos depois na Europa (distância física impossível)
@@ -26,6 +26,7 @@ enum RiskValues {
   REUSE_REFRESH_TOKEN = 90, // Tentativa de usar um Refresh Token que já foi consumido (indício de roubo de sessão)
 }
 
+// All Information needed to evaluate the risk of a login attempt
 interface RiskInfo {
   ipInfo: LoginIpContext;
   userInfo: {
@@ -36,37 +37,25 @@ interface RiskInfo {
     userAgent?: string;
     deviceFingerprint?: string;
   };
+  deviceInfo: Device | null;
 }
 
 @Injectable()
 export class RiskEngineService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor() {}
 
-  async evaluate(info: RiskInfo) {
+  evaluate(info: RiskInfo) {
     let riskScore = 0;
 
-    if (!info.ipInfo.ip) riskScore += RiskValues.MISSING_IP;
-    if (!info.requestInfo.userAgent) riskScore += RiskValues.MISSING_USER_AGENT;
-    if (!info.requestInfo.deviceFingerprint)
-      riskScore += RiskValues.MISSING_FINGERPRINT;
+    const { deviceFingerprint, userAgent } = info.requestInfo;
 
-    if (info.requestInfo.deviceFingerprint) {
-      const deviceExists = await this.prismaService.device.findUnique({
-        where: {
-          userId_fingerprintHash: {
-            userId: info.userInfo.id,
-            fingerprintHash: createHash('sha256')
-              .update(info.requestInfo.deviceFingerprint)
-              .digest('hex'),
-          },
-        },
-        select: { id: true },
-      });
+    // Futuramente avaliar a geolocalização do IP e comparar com o histórico do usuário
+    const { ip } = info.ipInfo;
 
-      if (!deviceExists) {
-        riskScore += RiskValues.NEW_DEVICE;
-      }
-    }
+    if (!ip) riskScore += RiskValues.MISSING_IP;
+    if (!info.deviceInfo) riskScore += RiskValues.NEW_DEVICE;
+    if (!userAgent) riskScore += RiskValues.MISSING_USER_AGENT;
+    if (!deviceFingerprint) riskScore += RiskValues.MISSING_FINGERPRINT;
 
     if (info.userInfo.failedLoginCount > 0) {
       riskScore +=

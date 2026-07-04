@@ -27,6 +27,6 @@
     "src",
     "src/**/*.ts",
     "src/.shared/**/*.ts",
-    "src/.shared/prisma/generated"
+    "src/infra/prisma/generated"
   ]
 }
