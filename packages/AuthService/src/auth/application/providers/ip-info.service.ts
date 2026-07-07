@@ -1,12 +1,14 @@
+import { Injectable } from '@nestjs/common';
 import { LoginIpContext } from '../ports/IpLookup';
 import { IpLookup } from '../ports/IpLookup';
 
+@Injectable()
 export class IpInfoService {
   constructor(private readonly ipLookup: IpLookup) {}
 
   async lookup(ip: string): Promise<LoginIpContext> {
     const ctx = await this.ipLookup.fetch(ip);
-
+    console.log(`[GeoIPService] Lookup result for IP ${ip}:`, ctx);
     if (!ctx.success) {
       console.log(
         `[GeoIPService] Failed to lookup IP address ${ip}: ${ctx.message}`,

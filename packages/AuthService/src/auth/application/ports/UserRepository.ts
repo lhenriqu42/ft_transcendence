@@ -24,6 +24,15 @@ export abstract class UserRepository {
    */
   abstract findLoginDataByEmail(email: string): Atomic<UserLoginData | null>;
 
+  /**
+   * Checks if a user exists by their email.
+   *
+   * @param email The email of the user to check.
+   * @returns A promise that resolves to true if the user exists, false otherwise.
+   * @throws An error if the query fails.
+   */
+  abstract existsByEmail(email: string): Promise<boolean>;
+
   // ---------------------------------------------
   //                   Commands
   // ---------------------------------------------

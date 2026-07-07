@@ -297,7 +297,7 @@ export type LoginHistoryGroupByOutputType = {
   org: string | null
   isp: string | null
   domain: string | null
-  userAgent: string
+  userAgent: string | null
   riskScore: number
   captchaRequired: boolean
   mfaRequired: boolean
@@ -343,7 +343,7 @@ export type LoginHistoryWhereInput = {
   org?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   isp?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   domain?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
-  userAgent?: Prisma.StringFilter<"LoginHistory"> | string
+  userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -369,7 +369,7 @@ export type LoginHistoryOrderByWithRelationInput = {
   org?: Prisma.SortOrderInput | Prisma.SortOrder
   isp?: Prisma.SortOrderInput | Prisma.SortOrder
   domain?: Prisma.SortOrderInput | Prisma.SortOrder
-  userAgent?: Prisma.SortOrder
+  userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
   mfaRequired?: Prisma.SortOrder
@@ -398,7 +398,7 @@ export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
   org?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   isp?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   domain?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
-  userAgent?: Prisma.StringFilter<"LoginHistory"> | string
+  userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -424,7 +424,7 @@ export type LoginHistoryOrderByWithAggregationInput = {
   org?: Prisma.SortOrderInput | Prisma.SortOrder
   isp?: Prisma.SortOrderInput | Prisma.SortOrder
   domain?: Prisma.SortOrderInput | Prisma.SortOrder
-  userAgent?: Prisma.SortOrder
+  userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
   mfaRequired?: Prisma.SortOrder
@@ -455,7 +455,7 @@ export type LoginHistoryScalarWhereWithAggregatesInput = {
   org?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   isp?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   domain?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
-  userAgent?: Prisma.StringWithAggregatesFilter<"LoginHistory"> | string
+  userAgent?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntWithAggregatesFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
   mfaRequired?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
@@ -475,7 +475,7 @@ export type LoginHistoryCreateInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -501,7 +501,7 @@ export type LoginHistoryUncheckedCreateInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -521,7 +521,7 @@ export type LoginHistoryUpdateInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -547,7 +547,7 @@ export type LoginHistoryUncheckedUpdateInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -570,7 +570,7 @@ export type LoginHistoryCreateManyInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -590,7 +590,7 @@ export type LoginHistoryUpdateManyMutationInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -613,7 +613,7 @@ export type LoginHistoryUncheckedUpdateManyInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -872,7 +872,7 @@ export type LoginHistoryCreateWithoutUserInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -896,7 +896,7 @@ export type LoginHistoryUncheckedCreateWithoutUserInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -948,7 +948,7 @@ export type LoginHistoryScalarWhereInput = {
   org?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   isp?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   domain?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
-  userAgent?: Prisma.StringFilter<"LoginHistory"> | string
+  userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -968,7 +968,7 @@ export type LoginHistoryCreateWithoutDeviceInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -992,7 +992,7 @@ export type LoginHistoryUncheckedCreateWithoutDeviceInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1038,7 +1038,7 @@ export type LoginHistoryCreateWithoutSessionInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1062,7 +1062,7 @@ export type LoginHistoryUncheckedCreateWithoutSessionInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1110,7 +1110,7 @@ export type LoginHistoryCreateManyUserInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1130,7 +1130,7 @@ export type LoginHistoryUpdateWithoutUserInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1154,7 +1154,7 @@ export type LoginHistoryUncheckedUpdateWithoutUserInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1176,7 +1176,7 @@ export type LoginHistoryUncheckedUpdateManyWithoutUserInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1198,7 +1198,7 @@ export type LoginHistoryCreateManyDeviceInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1218,7 +1218,7 @@ export type LoginHistoryUpdateWithoutDeviceInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1242,7 +1242,7 @@ export type LoginHistoryUncheckedUpdateWithoutDeviceInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1264,7 +1264,7 @@ export type LoginHistoryUncheckedUpdateManyWithoutDeviceInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1286,7 +1286,7 @@ export type LoginHistoryCreateManySessionInput = {
   org?: string | null
   isp?: string | null
   domain?: string | null
-  userAgent: string
+  userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
   mfaRequired?: boolean
@@ -1306,7 +1306,7 @@ export type LoginHistoryUpdateWithoutSessionInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1330,7 +1330,7 @@ export type LoginHistoryUncheckedUpdateWithoutSessionInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1352,7 +1352,7 @@ export type LoginHistoryUncheckedUpdateManyWithoutSessionInput = {
   org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1502,7 +1502,7 @@ export type $LoginHistoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     org: string | null
     isp: string | null
     domain: string | null
-    userAgent: string
+    userAgent: string | null
     riskScore: number
     captchaRequired: boolean
     mfaRequired: boolean

@@ -30,7 +30,7 @@ export type SessionMinAggregateOutputType = {
   deviceId: string | null
   createdAt: Date | null
   revokedAt: Date | null
-  revokedReason: string | null
+  revokedReason: $Enums.SessionRevokedReason | null
 }
 
 export type SessionMaxAggregateOutputType = {
@@ -39,7 +39,7 @@ export type SessionMaxAggregateOutputType = {
   deviceId: string | null
   createdAt: Date | null
   revokedAt: Date | null
-  revokedReason: string | null
+  revokedReason: $Enums.SessionRevokedReason | null
 }
 
 export type SessionCountAggregateOutputType = {
@@ -159,7 +159,7 @@ export type SessionGroupByOutputType = {
   deviceId: string
   createdAt: Date
   revokedAt: Date | null
-  revokedReason: string | null
+  revokedReason: $Enums.SessionRevokedReason | null
   _count: SessionCountAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
@@ -189,7 +189,7 @@ export type SessionWhereInput = {
   deviceId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
-  revokedReason?: Prisma.StringNullableFilter<"Session"> | string | null
+  revokedReason?: Prisma.EnumSessionRevokedReasonNullableFilter<"Session"> | $Enums.SessionRevokedReason | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   device?: Prisma.XOR<Prisma.DeviceScalarRelationFilter, Prisma.DeviceWhereInput>
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
@@ -218,7 +218,7 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   deviceId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
-  revokedReason?: Prisma.StringNullableFilter<"Session"> | string | null
+  revokedReason?: Prisma.EnumSessionRevokedReasonNullableFilter<"Session"> | $Enums.SessionRevokedReason | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   device?: Prisma.XOR<Prisma.DeviceScalarRelationFilter, Prisma.DeviceWhereInput>
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
@@ -246,14 +246,14 @@ export type SessionScalarWhereWithAggregatesInput = {
   deviceId?: Prisma.UuidWithAggregatesFilter<"Session"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
   revokedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
-  revokedReason?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
+  revokedReason?: Prisma.EnumSessionRevokedReasonNullableWithAggregatesFilter<"Session"> | $Enums.SessionRevokedReason | null
 }
 
 export type SessionCreateInput = {
   id?: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
   device: Prisma.DeviceCreateNestedOneWithoutSessionsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutSessionInput
@@ -266,7 +266,7 @@ export type SessionUncheckedCreateInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutSessionInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutSessionInput
 }
@@ -275,7 +275,7 @@ export type SessionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
   device?: Prisma.DeviceUpdateOneRequiredWithoutSessionsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutSessionNestedInput
@@ -288,7 +288,7 @@ export type SessionUncheckedUpdateInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutSessionNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutSessionNestedInput
 }
@@ -299,14 +299,14 @@ export type SessionCreateManyInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
 }
 
 export type SessionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
 }
 
 export type SessionUncheckedUpdateManyInput = {
@@ -315,7 +315,7 @@ export type SessionUncheckedUpdateManyInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
 }
 
 export type SessionListRelationFilter = {
@@ -449,6 +449,10 @@ export type SessionUncheckedUpdateManyWithoutDeviceNestedInput = {
   deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
 }
 
+export type NullableEnumSessionRevokedReasonFieldUpdateOperationsInput = {
+  set?: $Enums.SessionRevokedReason | null
+}
+
 export type SessionCreateNestedOneWithoutRefreshTokensInput = {
   create?: Prisma.XOR<Prisma.SessionCreateWithoutRefreshTokensInput, Prisma.SessionUncheckedCreateWithoutRefreshTokensInput>
   connectOrCreate?: Prisma.SessionCreateOrConnectWithoutRefreshTokensInput
@@ -483,7 +487,7 @@ export type SessionCreateWithoutUserInput = {
   id?: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   device: Prisma.DeviceCreateNestedOneWithoutSessionsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutSessionInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutSessionInput
@@ -494,7 +498,7 @@ export type SessionUncheckedCreateWithoutUserInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutSessionInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutSessionInput
 }
@@ -534,14 +538,14 @@ export type SessionScalarWhereInput = {
   deviceId?: Prisma.UuidFilter<"Session"> | string
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
-  revokedReason?: Prisma.StringNullableFilter<"Session"> | string | null
+  revokedReason?: Prisma.EnumSessionRevokedReasonNullableFilter<"Session"> | $Enums.SessionRevokedReason | null
 }
 
 export type SessionCreateWithoutDeviceInput = {
   id?: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutSessionInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutSessionInput
@@ -552,7 +556,7 @@ export type SessionUncheckedCreateWithoutDeviceInput = {
   userId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutSessionInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutSessionInput
 }
@@ -587,7 +591,7 @@ export type SessionCreateWithoutRefreshTokensInput = {
   id?: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
   device: Prisma.DeviceCreateNestedOneWithoutSessionsInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutSessionInput
@@ -599,7 +603,7 @@ export type SessionUncheckedCreateWithoutRefreshTokensInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -623,7 +627,7 @@ export type SessionUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
   device?: Prisma.DeviceUpdateOneRequiredWithoutSessionsNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutSessionNestedInput
@@ -635,7 +639,7 @@ export type SessionUncheckedUpdateWithoutRefreshTokensInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -643,7 +647,7 @@ export type SessionCreateWithoutLoginHistoryInput = {
   id?: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   user: Prisma.UserCreateNestedOneWithoutSessionsInput
   device: Prisma.DeviceCreateNestedOneWithoutSessionsInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutSessionInput
@@ -655,7 +659,7 @@ export type SessionUncheckedCreateWithoutLoginHistoryInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutSessionInput
 }
 
@@ -679,7 +683,7 @@ export type SessionUpdateWithoutLoginHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
   device?: Prisma.DeviceUpdateOneRequiredWithoutSessionsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutSessionNestedInput
@@ -691,7 +695,7 @@ export type SessionUncheckedUpdateWithoutLoginHistoryInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutSessionNestedInput
 }
 
@@ -700,14 +704,14 @@ export type SessionCreateManyUserInput = {
   deviceId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
 }
 
 export type SessionUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   device?: Prisma.DeviceUpdateOneRequiredWithoutSessionsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutSessionNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutSessionNestedInput
@@ -718,7 +722,7 @@ export type SessionUncheckedUpdateWithoutUserInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutSessionNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutSessionNestedInput
 }
@@ -728,7 +732,7 @@ export type SessionUncheckedUpdateManyWithoutUserInput = {
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
 }
 
 export type SessionCreateManyDeviceInput = {
@@ -736,14 +740,14 @@ export type SessionCreateManyDeviceInput = {
   userId: string
   createdAt: Date | string
   revokedAt?: Date | string | null
-  revokedReason?: string | null
+  revokedReason?: $Enums.SessionRevokedReason | null
 }
 
 export type SessionUpdateWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   user?: Prisma.UserUpdateOneRequiredWithoutSessionsNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutSessionNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutSessionNestedInput
@@ -754,7 +758,7 @@ export type SessionUncheckedUpdateWithoutDeviceInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutSessionNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutSessionNestedInput
 }
@@ -764,7 +768,7 @@ export type SessionUncheckedUpdateManyWithoutDeviceInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  revokedReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  revokedReason?: Prisma.NullableEnumSessionRevokedReasonFieldUpdateOperationsInput | $Enums.SessionRevokedReason | null
 }
 
 
@@ -883,7 +887,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     deviceId: string
     createdAt: Date
     revokedAt: Date | null
-    revokedReason: string | null
+    revokedReason: $Enums.SessionRevokedReason | null
   }, ExtArgs["result"]["session"]>
   composites: {}
 }
@@ -1316,7 +1320,7 @@ export interface SessionFieldRefs {
   readonly deviceId: Prisma.FieldRef<"Session", 'String'>
   readonly createdAt: Prisma.FieldRef<"Session", 'DateTime'>
   readonly revokedAt: Prisma.FieldRef<"Session", 'DateTime'>
-  readonly revokedReason: Prisma.FieldRef<"Session", 'String'>
+  readonly revokedReason: Prisma.FieldRef<"Session", 'SessionRevokedReason'>
 }
     
 

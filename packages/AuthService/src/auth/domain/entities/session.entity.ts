@@ -1,3 +1,5 @@
+import { SessionRevokedReason } from '../../../infra/prisma/generated/enums';
+
 export class Session {
   constructor(
     public readonly id: string,
@@ -5,6 +7,6 @@ export class Session {
     public readonly deviceId: string,
     public readonly createdAt: Date,
     public readonly revokedAt: Date | null,
-    public readonly revokedReason: string | null,
+    public readonly revokedReason: SessionRevokedReason | null,
   ) {}
 }

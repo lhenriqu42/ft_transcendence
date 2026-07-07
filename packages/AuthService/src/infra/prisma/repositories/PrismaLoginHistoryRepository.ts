@@ -6,7 +6,7 @@ import {
   LoginHistoryFailureRecord,
   LoginHistorySuccessRecord,
 } from '../../../auth/application/ports/LoginHistoryRepository';
-import { LoginHistory } from '../generated/browser';
+import { LoginHistory } from '../../../auth/domain/entities/login-history.entity';
 
 @Injectable()
 export class PrismaLoginHistoryRepository implements LoginHistoryRepository {

@@ -1,6 +1,5 @@
 export interface ChallengeRequest {
   email: string;
-  password: string;
   ip: string;
 
   deviceId?: string;
@@ -24,15 +23,12 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  userId: string;
   accessToken: string;
   refreshToken: string;
   sessionId: string;
+  deviceId: string;
   expiresIn: number;
-  user: {
-    id: string;
-    email: string;
-    roles: string[];
-  };
 }
 
 export interface RefreshRequest {
@@ -55,6 +51,7 @@ export interface LogoutRequest {
 }
 
 export interface RegisterRequest {
+  name: string;
   email: string;
   password: string;
 }

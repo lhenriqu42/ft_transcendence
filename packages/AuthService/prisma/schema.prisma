@@ -21,6 +21,8 @@ datasource db {
 model User {
   id String @id @default(uuid()) @db.Uuid
 
+  name String @db.VarChar(100)
+
   email String @unique @db.VarChar(320) // unique já cria índice, não duplicar
 
   passwordHash String @map("password_hash") @db.VarChar(255)
@@ -87,6 +89,15 @@ model Device {
 // SESSIONS (histórico / revogação — NÃO é estado vivo)
 // ///////////////////////////////////////////////////////////
 
+enum SessionRevokedReason {
+  LOGOUT
+  LOGOUT_ALL_DEVICES
+  REFRESH_TOKEN_REUSE_DETECTED
+
+  @@map("session_revoked_reason")
+}
+
+
 model Session {
   id String @id @default(uuid()) @db.Uuid // mesmo id usado como sufixo de session:{id} no Redis
 
@@ -98,8 +109,8 @@ model Session {
 
   revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
 
-  revokedReason String? @map("revoked_reason") @db.VarChar(100)
-
+  revokedReason SessionRevokedReason? @map("revoked_reason")
+  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
@@ -266,7 +277,7 @@ model LoginHistory {
 
   domain String? @db.VarChar(100)
 
-  userAgent String @map("user_agent") @db.Text
+  userAgent String? @map("user_agent") @db.Text
 
   riskScore Int @default(0) @map("risk_score")
 

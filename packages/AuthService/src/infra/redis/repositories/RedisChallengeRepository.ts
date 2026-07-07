@@ -26,12 +26,12 @@ export class RedisChallengeRepository implements ChallengeRepository {
   }
 
   async find(id: string): Promise<ChallengePayload | null> {
-    const raw = await this.redisService.getClient().get(` ${NAMESPACE}:${id}`);
+    const raw = await this.redisService.getClient().get(`${NAMESPACE}:${id}`);
     if (!raw) return null;
     return JSON.parse(raw) as ChallengePayload;
   }
 
   async delete(id: string): Promise<void> {
-    await this.redisService.getClient().del(` ${NAMESPACE}:${id}`);
+    await this.redisService.getClient().del(`${NAMESPACE}:${id}`);
   }
 }

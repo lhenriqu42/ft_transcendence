@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import * as CI from './contracts/auth.contracts';
+import { UnitOfWork } from './ports/unit-of-work';
 import { LoginError } from './exceptions/LoginError';
 import { SessionService } from './providers/session.service';
 import { LoginFailureReason } from '../../infra/prisma/generated/enums';
@@ -17,10 +18,12 @@ const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 @Injectable()
 export class LoginService {
   constructor(
+    private readonly uof: UnitOfWork,
     private readonly userRepo: UserRepository,
     private readonly deviceRepo: DeviceRepository,
     private readonly sessionService: SessionService,
     private readonly challengeRepo: ChallengeRepository,
+
     private readonly loginHistoryRepo: LoginHistoryRepository,
   ) {}
 
@@ -126,40 +129,51 @@ export class LoginService {
       //              LOGIN SUCCESS
       // ---------------------------------------------
 
-      const [sessionResponse] = await Promise.all([
-        this.sessionService.create(challenge.user.id, device.id),
+      const sessionResponse = this.sessionService.create(
+        challenge.user.id,
+        device.id,
+      );
+
+      const prismaPromises = [
+        ...sessionResponse.prismaPromises,
+
+        this.loginHistoryRepo.recordSuccess({
+          userId: challenge.user.id,
+          deviceId: device.id,
+          sessionId: sessionResponse.payload.sid,
+          ip: challenge.ipContext.ip,
+          userAgent: challenge.userAgent,
+          riskScore: challenge.riskScore,
+          country: challenge.ipContext.country,
+          city: challenge.ipContext.city,
+          latitude: challenge.ipContext.latitude,
+          longitude: challenge.ipContext.longitude,
+          asn: challenge.ipContext.connection?.asn,
+          org: challenge.ipContext.connection?.org,
+          isp: challenge.ipContext.connection?.isp,
+          domain: challenge.ipContext.connection?.domain,
+          captchaRequired: challenge.requiresCaptcha,
+          mfaRequired: challenge.requiresMFA,
+        }),
+      ] as const;
+
+      const promises = [
+        ...sessionResponse.promises,
         this.challengeRepo.delete(body.challengeId),
+      ] as const;
+
+      const [accessToken] = await Promise.all([
+        ...promises,
+        this.uof.runBatch(prismaPromises),
       ]);
 
-      await this.loginHistoryRepo.recordSuccess({
-        userId: challenge.user.id,
-        deviceId: device.id,
-        sessionId: sessionResponse.payload.sid,
-        ip: challenge.ipContext.ip,
-        userAgent: challenge.userAgent ?? '',
-        riskScore: challenge.riskScore,
-        country: challenge.ipContext.country,
-        city: challenge.ipContext.city,
-        latitude: challenge.ipContext.latitude,
-        longitude: challenge.ipContext.longitude,
-        asn: challenge.ipContext.connection?.asn,
-        org: challenge.ipContext.connection?.org,
-        isp: challenge.ipContext.connection?.isp,
-        domain: challenge.ipContext.connection?.domain,
-        captchaRequired: challenge.requiresCaptcha,
-        mfaRequired: challenge.requiresMFA,
-      });
-
       return {
-        accessToken: sessionResponse.accessToken,
+        userId: challenge.user.id,
+        accessToken,
+        deviceId: device.id,
         refreshToken: sessionResponse.refreshToken,
         sessionId: sessionResponse.payload.sid,
         expiresIn: ACCESS_TOKEN_TTL_SECONDS,
-        user: {
-          id: challenge.user.id,
-          email: challenge.user.email,
-          roles: [],
-        },
       };
     } catch (error) {
       if (error instanceof LoginError) {
@@ -167,7 +181,7 @@ export class LoginService {
           userId: challenge.user.id,
           deviceId: device.id,
           ip: challenge.ipContext.ip,
-          userAgent: challenge.userAgent ?? '',
+          userAgent: challenge.userAgent,
           riskScore: challenge.riskScore,
           country: challenge.ipContext.country,
           city: challenge.ipContext.city,
@@ -181,6 +195,7 @@ export class LoginService {
           mfaRequired: challenge.requiresMFA,
           failureReason: error.reason,
         });
+        throw error.httpException;
       }
       throw error;
     }

@@ -1344,6 +1344,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   email: 'email',
   passwordHash: 'passwordHash',
   emailVerified: 'emailVerified',
@@ -1592,6 +1593,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SessionRevokedReason'
+ */
+export type EnumSessionRevokedReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionRevokedReason'>
+    
+
+
+/**
+ * Reference to a field of type 'SessionRevokedReason[]'
+ */
+export type ListEnumSessionRevokedReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionRevokedReason[]'>
     
 
 

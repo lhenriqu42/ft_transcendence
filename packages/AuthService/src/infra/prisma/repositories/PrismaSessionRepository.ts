@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { SessionHistoryRepository } from '../../../auth/application/ports/SessionHistoryRepository';
-import { Session } from '../../../auth/domain/entities/session.entity';
 import { PrismaService } from '../prisma.service';
+import { SessionRevokedReason } from '../generated/enums';
 import { Atomic } from '../../../auth/application/ports/Atomic';
+import { Session } from '../../../auth/domain/entities/session.entity';
+import { SessionHistoryRepository } from '../../../auth/application/ports/SessionHistoryRepository';
 
 @Injectable()
 export class PrismaSessionRepository implements SessionHistoryRepository {
@@ -28,6 +29,28 @@ export class PrismaSessionRepository implements SessionHistoryRepository {
   findByUserId(userId: string): Atomic<Session[]> {
     return this.prismaService.session.findMany({
       where: { userId },
+    });
+  }
+
+  close(
+    id: string,
+    revokedAt: Date,
+    reason: SessionRevokedReason,
+  ): Atomic<Session> {
+    return this.prismaService.session.update({
+      where: { id },
+      data: { revokedAt, revokedReason: reason },
+    });
+  }
+
+  closeAllByUserId(
+    userId: string,
+    revokedAt: Date,
+    reason: SessionRevokedReason,
+  ): Atomic<{ count: number }> {
+    return this.prismaService.session.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt, revokedReason: reason },
     });
   }
 }

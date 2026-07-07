@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const SessionRevokedReason = {
+  LOGOUT: 'LOGOUT',
+  LOGOUT_ALL_DEVICES: 'LOGOUT_ALL_DEVICES',
+  REFRESH_TOKEN_REUSE_DETECTED: 'REFRESH_TOKEN_REUSE_DETECTED'
+} as const
+
+export type SessionRevokedReason = (typeof SessionRevokedReason)[keyof typeof SessionRevokedReason]
+
+
 export const OauthProvider = {
   GOOGLE: 'GOOGLE',
   GITHUB: 'GITHUB',

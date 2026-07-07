@@ -41,4 +41,11 @@ export abstract class ActiveSessionRepository {
    * @throws An error if the existence check operation fails.
    */
   abstract exists(sessionId: string): Promise<boolean>;
+
+  /**
+   * Deletes all active sessions belonging to a user (logout de todos os devices).
+   *
+   * @param userId The ID of the user whose sessions should be deleted.
+   */
+  abstract deleteAllByUserId(userId: string): Promise<void>;
 }

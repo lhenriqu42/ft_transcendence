@@ -1,6 +1,6 @@
 import { Atomic } from './Atomic';
 import { LoginHistory } from '../../domain/entities/login-history.entity';
-import { LoginFailureReason } from '../../../infra/prisma/generated/browser';
+import { LoginFailureReason } from '../../../infra/prisma/generated/enums';
 
 export interface LoginHistorySuccessRecord {
   userId: string;
@@ -8,7 +8,7 @@ export interface LoginHistorySuccessRecord {
   sessionId?: string;
 
   ip: string;
-  userAgent: string;
+  userAgent: string | null;
 
   riskScore: number;
 

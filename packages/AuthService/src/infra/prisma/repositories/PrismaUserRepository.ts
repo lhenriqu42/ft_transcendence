@@ -25,10 +25,19 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
+  existsByEmail(email: string): Promise<boolean> {
+    return this.prisma.user
+      .count({
+        where: { email },
+      })
+      .then((count) => count > 0);
+  }
+
   save(user: User): Atomic<User> {
     return this.prisma.user.create({
       data: {
         id: user.id,
+        name: user.name,
         email: user.email,
         passwordHash: user.passwordHash,
         emailVerified: user.emailVerified,

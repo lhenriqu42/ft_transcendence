@@ -17,7 +17,7 @@ export class LoginHistory {
     public readonly org: string | null,
     public readonly isp: string | null,
     public readonly domain: string | null,
-    public readonly userAgent: string,
+    public readonly userAgent: string | null,
     public readonly riskScore: number,
     public readonly captchaRequired: boolean,
     public readonly mfaRequired: boolean,

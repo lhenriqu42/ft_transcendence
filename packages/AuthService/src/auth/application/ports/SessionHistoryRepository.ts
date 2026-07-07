@@ -1,13 +1,10 @@
+import { SessionRevokedReason } from '../../../infra/prisma/generated/enums';
 import { Session } from '../../domain/entities/session.entity';
 import { Atomic } from './Atomic';
 
 export abstract class SessionHistoryRepository {
   /**
    * Saves a new session record in the repository.
-   *
-   * @param session The session entity to be saved.
-   * @returns A promise that resolves when the session is successfully saved.
-   * @throws An error if the save operation fails.
    */
   abstract save(
     session: Omit<Session, 'revokedAt' | 'revokedReason'>,
@@ -15,19 +12,37 @@ export abstract class SessionHistoryRepository {
 
   /**
    * Finds all sessions associated with a specific user ID.
-   *
-   * @param userId The ID of the user whose sessions are to be retrieved.
-   * @returns A promise that resolves to an array of session entities.
-   * @throws An error if the query operation fails.
    */
   abstract findByUserId(userId: string): Atomic<Session[]>;
 
   /**
    * Finds a session by its unique ID.
-   *
-   * @param id The unique ID of the session to be retrieved.
-   * @returns A promise that resolves to the session entity if found, or null if not found.
-   * @throws An error if the query operation fails.
    */
   abstract findById(id: string): Atomic<Session | null>;
+
+  /**
+   * Marks a single session as encerrada (revoked/closed).
+   *
+   * @param id O ID da sessão a ser encerrada.
+   * @param revokedAt O instante em que a sessão foi encerrada.
+   * @param reason O motivo do encerramento.
+   */
+  abstract close(
+    id: string,
+    revokedAt: Date,
+    reason: SessionRevokedReason,
+  ): Atomic<Session>;
+
+  /**
+   * Marks all active (não encerradas) sessions of a user as encerradas.
+   *
+   * @param userId O ID do usuário cujas sessões serão encerradas.
+   * @param revokedAt O instante em que as sessões foram encerradas.
+   * @param reason O motivo do encerramento.
+   */
+  abstract closeAllByUserId(
+    userId: string,
+    revokedAt: Date,
+    reason: SessionRevokedReason,
+  ): Atomic<{ count: number }>;
 }
