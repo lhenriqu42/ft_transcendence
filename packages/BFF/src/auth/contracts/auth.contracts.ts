@@ -1,9 +1,9 @@
 export interface ChallengeRequest {
   email: string;
-
-  userAgent: string;
   ip: string;
 
+  deviceId?: string;
+  userAgent?: string;
   deviceFingerprint?: string;
 }
 
@@ -18,22 +18,17 @@ export interface LoginRequest {
   challengeId: string;
   email: string;
   password: string;
-  userAgent: string; // adicionado: BFF repassa
-  ip: string; // adicionado: BFF repassa
   captchaToken?: string;
   mfaCode?: string;
 }
 
 export interface LoginResponse {
+  userId: string;
   accessToken: string;
   refreshToken: string;
   sessionId: string;
+  deviceId: string;
   expiresIn: number;
-  user: {
-    id: string;
-    email: string;
-    roles: string[];
-  };
 }
 
 export interface RefreshRequest {
@@ -56,6 +51,7 @@ export interface LogoutRequest {
 }
 
 export interface RegisterRequest {
+  name: string;
   email: string;
   password: string;
 }

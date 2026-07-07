@@ -9,16 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import * as CI from './contracts/auth.contracts';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { RegisterDTO } from './auth.dto';
-
-interface LoginBody {
-  email: string;
-  password: string;
-  fingerprint?: string;
-  challengeId?: string; // presente na 2ª chamada, quando captcha/MFA já foram resolvidos
-  captchaToken?: string;
-  mfaCode?: string;
-}
+import { RegisterDTO, LoginDTO } from './auth.dto';
 
 const COOKIE_OPTS = {
   httpOnly: true,
@@ -35,12 +26,13 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() body: LoginBody,
+    @Body() body: LoginDTO,
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ) {
     const ip = req.ip;
-    const userAgent = req.headers['user-agent'] ?? '';
+    const userAgent = req.headers['user-agent'];
+    const deviceId = req.cookies?.did;
 
     let challengeId = body.challengeId;
     let requiresCaptcha = false;
@@ -53,6 +45,7 @@ export class AuthController {
         deviceFingerprint: body.fingerprint,
         ip,
         userAgent,
+        deviceId,
       });
 
       challengeId = challengeResponse.challengeId;
@@ -62,10 +55,8 @@ export class AuthController {
       // Se precisa de captcha/MFA e o client ainda não mandou, devolve o
       // desafio pra tela pedir e o client chama /login de novo com
       // challengeId + captchaToken/mfaCode preenchidos.
-      const missingCaptcha = requiresCaptcha && !body.captchaToken;
-      const missingMfa = requiresMFA && !body.mfaCode;
 
-      if (missingCaptcha || missingMfa) {
+      if (requiresCaptcha || requiresMFA) {
         return challengeResponse;
       }
     }
@@ -74,31 +65,32 @@ export class AuthController {
       challengeId,
       email: body.email,
       password: body.password,
-      userAgent,
-      ip,
       captchaToken: body.captchaToken,
       mfaCode: body.mfaCode,
     });
 
     // refreshToken e sessionId ficam só no cookie httpOnly — nunca voltam
     // no body pro JS do client conseguir ler.
-    reply.setCookie('RToken', loginResponse.refreshToken, {
+    reply.setCookie('r', loginResponse.refreshToken, {
       ...COOKIE_OPTS,
       maxAge: REFRESH_TOKEN_TTL_SECONDS,
     });
-    reply.setCookie('sessionId', loginResponse.sessionId, {
+    reply.setCookie('sid', loginResponse.sessionId, {
       ...COOKIE_OPTS,
       maxAge: REFRESH_TOKEN_TTL_SECONDS,
     });
-    reply.setCookie('userId', loginResponse.user.id, {
+    reply.setCookie('uid', loginResponse.userId, {
       ...COOKIE_OPTS,
       maxAge: REFRESH_TOKEN_TTL_SECONDS,
+    });
+    reply.setCookie('did', loginResponse.deviceId, {
+      ...COOKIE_OPTS,
+      maxAge: 365 * 24 * 60 * 60, // 1 ano
     });
 
     return {
       accessToken: loginResponse.accessToken,
       expiresIn: loginResponse.expiresIn,
-      user: loginResponse.user,
     };
   }
 
@@ -107,9 +99,9 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ) {
-    const refreshToken = req.cookies?.refreshToken;
-    const sessionId = req.cookies?.sessionId;
-
+    const refreshToken = req.cookies?.r;
+    const sessionId = req.cookies?.sid;
+    console.log(req.cookies);
     if (!refreshToken || !sessionId) {
       throw new UnauthorizedException('Missing session');
     }
@@ -121,12 +113,15 @@ export class AuthController {
       userAgent: req.headers['user-agent'] ?? '',
     });
 
-    reply.setCookie('RToken', refreshResponse.refreshToken, {
+    reply.setCookie('r', refreshResponse.refreshToken, {
       ...COOKIE_OPTS,
       maxAge: REFRESH_TOKEN_TTL_SECONDS,
     });
 
-    return refreshResponse; // { accessToken, expiresIn }
+    return {
+      accessToken: refreshResponse.accessToken,
+      expiresIn: refreshResponse.expiresIn,
+    };
   }
 
   @Post('logout')
@@ -135,8 +130,8 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) reply: FastifyReply,
   ) {
-    const sessionId = req.cookies?.sessionId;
-    const userId = req.cookies?.userId;
+    const sessionId = req.cookies?.sid;
+    const userId = req.cookies?.uid;
 
     if (sessionId && userId) {
       const logoutRequest: CI.LogoutRequest = {
@@ -157,6 +152,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: RegisterDTO) {
     const registerResponse = await this.authService.register({
+      name: body.name,
       email: body.email,
       password: body.password,
     });
