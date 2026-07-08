@@ -37,3 +37,17 @@ export class LoginDTO {
   @IsOptional()
   mfaCode?: string;
 }
+
+export class ForgotPasswordDTO {
+  @IsEmail()
+  email!: string;
+}
+
+export class ResetPasswordDTO {
+  @IsString()
+  token!: string;
+
+  @IsString()
+  @MinLength(6)
+  newPassword!: string;
+}

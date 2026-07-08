@@ -9,7 +9,12 @@ import {
 import { AuthService } from './auth.service';
 import * as CI from './contracts/auth.contracts';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { RegisterDTO, LoginDTO } from './auth.dto';
+import {
+  RegisterDTO,
+  LoginDTO,
+  ForgotPasswordDTO,
+  ResetPasswordDTO,
+} from './auth.dto';
 
 const COOKIE_OPTS = {
   httpOnly: true,
@@ -151,11 +156,25 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: RegisterDTO) {
-    const registerResponse = await this.authService.register({
+    return await this.authService.register({
       name: body.name,
       email: body.email,
       password: body.password,
     });
-    return registerResponse;
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: ForgotPasswordDTO) {
+    return await this.authService.forgotPassword({
+      email: body.email,
+    });
+  }
+
+  @Post('forgot-password/reset-password')
+  async resetPassword(@Body() body: ResetPasswordDTO) {
+    return await this.authService.resetPassword({
+      token: body.token,
+      newPassword: body.newPassword,
+    });
   }
 }

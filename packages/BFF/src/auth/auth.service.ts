@@ -93,6 +93,36 @@ export class AuthService {
     return this.parseResponse(response);
   }
 
+  async forgotPassword(payload: CI.ForgotPasswordRequest): Promise<void> {
+    const response = await this.breaker.execute(() =>
+      fetch(`${this.authServiceUrl}/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-secret': this.signatureKey,
+        },
+        body: JSON.stringify(payload),
+      }),
+    );
+
+    return this.parseResponse(response, { expectBody: false });
+  }
+
+  async resetPassword(payload: CI.ResetPasswordRequest): Promise<void> {
+    const response = await this.breaker.execute(() =>
+      fetch(`${this.authServiceUrl}/auth/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-secret': this.signatureKey,
+        },
+        body: JSON.stringify(payload),
+      }),
+    );
+
+    return this.parseResponse(response, { expectBody: false });
+  }
+
   // ---------------------------------------------------------------------
   // Helpers privados
   // ---------------------------------------------------------------------
