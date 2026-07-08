@@ -38,6 +38,15 @@ export abstract class UserRepository {
   // ---------------------------------------------
 
   /**
+   * Finds a user by their ID.
+   *
+   * @param id The ID of the user to find.
+   * @returns A promise that resolves to the user entity or null if not found.
+   * @throws An error if the query fails.
+   */
+  abstract findById(id: string): Atomic<User | null>;
+
+  /**
    * Saves a new user to the repository.
    *
    * @param user The user entity to be saved.

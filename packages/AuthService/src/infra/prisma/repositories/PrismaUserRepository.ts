@@ -57,4 +57,10 @@ export class PrismaUserRepository implements UserRepository {
       data: user,
     });
   }
+
+  findById(id: string): Atomic<User | null> {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
 }

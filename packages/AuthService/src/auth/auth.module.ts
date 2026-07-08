@@ -10,6 +10,9 @@ import {
   RefreshUseCase,
   RegisterUseCase,
   ChallengeUseCase,
+  ResetPasswordUseCase,
+  ChangePasswordUseCase,
+  ForgotPasswordUseCase,
 } from './application';
 
 @Module({
@@ -20,6 +23,9 @@ import {
     RefreshUseCase,
     RegisterUseCase,
     ChallengeUseCase,
+    ResetPasswordUseCase,
+    ChangePasswordUseCase,
+    ForgotPasswordUseCase,
     IpInfoService,
     SessionService,
     RiskEngineService,

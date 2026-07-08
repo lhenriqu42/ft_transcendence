@@ -59,3 +59,27 @@ export interface RegisterRequest {
 export interface RegisterResponse {
   userId: string;
 }
+
+export interface ChangePasswordRequest {
+  userId: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface ResetPasswordResponse {
+  success: boolean;
+  message: string;
+}
