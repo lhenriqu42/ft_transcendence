@@ -5,23 +5,23 @@ import { RiskEngineService } from './domain/risk-engine.service';
 import { IpInfoService } from './application/providers/ip-info.service';
 import { SessionService } from './application/providers/session.service';
 import {
-  LoginService,
-  LogoutService,
-  RefreshService,
-  RegisterService,
-  ChallengeService,
+  LoginUseCase,
+  LogoutUseCase,
+  RefreshUseCase,
+  RegisterUseCase,
+  ChallengeUseCase,
 } from './application';
 
 @Module({
   imports: [InfraModule],
   providers: [
-    LoginService,
-    LogoutService,
+    LoginUseCase,
+    LogoutUseCase,
+    RefreshUseCase,
+    RegisterUseCase,
+    ChallengeUseCase,
     IpInfoService,
-    RefreshService,
     SessionService,
-    RegisterService,
-    ChallengeService,
     RiskEngineService,
   ],
   controllers: [AuthController],

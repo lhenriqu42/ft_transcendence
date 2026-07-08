@@ -3,22 +3,22 @@ import { UseGuards } from '@nestjs/common';
 import { SecretAuthGuard } from '../.shared/security/auth.guard';
 import * as CI from './application/contracts/auth.contracts';
 import {
-  LoginService,
-  LogoutService,
-  RefreshService,
-  RegisterService,
-  ChallengeService,
+  LoginUseCase,
+  LogoutUseCase,
+  RefreshUseCase,
+  RegisterUseCase,
+  ChallengeUseCase,
 } from './application';
 
 @Controller('auth')
 @UseGuards(SecretAuthGuard)
 export class AuthController {
   constructor(
-    private readonly loginService: LoginService,
-    private readonly registerService: RegisterService,
-    private readonly logoutService: LogoutService,
-    private readonly refreshService: RefreshService,
-    private readonly challengeService: ChallengeService,
+    private readonly loginService: LoginUseCase,
+    private readonly registerService: RegisterUseCase,
+    private readonly logoutService: LogoutUseCase,
+    private readonly refreshService: RefreshUseCase,
+    private readonly challengeService: ChallengeUseCase,
   ) {}
 
   /**

@@ -3,8 +3,14 @@ import * as CI from './contracts/auth.contracts';
 import { SessionService } from './providers/session.service';
 
 @Injectable()
-export class LogoutService {
+export class LogoutUseCase {
   constructor(private readonly sessionService: SessionService) {}
 
-  async execute(body: CI.LogoutRequest): Promise<void> {}
+  execute(body: CI.LogoutRequest) {
+    return this.sessionService.logout(
+      body.userId,
+      body.sessionId,
+      body.allDevices,
+    );
+  }
 }

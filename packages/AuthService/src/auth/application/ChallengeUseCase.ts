@@ -17,7 +17,7 @@ import { RiskEngineService } from '../domain/risk-engine.service';
 const RISK_SCORE_CAPTCHA_THRESHOLD = 50; // acima disso, exige captcha
 
 @Injectable()
-export class ChallengeService {
+export class ChallengeUseCase {
   constructor(
     private readonly userRepo: UserRepository,
     private readonly deviceRepo: DeviceRepository,

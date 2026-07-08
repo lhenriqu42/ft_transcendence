@@ -9,7 +9,7 @@ import {
 } from '../domain/errors/session.errors';
 
 @Injectable()
-export class RefreshService {
+export class RefreshUseCase {
   constructor(private readonly sessionService: SessionService) {}
 
   async execute(body: CI.RefreshRequest): Promise<CI.RefreshResponse> {

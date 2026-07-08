@@ -16,7 +16,7 @@ const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 
 @Injectable()
-export class LoginService {
+export class LoginUseCase {
   constructor(
     private readonly uof: UnitOfWork,
     private readonly userRepo: UserRepository,
