@@ -51,3 +51,27 @@ export class ResetPasswordDTO {
   @MinLength(6)
   newPassword!: string;
 }
+
+export class OAuthCallbackQueryDTO {
+  @IsString()
+  code!: string;
+
+  @IsString()
+  state!: string;
+
+  @IsOptional()
+  @IsString()
+  iss?: string;
+
+  @IsOptional()
+  @IsString()
+  scope?: string;
+
+  @IsOptional()
+  @IsString()
+  authuser?: string;
+
+  @IsOptional()
+  @IsString()
+  prompt?: string;
+}

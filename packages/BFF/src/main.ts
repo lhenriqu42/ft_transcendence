@@ -26,7 +26,7 @@ async function bootstrap() {
   );
 
   await app.listen({
-    port: 3002,
+    port: 3003,
     host: '0.0.0.0',
   });
 }

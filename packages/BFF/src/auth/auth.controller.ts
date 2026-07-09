@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   Req,
   Res,
   UnauthorizedException,
@@ -14,6 +16,7 @@ import {
   LoginDTO,
   ForgotPasswordDTO,
   ResetPasswordDTO,
+  OAuthCallbackQueryDTO,
 } from './auth.dto';
 
 const COOKIE_OPTS = {
@@ -175,6 +178,67 @@ export class AuthController {
     return await this.authService.resetPassword({
       token: body.token,
       newPassword: body.newPassword,
+    });
+  }
+
+  @Post('oauth/42')
+  async oauth42() {
+    return await this.authService.startOAuth({
+      provider: 'ECOLE42',
+    });
+  }
+  @Post('oauth/github')
+  async oauthGithub() {
+    return await this.authService.startOAuth({
+      provider: 'GITHUB',
+    });
+  }
+  @Post('oauth/google')
+  async oauthGoogle() {
+    return await this.authService.startOAuth({
+      provider: 'GOOGLE',
+    });
+  }
+  @Post('oauth/discord')
+  async oauthDiscord() {
+    return await this.authService.startOAuth({
+      provider: 'DISCORD',
+    });
+  }
+
+  @Get('42/callback')
+  async oauth42Callback(@Query() query: OAuthCallbackQueryDTO) {
+    console.log('42 callback query:', query);
+    await this.authService.handleOAuthCallback({
+      provider: 'ECOLE42',
+      ...query,
+    });
+  }
+
+  @Get('github/callback')
+  async oauthGithubCallback(@Query() query: OAuthCallbackQueryDTO) {
+    console.log('GitHub callback query:', query);
+    await this.authService.handleOAuthCallback({
+      provider: 'GITHUB',
+      ...query,
+    });
+  }
+
+  @Get('google/callback')
+  async oauthGoogleCallback(@Query() query: OAuthCallbackQueryDTO) {
+    console.log('Google callback query:', query);
+    await this.authService.handleOAuthCallback({
+      provider: 'GOOGLE',
+      ...query,
+    });
+  }
+
+  @Get('discord/callback')
+  async oauthDiscordCallback(@Query() query: OAuthCallbackQueryDTO) {
+    console.log('Discord callback query:', query);
+    await this.authService.handleOAuthCallback({
+      provider: 'DISCORD',
+      ...query,
     });
   }
 }

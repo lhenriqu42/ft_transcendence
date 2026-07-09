@@ -1,3 +1,13 @@
+export const OAuthProvider = {
+  GOOGLE: 'GOOGLE',
+  GITHUB: 'GITHUB',
+  DISCORD: 'DISCORD',
+  ECOLE42: 'ECOLE42',
+} as const;
+
+type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider];
+export type OAuthProviderType = OAuthProvider;
+
 export interface ChallengeRequest {
   email: string;
   ip: string;
@@ -82,4 +92,43 @@ export interface ForgotPasswordResponse {
 export interface ResetPasswordResponse {
   success: boolean;
   message: string;
+}
+
+export interface OAuthStartRequest {
+  provider: OAuthProviderType;
+}
+
+export interface OAuthStartResponse {
+  authorizationUrl: URL;
+}
+
+export interface OAuthCallbackRequest {
+  provider: OAuthProviderType;
+  code: string;
+  state: string;
+}
+
+export interface OAuthIdentity {
+  provider: OAuthProviderType;
+
+  providerUserId: string;
+
+  email: string;
+
+  emailVerified: boolean;
+
+  username?: string;
+
+  displayName?: string;
+
+  avatarUrl?: string;
+}
+
+export interface OAuthCallbackResponse {
+  accessToken: string;
+  refreshToken?: string;
+  expiresAt?: Date;
+  idToken?: string;
+  scopes: string[];
+  identity: OAuthIdentity;
 }
