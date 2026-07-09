@@ -1,4 +1,4 @@
-import { LoginIpContext } from './IpLookup';
+import { LoginIpContext } from '../utils/IpLookup';
 
 export interface ChallengePayload {
   user: {

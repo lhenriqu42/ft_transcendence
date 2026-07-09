@@ -1,5 +1,5 @@
-import { Device } from '../../domain/entities/device.entity';
-import { Atomic } from './Atomic';
+import { Device } from '../../../domain/entities/device.entity';
+import { Atomic } from '../utils/Atomic';
 
 export type DataToIncrement = {
   userId: string;

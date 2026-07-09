@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common';
-import { ChallengePayload } from '../ports/ChallengeRepository';
+import { ChallengePayload } from '../ports/session/ChallengeRepository';
 import { LoginFailureReason } from '../../../infra/prisma/generated/enums';
 
 export class LoginError extends Error {

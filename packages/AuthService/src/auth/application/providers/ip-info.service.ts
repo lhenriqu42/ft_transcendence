@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LoginIpContext } from '../ports/IpLookup';
-import { IpLookup } from '../ports/IpLookup';
+import { LoginIpContext, IpLookup } from '../ports';
 
 @Injectable()
 export class IpInfoService {

@@ -1,11 +1,11 @@
-import { Atomic } from '../../../auth/application/ports/Atomic';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 import {
   LoginHistoryRepository,
   LoginHistoryFailureRecord,
   LoginHistorySuccessRecord,
-} from '../../../auth/application/ports/LoginHistoryRepository';
+} from '../../../auth/application/ports/session/LoginHistoryRepository';
 import { LoginHistory } from '../../../auth/domain/entities/login-history.entity';
 
 @Injectable()

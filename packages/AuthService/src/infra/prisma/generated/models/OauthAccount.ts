@@ -27,7 +27,7 @@ export type AggregateOauthAccount = {
 export type OauthAccountMinAggregateOutputType = {
   id: string | null
   userId: string | null
-  provider: $Enums.OauthProvider | null
+  provider: $Enums.OAuthProvider | null
   providerUserId: string | null
   createdAt: Date | null
 }
@@ -35,7 +35,7 @@ export type OauthAccountMinAggregateOutputType = {
 export type OauthAccountMaxAggregateOutputType = {
   id: string | null
   userId: string | null
-  provider: $Enums.OauthProvider | null
+  provider: $Enums.OAuthProvider | null
   providerUserId: string | null
   createdAt: Date | null
 }
@@ -150,7 +150,7 @@ export type OauthAccountGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type OauthAccountGroupByOutputType = {
   id: string
   userId: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date
   _count: OauthAccountCountAggregateOutputType | null
@@ -179,7 +179,7 @@ export type OauthAccountWhereInput = {
   NOT?: Prisma.OauthAccountWhereInput | Prisma.OauthAccountWhereInput[]
   id?: Prisma.UuidFilter<"OauthAccount"> | string
   userId?: Prisma.UuidFilter<"OauthAccount"> | string
-  provider?: Prisma.EnumOauthProviderFilter<"OauthAccount"> | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFilter<"OauthAccount"> | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFilter<"OauthAccount"> | string
   createdAt?: Prisma.DateTimeFilter<"OauthAccount"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -201,7 +201,7 @@ export type OauthAccountWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OauthAccountWhereInput[]
   NOT?: Prisma.OauthAccountWhereInput | Prisma.OauthAccountWhereInput[]
   userId?: Prisma.UuidFilter<"OauthAccount"> | string
-  provider?: Prisma.EnumOauthProviderFilter<"OauthAccount"> | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFilter<"OauthAccount"> | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFilter<"OauthAccount"> | string
   createdAt?: Prisma.DateTimeFilter<"OauthAccount"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -224,14 +224,14 @@ export type OauthAccountScalarWhereWithAggregatesInput = {
   NOT?: Prisma.OauthAccountScalarWhereWithAggregatesInput | Prisma.OauthAccountScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"OauthAccount"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"OauthAccount"> | string
-  provider?: Prisma.EnumOauthProviderWithAggregatesFilter<"OauthAccount"> | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderWithAggregatesFilter<"OauthAccount"> | $Enums.OAuthProvider
   providerUserId?: Prisma.StringWithAggregatesFilter<"OauthAccount"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OauthAccount"> | Date | string
 }
 
 export type OauthAccountCreateInput = {
   id?: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
   user: Prisma.UserCreateNestedOneWithoutOauthAccountsInput
@@ -240,14 +240,14 @@ export type OauthAccountCreateInput = {
 export type OauthAccountUncheckedCreateInput = {
   id?: string
   userId: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
 }
 
 export type OauthAccountUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutOauthAccountsNestedInput
@@ -256,7 +256,7 @@ export type OauthAccountUpdateInput = {
 export type OauthAccountUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -264,14 +264,14 @@ export type OauthAccountUncheckedUpdateInput = {
 export type OauthAccountCreateManyInput = {
   id?: string
   userId: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
 }
 
 export type OauthAccountUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -279,7 +279,7 @@ export type OauthAccountUpdateManyMutationInput = {
 export type OauthAccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -295,7 +295,7 @@ export type OauthAccountOrderByRelationAggregateInput = {
 }
 
 export type OauthAccountProviderProviderUserIdCompoundUniqueInput = {
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
 }
 
@@ -365,20 +365,20 @@ export type OauthAccountUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.OauthAccountScalarWhereInput | Prisma.OauthAccountScalarWhereInput[]
 }
 
-export type EnumOauthProviderFieldUpdateOperationsInput = {
-  set?: $Enums.OauthProvider
+export type EnumOAuthProviderFieldUpdateOperationsInput = {
+  set?: $Enums.OAuthProvider
 }
 
 export type OauthAccountCreateWithoutUserInput = {
   id?: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
 }
 
 export type OauthAccountUncheckedCreateWithoutUserInput = {
   id?: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
 }
@@ -415,35 +415,35 @@ export type OauthAccountScalarWhereInput = {
   NOT?: Prisma.OauthAccountScalarWhereInput | Prisma.OauthAccountScalarWhereInput[]
   id?: Prisma.UuidFilter<"OauthAccount"> | string
   userId?: Prisma.UuidFilter<"OauthAccount"> | string
-  provider?: Prisma.EnumOauthProviderFilter<"OauthAccount"> | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFilter<"OauthAccount"> | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFilter<"OauthAccount"> | string
   createdAt?: Prisma.DateTimeFilter<"OauthAccount"> | Date | string
 }
 
 export type OauthAccountCreateManyUserInput = {
   id?: string
-  provider: $Enums.OauthProvider
+  provider: $Enums.OAuthProvider
   providerUserId: string
   createdAt: Date | string
 }
 
 export type OauthAccountUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OauthAccountUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OauthAccountUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumOauthProviderFieldUpdateOperationsInput | $Enums.OauthProvider
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
   providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -504,7 +504,7 @@ export type $OauthAccountPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
-    provider: $Enums.OauthProvider
+    provider: $Enums.OAuthProvider
     providerUserId: string
     createdAt: Date
   }, ExtArgs["result"]["oauthAccount"]>
@@ -933,7 +933,7 @@ export interface Prisma__OauthAccountClient<T, Null = never, ExtArgs extends run
 export interface OauthAccountFieldRefs {
   readonly id: Prisma.FieldRef<"OauthAccount", 'String'>
   readonly userId: Prisma.FieldRef<"OauthAccount", 'String'>
-  readonly provider: Prisma.FieldRef<"OauthAccount", 'OauthProvider'>
+  readonly provider: Prisma.FieldRef<"OauthAccount", 'OAuthProvider'>
   readonly providerUserId: Prisma.FieldRef<"OauthAccount", 'String'>
   readonly createdAt: Prisma.FieldRef<"OauthAccount", 'DateTime'>
 }

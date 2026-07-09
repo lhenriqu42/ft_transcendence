@@ -4,8 +4,8 @@ import { PrismaService } from '../prisma.service';
 import {
   CreateRefreshTokenDTO,
   RefreshTokenRepository,
-} from '../../../auth/application/ports/RefreshTokenRepository';
-import { Atomic } from '../../../auth/application/ports/Atomic';
+} from '../../../auth/application/ports/session/RefreshTokenRepository';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 import { RefreshToken } from '../../../auth/domain/entities/refresh-token.entity';
 import { RefreshTokenReuseError } from '../../../auth/domain/errors/session.errors';
 

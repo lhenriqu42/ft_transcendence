@@ -1,5 +1,5 @@
-import { Atomic } from './Atomic';
-import { RefreshToken } from '../../domain/entities/refresh-token.entity';
+import { Atomic } from '../utils/Atomic';
+import { RefreshToken } from '../../../domain/entities/refresh-token.entity';
 
 export interface CreateRefreshTokenDTO {
   jti: string; // gerado pelo SessionService, embutido no token bruto entregue ao cliente

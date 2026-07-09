@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PasswordResetRepository } from '../../../auth/application/ports/PasswordResetRepository';
+import { PasswordResetRepository } from '../../../auth/application/ports/user/PasswordResetRepository';
 import { RedisService } from '../redis.service';
 
 const NAMESPACE = 'password_reset';

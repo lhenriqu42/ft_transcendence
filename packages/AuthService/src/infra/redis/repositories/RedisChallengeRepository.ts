@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   ChallengePayload,
   ChallengeRepository,
-} from '../../../auth/application/ports/ChallengeRepository';
+} from '../../../auth/application/ports/session/ChallengeRepository';
 import { randomUUID } from 'crypto';
 import { RedisService } from '../redis.service';
 

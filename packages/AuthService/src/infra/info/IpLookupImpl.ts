@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IpCtxResponse, IpLookup } from '../../auth/application/ports/IpLookup';
+import { IpCtxResponse, IpLookup } from '../../auth/application/ports/utils/IpLookup';
 
 @Injectable()
 export class IpLookupImpl extends IpLookup {

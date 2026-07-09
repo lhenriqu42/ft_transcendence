@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Device } from './entities/device.entity';
-import { LoginIpContext } from '../application/ports/IpLookup';
+import { LoginIpContext } from '../application/ports';
 
 enum RiskValues {
   // --- CATEGORIA 1: DADOS AUSENTES OU INCOMPLETOS (Sinal de automação/bot) ---

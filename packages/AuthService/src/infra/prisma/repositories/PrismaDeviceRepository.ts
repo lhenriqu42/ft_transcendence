@@ -1,9 +1,9 @@
 import { Device } from '../../../auth/domain/entities/device.entity';
-import { Atomic } from '../../../auth/application/ports/Atomic';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 import {
   DataToIncrement,
   DeviceRepository,
-} from '../../../auth/application/ports/DeviceRepository';
+} from '../../../auth/application/ports/session/DeviceRepository';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 import { createHash } from 'crypto';

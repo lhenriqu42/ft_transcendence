@@ -1,5 +1,5 @@
-import { User } from '../../domain/entities/user.entity';
-import { Atomic } from './Atomic';
+import { User } from '../../../domain/entities/user.entity';
+import { Atomic } from '../utils/Atomic';
 
 export interface UserLoginData {
   id: string;

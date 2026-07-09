@@ -1,7 +1,6 @@
-import { PasswordHistoryRepository } from './ports/PasswordHistoryRepository';
+import { PasswordHistoryRepository } from './ports/user/PasswordHistoryRepository';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UnitOfWork } from './ports/unit-of-work';
-import { UserRepository } from './ports';
+import { UserRepository, UnitOfWork } from './ports';
 import * as argon2 from 'argon2';
 
 @Injectable()

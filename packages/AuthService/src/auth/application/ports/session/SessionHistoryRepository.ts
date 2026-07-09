@@ -1,6 +1,6 @@
-import { SessionRevokedReason } from '../../../infra/prisma/generated/enums';
-import { Session } from '../../domain/entities/session.entity';
-import { Atomic } from './Atomic';
+import { SessionRevokedReason } from '../../../../infra/prisma/generated/enums';
+import { Session } from '../../../domain/entities/session.entity';
+import { Atomic } from '../utils/Atomic';
 
 export abstract class SessionHistoryRepository {
   /**

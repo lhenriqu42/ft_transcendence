@@ -4,7 +4,7 @@ import { RedisService } from '../redis.service';
 import {
   ActiveSession,
   ActiveSessionRepository,
-} from '../../../auth/application/ports/ActiveSessionRepository';
+} from '../../../auth/application/ports/session/ActiveSessionRepository';
 
 const NAMESPACE = 'session';
 

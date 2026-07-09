@@ -1,4 +1,4 @@
-import { PasswordHistoryRepository } from '../../../auth/application/ports/PasswordHistoryRepository';
+import { PasswordHistoryRepository } from '../../../auth/application/ports/user/PasswordHistoryRepository';
 import { PasswordHistory } from '../../../auth/domain/entities/password-history.entity';
 import { PrismaPromise } from '../generated/internal/prismaNamespace';
 import { PrismaService } from '../prisma.service';

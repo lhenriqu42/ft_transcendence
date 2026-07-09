@@ -3,8 +3,8 @@ import { PrismaService } from '../prisma.service';
 import {
   Results,
   UnitOfWork,
-} from './../../../auth/application/ports/unit-of-work';
-import { Atomic } from './../../../auth/application/ports/Atomic';
+} from './../../../auth/application/ports/utils/unit-of-work';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 
 @Injectable()
 export class PrismaUnitOfWork implements UnitOfWork {

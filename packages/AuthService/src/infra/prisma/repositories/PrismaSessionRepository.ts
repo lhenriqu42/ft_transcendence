@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { SessionRevokedReason } from '../generated/enums';
-import { Atomic } from '../../../auth/application/ports/Atomic';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 import { Session } from '../../../auth/domain/entities/session.entity';
-import { SessionHistoryRepository } from '../../../auth/application/ports/SessionHistoryRepository';
+import { SessionHistoryRepository } from '../../../auth/application/ports/session/SessionHistoryRepository';
 
 @Injectable()
 export class PrismaSessionRepository implements SessionHistoryRepository {

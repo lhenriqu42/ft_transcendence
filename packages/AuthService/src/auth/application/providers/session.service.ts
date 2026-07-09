@@ -1,21 +1,21 @@
+import { randomBytes, randomUUID, createHash, timingSafeEqual } from 'crypto';
+import { RefreshToken } from '../../domain/entities/refresh-token.entity';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
-import { randomBytes, randomUUID, createHash, timingSafeEqual } from 'crypto';
 import { SignJWT } from 'jose';
 import {
+  UnitOfWork,
   UserRepository,
   RefreshTokenRepository,
   ActiveSessionRepository,
   SessionHistoryRepository,
 } from '../ports';
 import {
-  InvalidRefreshTokenError,
-  RefreshTokenExpiredError,
-  RefreshTokenReuseError,
   SessionMismatchError,
+  RefreshTokenReuseError,
+  RefreshTokenExpiredError,
+  InvalidRefreshTokenError,
 } from '../../domain/errors/session.errors';
-import { RefreshToken } from '../../domain/entities/refresh-token.entity';
-import { UnitOfWork } from '../ports/unit-of-work';
 
 const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 dias
 const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min

@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { UserRepository, PasswordResetRepository } from './ports';
 import * as CI from './contracts/auth.contracts';
-import { PasswordResetRepository } from './ports/PasswordResetRepository';
-import { UserRepository } from './ports';
+import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
 
 @Injectable()

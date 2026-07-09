@@ -1,5 +1,5 @@
-import { PasswordHistory } from '../../domain/entities/password-history.entity';
-import { Atomic } from './Atomic';
+import { PasswordHistory } from '../../../domain/entities/password-history.entity';
+import { Atomic } from '../utils/Atomic';
 
 export abstract class PasswordHistoryRepository {
   /**

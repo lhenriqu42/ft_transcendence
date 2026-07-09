@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import * as CI from '../application/contracts/auth.contracts';
-import { PasswordResetRepository } from './ports/PasswordResetRepository';
 import { ChangePasswordUseCase } from './ChangePasswordUseCase';
+import * as CI from '../application/contracts/auth.contracts';
+import { PasswordResetRepository } from './ports';
 
 @Injectable()
 export class ResetPasswordUseCase {

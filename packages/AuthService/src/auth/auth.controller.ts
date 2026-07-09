@@ -1,7 +1,8 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common';
 import { SecretAuthGuard } from '../.shared/security/auth.guard';
 import * as CI from './application/contracts/auth.contracts';
+import { UseGuards } from '@nestjs/common';
+
 import {
   LoginUseCase,
   LogoutUseCase,
@@ -11,6 +12,8 @@ import {
   ResetPasswordUseCase,
   ForgotPasswordUseCase,
   ChangePasswordUseCase,
+  OAuthStartUseCase,
+  OAuthCallbackUseCase,
 } from './application';
 
 @Controller('auth')
@@ -25,6 +28,8 @@ export class AuthController {
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
     private readonly changePasswordUseCase: ChangePasswordUseCase,
+    private readonly oAuthStartUseCase: OAuthStartUseCase,
+    private readonly oAuthCallbackUseCase: OAuthCallbackUseCase,
   ) {}
 
   @Post('login/challenge')
@@ -86,6 +91,22 @@ export class AuthController {
   ): Promise<CI.ResetPasswordResponse> {
     body.newPassword = body.newPassword.trim();
     return this.resetPasswordUseCase.execute(body);
+  }
+
+  @Post('oauth')
+  @HttpCode(HttpStatus.OK)
+  oAuthStart(
+    @Body() body: CI.OAuthStartRequest,
+  ): Promise<CI.OAuthStartResponse> {
+    return this.oAuthStartUseCase.execute(body);
+  }
+
+  @Post('oauth/callback')
+  @HttpCode(HttpStatus.OK)
+  oAuthCallback(
+    @Body() body: CI.OAuthCallbackRequest,
+  ): Promise<CI.OAuthCallbackResponse> {
+    return this.oAuthCallbackUseCase.execute(body);
   }
 }
 

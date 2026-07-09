@@ -246,21 +246,21 @@ export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
-export type EnumOauthProviderFilter<$PrismaModel = never> = {
-  equals?: $Enums.OauthProvider | Prisma.EnumOauthProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel> | $Enums.OauthProvider
+export type EnumOAuthProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel> | $Enums.OAuthProvider
 }
 
-export type EnumOauthProviderWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.OauthProvider | Prisma.EnumOauthProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumOauthProviderWithAggregatesFilter<$PrismaModel> | $Enums.OauthProvider
+export type EnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOAuthProviderWithAggregatesFilter<$PrismaModel> | $Enums.OAuthProvider
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
 }
 
 export type EnumLoginFailureReasonNullableFilter<$PrismaModel = never> = {
@@ -619,21 +619,21 @@ export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
-export type NestedEnumOauthProviderFilter<$PrismaModel = never> = {
-  equals?: $Enums.OauthProvider | Prisma.EnumOauthProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel> | $Enums.OauthProvider
+export type NestedEnumOAuthProviderFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel> | $Enums.OAuthProvider
 }
 
-export type NestedEnumOauthProviderWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.OauthProvider | Prisma.EnumOauthProviderFieldRefInput<$PrismaModel>
-  in?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  notIn?: $Enums.OauthProvider[] | Prisma.ListEnumOauthProviderFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumOauthProviderWithAggregatesFilter<$PrismaModel> | $Enums.OauthProvider
+export type NestedEnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel>
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOAuthProviderWithAggregatesFilter<$PrismaModel> | $Enums.OAuthProvider
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumOauthProviderFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
 }
 
 export type NestedEnumLoginFailureReasonNullableFilter<$PrismaModel = never> = {

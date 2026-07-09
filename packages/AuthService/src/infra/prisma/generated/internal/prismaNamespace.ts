@@ -1611,16 +1611,16 @@ export type ListEnumSessionRevokedReasonFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
- * Reference to a field of type 'OauthProvider'
+ * Reference to a field of type 'OAuthProvider'
  */
-export type EnumOauthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OauthProvider'>
+export type EnumOAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthProvider'>
     
 
 
 /**
- * Reference to a field of type 'OauthProvider[]'
+ * Reference to a field of type 'OAuthProvider[]'
  */
-export type ListEnumOauthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OauthProvider[]'>
+export type ListEnumOAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthProvider[]'>
     
 
 

@@ -18,16 +18,14 @@ export const SessionRevokedReason = {
 export type SessionRevokedReason = (typeof SessionRevokedReason)[keyof typeof SessionRevokedReason]
 
 
-export const OauthProvider = {
+export const OAuthProvider = {
   GOOGLE: 'GOOGLE',
   GITHUB: 'GITHUB',
-  MICROSOFT: 'MICROSOFT',
-  APPLE: 'APPLE',
   DISCORD: 'DISCORD',
   ECOLE42: 'ECOLE42'
 } as const
 
-export type OauthProvider = (typeof OauthProvider)[keyof typeof OauthProvider]
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider]
 
 
 export const LoginFailureReason = {

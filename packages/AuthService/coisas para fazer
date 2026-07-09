@@ -1,0 +1,17 @@
+deixar as operacoes redis atomicas, e tentar deixar o prisma atomico tambem, inclusive os 2 juntos em cada caso de uso.
+
+Resumindo
+Método	Atomicamente seguro?
+ActiveSession.save	✅ Sim (MULTI/EXEC)
+ActiveSession.get	✅ Sim (comando único)
+ActiveSession.exists	✅ Sim
+ActiveSession.delete	⚠️ Parcialmente (há leitura antes do MULTI)
+ActiveSession.deleteAllByUserId	❌ Não (race condition entre SMEMBERS e MULTI)
+Challenge.save/find/delete	✅ Sim
+OAuthState.save/exists/delete	✅ Sim individualmente, mas ⚠️ exists seguido de delete não é seguro para uso único
+PasswordReset.save/get/delete	✅ Sim individualmente, mas ⚠️ get seguido de delete não é seguro para uso único
+
+Para um sistema de autenticação robusto, eu faria duas melhorias principais:
+
+Trocar os fluxos "verificar e depois apagar" por uma operação atômica, usando GETDEL (quando o valor precisa ser lido) ou um script Lua (quando é necessário validar e consumir em uma única etapa).
+Reescrever deleteAllByUserId() como um script Lua para que a leitura do conjunto de sessões e a remoção das sessões e do índice ocorram em uma única operação atômica, eliminando a condição de corrida que pode deixar sessões órfãs.

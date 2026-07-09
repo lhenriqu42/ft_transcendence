@@ -4,8 +4,8 @@ import { User } from '../../../auth/domain/entities/user.entity';
 import {
   UserLoginData,
   UserRepository,
-} from '../../../auth/application/ports/UserRepository';
-import { Atomic } from '../../../auth/application/ports/Atomic';
+} from '../../../auth/application/ports/user/UserRepository';
+import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {

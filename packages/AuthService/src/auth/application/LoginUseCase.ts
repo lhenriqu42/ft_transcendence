@@ -5,12 +5,16 @@ import {
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import * as CI from './contracts/auth.contracts';
-import { UnitOfWork } from './ports/unit-of-work';
 import { LoginError } from './exceptions/LoginError';
 import { SessionService } from './providers/session.service';
 import { LoginFailureReason } from '../../infra/prisma/generated/enums';
-import { LoginHistoryRepository } from './ports/LoginHistoryRepository';
-import { ChallengeRepository, DeviceRepository, UserRepository } from './ports';
+import { LoginHistoryRepository } from './ports/session/LoginHistoryRepository';
+import {
+  ChallengeRepository,
+  DeviceRepository,
+  UserRepository,
+  UnitOfWork,
+} from './ports';
 
 const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
