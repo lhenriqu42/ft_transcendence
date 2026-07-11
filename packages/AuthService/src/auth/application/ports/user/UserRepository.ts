@@ -3,8 +3,10 @@ import { Atomic } from '../utils/Atomic';
 
 export interface UserLoginData {
   id: string;
-  passwordHash: string;
-  emailVerified: boolean;
+  name: string | null;
+  email: string;
+  passwordHash: string | null;
+  emailVerified: boolean | null;
   accountLocked: boolean;
   failedLoginCount: number;
   deletedAt: Date | null;
@@ -45,6 +47,15 @@ export abstract class UserRepository {
    * @throws An error if the query fails.
    */
   abstract findById(id: string): Atomic<User | null>;
+
+  /**
+   * Finds a user by their email.
+   *
+   * @param email The email of the user to find.
+   * @returns A promise that resolves to the user entity or null if not found.
+   * @throws An error if the query fails.
+   */
+  abstract findByEmail(email: string): Atomic<User | null>;
 
   /**
    * Saves a new user to the repository.

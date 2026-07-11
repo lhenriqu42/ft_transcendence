@@ -1,10 +1,10 @@
 export class User {
   constructor(
     public readonly id: string,
-    public name: string,
+    public name: string | null,
     public email: string,
-    public passwordHash: string,
-    public emailVerified: boolean,
+    public passwordHash: string | null,
+    public emailVerified: boolean | null,
     public accountLocked: boolean,
     public failedLoginCount: number,
     public createdAt: Date,

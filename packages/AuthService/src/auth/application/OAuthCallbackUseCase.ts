@@ -1,41 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { OAuthService } from './providers/oauth.service';
+import { OAuthLoginUseCase } from './OAuthLoginUseCase';
+import { OAuthLinkUseCase } from './OAuthLinkUseCase';
 import * as CI from './contracts/auth.contracts';
-import { OAuthProviderFactory } from './ports/utils/OAuthProviderFactory';
-import { OAuthIdentity } from './ports';
 
 @Injectable()
 export class OAuthCallbackUseCase {
-  constructor(private readonly oAuthProviderFactory: OAuthProviderFactory) {}
+  constructor(
+    private readonly oAuthService: OAuthService,
+    private readonly oAuthLinkUseCase: OAuthLinkUseCase,
+    private readonly oAuthLoginUseCase: OAuthLoginUseCase,
+  ) {}
 
   async execute(
     body: CI.OAuthCallbackRequest,
   ): Promise<CI.OAuthCallbackResponse> {
-    const provider = this.oAuthProviderFactory.get(body.provider);
+    const data = await this.oAuthService.getStateData(body.state);
+    const { intent, userId } = data;
 
-    console.log(`Executing OAuth callback for provider: ${body.provider}`);
-
-    const result = await provider.validateAuthorizationCode(
+    const { identity, tokens } = await this.oAuthService.getIdentity(
+      data.provider,
       body.code,
       body.state,
     );
 
-    let identity: OAuthIdentity | null = null;
-    if (result.idToken) identity = provider.decodeIdToken(result.idToken);
-    else identity = await provider.getIdentity(result.accessToken);
-
-    if (!identity) {
-      throw new Error('Failed to retrieve user identity from OAuth provider');
+    let user: CI.OAuthCallbackResponse | null = null;
+    if (intent === 'link') {
+      user = await this.oAuthLinkUseCase.execute({
+        prevUID: userId,
+        currUID: body.sub,
+        info: { identity, tokens },
+      });
+    } else if (intent === 'login') {
+      user = await this.oAuthLoginUseCase.execute({ identity, tokens });
+    } else {
+      throw new InternalServerErrorException('Invalid intent');
     }
 
-    console.log(`Retrieved identity for provider ${body.provider}:`, identity);
-
     return {
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
-      expiresAt: result.expiresAt,
-      idToken: result.idToken,
-      scopes: result.scopes ?? [],
-      identity,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      accountLocked: user.accountLocked,
+      lastLoginAt: user.lastLoginAt,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      deletedAt: user.deletedAt,
     };
   }
 }

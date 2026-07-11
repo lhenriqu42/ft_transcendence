@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { RedisService } from '../redis.service';
+import {
+  OAuthStateData,
+  OAuthStateRepository,
+} from '../../../auth/application/ports/oauth/OAuthStateRepository';
 
 const NAMESPACE = 'oauth_authorization';
 
-export interface OAuthAuthorizationData {
-  codeVerifier?: string;
-}
-
 @Injectable()
-export class RedisOAuthAuthorizationRepository {
+export class RedisOAuthStateRepository implements OAuthStateRepository {
   constructor(private readonly redisService: RedisService) {}
 
   async save(
     state: string,
-    data: OAuthAuthorizationData,
+    data: OAuthStateData,
     ttlSeconds: number,
   ): Promise<void> {
     await this.redisService
@@ -21,7 +21,7 @@ export class RedisOAuthAuthorizationRepository {
       .set(`${NAMESPACE}:${state}`, JSON.stringify(data), 'EX', ttlSeconds);
   }
 
-  async find(state: string): Promise<OAuthAuthorizationData | null> {
+  async find(state: string): Promise<OAuthStateData | null> {
     const value = await this.redisService
       .getClient()
       .get(`${NAMESPACE}:${state}`);
@@ -30,7 +30,7 @@ export class RedisOAuthAuthorizationRepository {
       return null;
     }
 
-    return JSON.parse(value) as OAuthAuthorizationData;
+    return JSON.parse(value) as OAuthStateData;
   }
 
   async delete(state: string): Promise<void> {

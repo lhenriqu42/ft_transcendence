@@ -217,10 +217,10 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  name: string
+  name: string | null
   email: string
-  passwordHash: string
-  emailVerified: boolean
+  passwordHash: string | null
+  emailVerified: boolean | null
   accountLocked: boolean
   failedLoginCount: number
   createdAt: Date
@@ -254,10 +254,10 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.UuidFilter<"User"> | string
-  name?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringFilter<"User"> | string
-  passwordHash?: Prisma.StringFilter<"User"> | string
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
+  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolNullableFilter<"User"> | boolean | null
   accountLocked?: Prisma.BoolFilter<"User"> | boolean
   failedLoginCount?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -267,7 +267,7 @@ export type UserWhereInput = {
   devices?: Prisma.DeviceListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
-  oauthAccounts?: Prisma.OauthAccountListRelationFilter
+  oauthIdentities?: Prisma.OAuthIdentityListRelationFilter
   loginHistory?: Prisma.LoginHistoryListRelationFilter
   mfaCredentials?: Prisma.MfaCredentialListRelationFilter
   recoveryCodes?: Prisma.RecoveryCodeListRelationFilter
@@ -277,10 +277,10 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
+  passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   accountLocked?: Prisma.SortOrder
   failedLoginCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -290,7 +290,7 @@ export type UserOrderByWithRelationInput = {
   devices?: Prisma.DeviceOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
-  oauthAccounts?: Prisma.OauthAccountOrderByRelationAggregateInput
+  oauthIdentities?: Prisma.OAuthIdentityOrderByRelationAggregateInput
   loginHistory?: Prisma.LoginHistoryOrderByRelationAggregateInput
   mfaCredentials?: Prisma.MfaCredentialOrderByRelationAggregateInput
   recoveryCodes?: Prisma.RecoveryCodeOrderByRelationAggregateInput
@@ -304,9 +304,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  name?: Prisma.StringFilter<"User"> | string
-  passwordHash?: Prisma.StringFilter<"User"> | string
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
+  name?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolNullableFilter<"User"> | boolean | null
   accountLocked?: Prisma.BoolFilter<"User"> | boolean
   failedLoginCount?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -316,7 +316,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   devices?: Prisma.DeviceListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
-  oauthAccounts?: Prisma.OauthAccountListRelationFilter
+  oauthIdentities?: Prisma.OAuthIdentityListRelationFilter
   loginHistory?: Prisma.LoginHistoryListRelationFilter
   mfaCredentials?: Prisma.MfaCredentialListRelationFilter
   recoveryCodes?: Prisma.RecoveryCodeListRelationFilter
@@ -326,10 +326,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  passwordHash?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
+  passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
   accountLocked?: Prisma.SortOrder
   failedLoginCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -348,10 +348,10 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"User"> | string
-  name?: Prisma.StringWithAggregatesFilter<"User"> | string
+  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
-  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
   accountLocked?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   failedLoginCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -362,10 +362,10 @@ export type UserScalarWhereWithAggregatesInput = {
 
 export type UserCreateInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -375,7 +375,7 @@ export type UserCreateInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -385,10 +385,10 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -398,7 +398,7 @@ export type UserUncheckedCreateInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -408,10 +408,10 @@ export type UserUncheckedCreateInput = {
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -421,7 +421,7 @@ export type UserUpdateInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -431,10 +431,10 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -444,7 +444,7 @@ export type UserUncheckedUpdateInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -454,10 +454,10 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -468,10 +468,10 @@ export type UserCreateManyInput = {
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -482,10 +482,10 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -553,6 +553,14 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -615,18 +623,18 @@ export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
 }
 
-export type UserCreateNestedOneWithoutOauthAccountsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthAccountsInput
+export type UserCreateNestedOneWithoutOauthIdentitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthIdentitiesInput, Prisma.UserUncheckedCreateWithoutOauthIdentitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthIdentitiesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutOauthAccountsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthAccountsInput
-  upsert?: Prisma.UserUpsertWithoutOauthAccountsInput
+export type UserUpdateOneRequiredWithoutOauthIdentitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOauthIdentitiesInput, Prisma.UserUncheckedCreateWithoutOauthIdentitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOauthIdentitiesInput
+  upsert?: Prisma.UserUpsertWithoutOauthIdentitiesInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOauthAccountsInput, Prisma.UserUpdateWithoutOauthAccountsInput>, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOauthIdentitiesInput, Prisma.UserUpdateWithoutOauthIdentitiesInput>, Prisma.UserUncheckedUpdateWithoutOauthIdentitiesInput>
 }
 
 export type UserCreateNestedOneWithoutLoginHistoryInput = {
@@ -701,10 +709,10 @@ export type UserUpdateOneRequiredWithoutPasswordHistoryNestedInput = {
 
 export type UserCreateWithoutDevicesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -713,7 +721,7 @@ export type UserCreateWithoutDevicesInput = {
   deletedAt?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -723,10 +731,10 @@ export type UserCreateWithoutDevicesInput = {
 
 export type UserUncheckedCreateWithoutDevicesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -735,7 +743,7 @@ export type UserUncheckedCreateWithoutDevicesInput = {
   deletedAt?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -761,10 +769,10 @@ export type UserUpdateToOneWithWhereWithoutDevicesInput = {
 
 export type UserUpdateWithoutDevicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -773,7 +781,7 @@ export type UserUpdateWithoutDevicesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -783,10 +791,10 @@ export type UserUpdateWithoutDevicesInput = {
 
 export type UserUncheckedUpdateWithoutDevicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -795,7 +803,7 @@ export type UserUncheckedUpdateWithoutDevicesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -805,10 +813,10 @@ export type UserUncheckedUpdateWithoutDevicesInput = {
 
 export type UserCreateWithoutSessionsInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -817,7 +825,7 @@ export type UserCreateWithoutSessionsInput = {
   deletedAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -827,10 +835,10 @@ export type UserCreateWithoutSessionsInput = {
 
 export type UserUncheckedCreateWithoutSessionsInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -839,7 +847,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   deletedAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -865,10 +873,10 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 
 export type UserUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -877,7 +885,7 @@ export type UserUpdateWithoutSessionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -887,10 +895,10 @@ export type UserUpdateWithoutSessionsInput = {
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -899,7 +907,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -909,10 +917,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
 
 export type UserCreateWithoutRefreshTokensInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -921,7 +929,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   deletedAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -931,10 +939,10 @@ export type UserCreateWithoutRefreshTokensInput = {
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -943,7 +951,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   deletedAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -969,10 +977,10 @@ export type UserUpdateToOneWithWhereWithoutRefreshTokensInput = {
 
 export type UserUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,7 +989,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -991,10 +999,10 @@ export type UserUpdateWithoutRefreshTokensInput = {
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1003,7 +1011,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -1011,12 +1019,12 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutOauthAccountsInput = {
+export type UserCreateWithoutOauthIdentitiesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1033,12 +1041,12 @@ export type UserCreateWithoutOauthAccountsInput = {
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutOauthAccountsInput = {
+export type UserUncheckedCreateWithoutOauthIdentitiesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1055,28 +1063,28 @@ export type UserUncheckedCreateWithoutOauthAccountsInput = {
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutOauthAccountsInput = {
+export type UserCreateOrConnectWithoutOauthIdentitiesInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOauthIdentitiesInput, Prisma.UserUncheckedCreateWithoutOauthIdentitiesInput>
 }
 
-export type UserUpsertWithoutOauthAccountsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutOauthAccountsInput, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutOauthAccountsInput, Prisma.UserUncheckedCreateWithoutOauthAccountsInput>
+export type UserUpsertWithoutOauthIdentitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOauthIdentitiesInput, Prisma.UserUncheckedUpdateWithoutOauthIdentitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOauthIdentitiesInput, Prisma.UserUncheckedCreateWithoutOauthIdentitiesInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutOauthAccountsInput = {
+export type UserUpdateToOneWithWhereWithoutOauthIdentitiesInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutOauthAccountsInput, Prisma.UserUncheckedUpdateWithoutOauthAccountsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOauthIdentitiesInput, Prisma.UserUncheckedUpdateWithoutOauthIdentitiesInput>
 }
 
-export type UserUpdateWithoutOauthAccountsInput = {
+export type UserUpdateWithoutOauthIdentitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1093,12 +1101,12 @@ export type UserUpdateWithoutOauthAccountsInput = {
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutOauthAccountsInput = {
+export type UserUncheckedUpdateWithoutOauthIdentitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1117,10 +1125,10 @@ export type UserUncheckedUpdateWithoutOauthAccountsInput = {
 
 export type UserCreateWithoutLoginHistoryInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1130,7 +1138,7 @@ export type UserCreateWithoutLoginHistoryInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
@@ -1139,10 +1147,10 @@ export type UserCreateWithoutLoginHistoryInput = {
 
 export type UserUncheckedCreateWithoutLoginHistoryInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1152,7 +1160,7 @@ export type UserUncheckedCreateWithoutLoginHistoryInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
@@ -1177,10 +1185,10 @@ export type UserUpdateToOneWithWhereWithoutLoginHistoryInput = {
 
 export type UserUpdateWithoutLoginHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1190,7 +1198,7 @@ export type UserUpdateWithoutLoginHistoryInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
@@ -1199,10 +1207,10 @@ export type UserUpdateWithoutLoginHistoryInput = {
 
 export type UserUncheckedUpdateWithoutLoginHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1212,7 +1220,7 @@ export type UserUncheckedUpdateWithoutLoginHistoryInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
@@ -1221,10 +1229,10 @@ export type UserUncheckedUpdateWithoutLoginHistoryInput = {
 
 export type UserCreateWithoutMfaCredentialsInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1234,7 +1242,7 @@ export type UserCreateWithoutMfaCredentialsInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
@@ -1243,10 +1251,10 @@ export type UserCreateWithoutMfaCredentialsInput = {
 
 export type UserUncheckedCreateWithoutMfaCredentialsInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1256,7 +1264,7 @@ export type UserUncheckedCreateWithoutMfaCredentialsInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
@@ -1281,10 +1289,10 @@ export type UserUpdateToOneWithWhereWithoutMfaCredentialsInput = {
 
 export type UserUpdateWithoutMfaCredentialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1294,7 +1302,7 @@ export type UserUpdateWithoutMfaCredentialsInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
@@ -1303,10 +1311,10 @@ export type UserUpdateWithoutMfaCredentialsInput = {
 
 export type UserUncheckedUpdateWithoutMfaCredentialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1316,7 +1324,7 @@ export type UserUncheckedUpdateWithoutMfaCredentialsInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
@@ -1325,10 +1333,10 @@ export type UserUncheckedUpdateWithoutMfaCredentialsInput = {
 
 export type UserCreateWithoutRecoveryCodesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1338,7 +1346,7 @@ export type UserCreateWithoutRecoveryCodesInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
@@ -1347,10 +1355,10 @@ export type UserCreateWithoutRecoveryCodesInput = {
 
 export type UserUncheckedCreateWithoutRecoveryCodesInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1360,7 +1368,7 @@ export type UserUncheckedCreateWithoutRecoveryCodesInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
@@ -1385,10 +1393,10 @@ export type UserUpdateToOneWithWhereWithoutRecoveryCodesInput = {
 
 export type UserUpdateWithoutRecoveryCodesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1398,7 +1406,7 @@ export type UserUpdateWithoutRecoveryCodesInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
@@ -1407,10 +1415,10 @@ export type UserUpdateWithoutRecoveryCodesInput = {
 
 export type UserUncheckedUpdateWithoutRecoveryCodesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1420,7 +1428,7 @@ export type UserUncheckedUpdateWithoutRecoveryCodesInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
@@ -1429,10 +1437,10 @@ export type UserUncheckedUpdateWithoutRecoveryCodesInput = {
 
 export type UserCreateWithoutApiKeysInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1442,7 +1450,7 @@ export type UserCreateWithoutApiKeysInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -1451,10 +1459,10 @@ export type UserCreateWithoutApiKeysInput = {
 
 export type UserUncheckedCreateWithoutApiKeysInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1464,7 +1472,7 @@ export type UserUncheckedCreateWithoutApiKeysInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -1489,10 +1497,10 @@ export type UserUpdateToOneWithWhereWithoutApiKeysInput = {
 
 export type UserUpdateWithoutApiKeysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1502,7 +1510,7 @@ export type UserUpdateWithoutApiKeysInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -1511,10 +1519,10 @@ export type UserUpdateWithoutApiKeysInput = {
 
 export type UserUncheckedUpdateWithoutApiKeysInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1524,7 +1532,7 @@ export type UserUncheckedUpdateWithoutApiKeysInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -1533,10 +1541,10 @@ export type UserUncheckedUpdateWithoutApiKeysInput = {
 
 export type UserCreateWithoutPasswordHistoryInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1546,7 +1554,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
   devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeCreateNestedManyWithoutUserInput
@@ -1555,10 +1563,10 @@ export type UserCreateWithoutPasswordHistoryInput = {
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   id?: string
-  name: string
+  name?: string | null
   email: string
-  passwordHash: string
-  emailVerified?: boolean
+  passwordHash?: string | null
+  emailVerified?: boolean | null
   accountLocked?: boolean
   failedLoginCount?: number
   createdAt: Date | string
@@ -1568,7 +1576,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedCreateNestedManyWithoutUserInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutUserInput
   loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedCreateNestedManyWithoutUserInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedCreateNestedManyWithoutUserInput
@@ -1593,10 +1601,10 @@ export type UserUpdateToOneWithWhereWithoutPasswordHistoryInput = {
 
 export type UserUpdateWithoutPasswordHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1606,7 +1614,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUpdateManyWithoutUserNestedInput
@@ -1615,10 +1623,10 @@ export type UserUpdateWithoutPasswordHistoryInput = {
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   accountLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1628,7 +1636,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
-  oauthAccounts?: Prisma.OauthAccountUncheckedUpdateManyWithoutUserNestedInput
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   mfaCredentials?: Prisma.MfaCredentialUncheckedUpdateManyWithoutUserNestedInput
   recoveryCodes?: Prisma.RecoveryCodeUncheckedUpdateManyWithoutUserNestedInput
@@ -1644,7 +1652,7 @@ export type UserCountOutputType = {
   devices: number
   sessions: number
   refreshTokens: number
-  oauthAccounts: number
+  oauthIdentities: number
   loginHistory: number
   mfaCredentials: number
   recoveryCodes: number
@@ -1656,7 +1664,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   devices?: boolean | UserCountOutputTypeCountDevicesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
-  oauthAccounts?: boolean | UserCountOutputTypeCountOauthAccountsArgs
+  oauthIdentities?: boolean | UserCountOutputTypeCountOauthIdentitiesArgs
   loginHistory?: boolean | UserCountOutputTypeCountLoginHistoryArgs
   mfaCredentials?: boolean | UserCountOutputTypeCountMfaCredentialsArgs
   recoveryCodes?: boolean | UserCountOutputTypeCountRecoveryCodesArgs
@@ -1698,8 +1706,8 @@ export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Ty
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountOauthAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OauthAccountWhereInput
+export type UserCountOutputTypeCountOauthIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OAuthIdentityWhereInput
 }
 
 /**
@@ -1753,7 +1761,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
-  oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
+  oauthIdentities?: boolean | Prisma.User$oauthIdentitiesArgs<ExtArgs>
   loginHistory?: boolean | Prisma.User$loginHistoryArgs<ExtArgs>
   mfaCredentials?: boolean | Prisma.User$mfaCredentialsArgs<ExtArgs>
   recoveryCodes?: boolean | Prisma.User$recoveryCodesArgs<ExtArgs>
@@ -1809,7 +1817,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
-  oauthAccounts?: boolean | Prisma.User$oauthAccountsArgs<ExtArgs>
+  oauthIdentities?: boolean | Prisma.User$oauthIdentitiesArgs<ExtArgs>
   loginHistory?: boolean | Prisma.User$loginHistoryArgs<ExtArgs>
   mfaCredentials?: boolean | Prisma.User$mfaCredentialsArgs<ExtArgs>
   recoveryCodes?: boolean | Prisma.User$recoveryCodesArgs<ExtArgs>
@@ -1826,7 +1834,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     devices: Prisma.$DevicePayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
-    oauthAccounts: Prisma.$OauthAccountPayload<ExtArgs>[]
+    oauthIdentities: Prisma.$OAuthIdentityPayload<ExtArgs>[]
     loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
     mfaCredentials: Prisma.$MfaCredentialPayload<ExtArgs>[]
     recoveryCodes: Prisma.$RecoveryCodePayload<ExtArgs>[]
@@ -1835,10 +1843,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
+    name: string | null
     email: string
-    passwordHash: string
-    emailVerified: boolean
+    passwordHash: string | null
+    emailVerified: boolean | null
     accountLocked: boolean
     failedLoginCount: number
     createdAt: Date
@@ -2242,7 +2250,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   devices<T extends Prisma.User$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  oauthAccounts<T extends Prisma.User$oauthAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$oauthAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OauthAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  oauthIdentities<T extends Prisma.User$oauthIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$oauthIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loginHistory<T extends Prisma.User$loginHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mfaCredentials<T extends Prisma.User$mfaCredentialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mfaCredentialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MfaCredentialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recoveryCodes<T extends Prisma.User$recoveryCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recoveryCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecoveryCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2753,27 +2761,27 @@ export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * User.oauthAccounts
+ * User.oauthIdentities
  */
-export type User$oauthAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$oauthIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the OauthAccount
+   * Select specific fields to fetch from the OAuthIdentity
    */
-  select?: Prisma.OauthAccountSelect<ExtArgs> | null
+  select?: Prisma.OAuthIdentitySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the OauthAccount
+   * Omit specific fields from the OAuthIdentity
    */
-  omit?: Prisma.OauthAccountOmit<ExtArgs> | null
+  omit?: Prisma.OAuthIdentityOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.OauthAccountInclude<ExtArgs> | null
-  where?: Prisma.OauthAccountWhereInput
-  orderBy?: Prisma.OauthAccountOrderByWithRelationInput | Prisma.OauthAccountOrderByWithRelationInput[]
-  cursor?: Prisma.OauthAccountWhereUniqueInput
+  include?: Prisma.OAuthIdentityInclude<ExtArgs> | null
+  where?: Prisma.OAuthIdentityWhereInput
+  orderBy?: Prisma.OAuthIdentityOrderByWithRelationInput | Prisma.OAuthIdentityOrderByWithRelationInput[]
+  cursor?: Prisma.OAuthIdentityWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.OauthAccountScalarFieldEnum | Prisma.OauthAccountScalarFieldEnum[]
+  distinct?: Prisma.OAuthIdentityScalarFieldEnum | Prisma.OAuthIdentityScalarFieldEnum[]
 }
 
 /**

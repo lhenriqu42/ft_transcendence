@@ -1,19 +1,22 @@
 import * as arctic from 'arctic';
 import {
   Injectable,
-  InternalServerErrorException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  OAuthIdentity,
-  OAuthProvider,
   OAuthTokens,
+  OAuthProvider,
   STATE_TTL_SECONDS,
+  OAuthIdentityResume,
+  OAuthStateRepository,
 } from '../../auth/application/ports';
-import { OAuthProviderType } from '../../auth/application/contracts/auth.contracts';
-import { RedisOAuthAuthorizationRepository } from '../redis/repositories/RedisOAuthAuthorizationRepository';
 import { GoogleIdTokenClaims, GoogleUser } from './types/Google';
+import {
+  IntentPath,
+  OAuthProviderType,
+} from '../../auth/application/contracts/auth.contracts';
 
 @Injectable()
 export class GoogleOAuthProvider implements OAuthProvider {
@@ -22,7 +25,7 @@ export class GoogleOAuthProvider implements OAuthProvider {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly redisOauthStateRepo: RedisOAuthAuthorizationRepository,
+    private readonly redisOauthStateRepo: OAuthStateRepository,
   ) {
     this.google = new arctic.Google(
       this.configService.getOrThrow('GOOGLE_CLIENT_ID'),
@@ -31,14 +34,14 @@ export class GoogleOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl(): Promise<URL> {
+  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
     const state = arctic.generateState();
     const codeVerifier = arctic.generateCodeVerifier();
     const scopes = ['openid', 'profile', 'email'];
 
     await this.redisOauthStateRepo.save(
       state,
-      { codeVerifier },
+      { userId, intent, codeVerifier, provider: this.provider },
       STATE_TTL_SECONDS,
     );
 
@@ -85,7 +88,7 @@ export class GoogleOAuthProvider implements OAuthProvider {
     }
   }
 
-  async getIdentity(accessToken: string): Promise<OAuthIdentity> {
+  async getIdentityResume(accessToken: string): Promise<OAuthIdentityResume> {
     const response = await fetch(
       'https://www.googleapis.com/oauth2/v3/userinfo',
       {
@@ -106,7 +109,7 @@ export class GoogleOAuthProvider implements OAuthProvider {
     };
   }
 
-  decodeIdToken(idToken: string): OAuthIdentity | null {
+  decodeIdToken(idToken: string): OAuthIdentityResume | null {
     const claims = arctic.decodeIdToken(idToken) as GoogleIdTokenClaims;
     console.log('Decoded ID Token Claims:', claims);
 

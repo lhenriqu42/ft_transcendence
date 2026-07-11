@@ -9,11 +9,12 @@ import {
   RefreshUseCase,
   RegisterUseCase,
   ChallengeUseCase,
+  OAuthStartUseCase,
+  OAuthCallbackUseCase,
   ResetPasswordUseCase,
   ForgotPasswordUseCase,
   ChangePasswordUseCase,
-  OAuthStartUseCase,
-  OAuthCallbackUseCase,
+  OAuthConfirmLinkUseCase,
 } from './application';
 
 @Controller('auth')
@@ -25,11 +26,12 @@ export class AuthController {
     private readonly refreshUseCase: RefreshUseCase,
     private readonly registerUseCase: RegisterUseCase,
     private readonly challengeUseCase: ChallengeUseCase,
+    private readonly oAuthStartUseCase: OAuthStartUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
     private readonly changePasswordUseCase: ChangePasswordUseCase,
-    private readonly oAuthStartUseCase: OAuthStartUseCase,
     private readonly oAuthCallbackUseCase: OAuthCallbackUseCase,
+    private readonly oAuthConfirmLinkUseCase: OAuthConfirmLinkUseCase,
   ) {}
 
   @Post('login/challenge')
@@ -107,6 +109,14 @@ export class AuthController {
     @Body() body: CI.OAuthCallbackRequest,
   ): Promise<CI.OAuthCallbackResponse> {
     return this.oAuthCallbackUseCase.execute(body);
+  }
+
+  @Post('oauth/confirm-link')
+  @HttpCode(HttpStatus.OK)
+  oAuthConfirmLink(
+    @Body() body: CI.OAuthConfirmLinkRequest,
+  ): Promise<CI.OAuthCallbackResponse> {
+    return this.oAuthConfirmLinkUseCase.execute(body);
   }
 }
 

@@ -36,6 +36,12 @@ export class ChallengeUseCase {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (user.passwordHash === null) {
+      throw new UnauthorizedException(
+        'User does not have a password set. Please use OAuth login.',
+      );
+    }
+
     if (user.accountLocked) {
       throw new ForbiddenException('Account is temporarily locked');
     }
@@ -69,10 +75,7 @@ export class ChallengeUseCase {
 
     const requiresMFA = false; // Placeholder for MFA logic
     const challengePayload: ChallengePayload = {
-      user: {
-        ...user,
-        email: body.email,
-      },
+      user: { ...user, passwordHash: user.passwordHash },
       riskScore,
       ipContext,
       requiresCaptcha,

@@ -7,13 +7,16 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  OAuthIdentity,
-  OAuthProvider,
   OAuthTokens,
+  OAuthProvider,
   STATE_TTL_SECONDS,
+  OAuthIdentityResume,
+  OAuthStateRepository,
 } from '../../auth/application/ports';
-import { OAuthProviderType } from '../../auth/application/contracts/auth.contracts';
-import { RedisOAuthAuthorizationRepository } from '../redis/repositories/RedisOAuthAuthorizationRepository';
+import {
+  IntentPath,
+  OAuthProviderType,
+} from '../../auth/application/contracts/auth.contracts';
 
 @Injectable()
 export class GithubOAuthProvider implements OAuthProvider {
@@ -22,7 +25,7 @@ export class GithubOAuthProvider implements OAuthProvider {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly redisOauthStateRepo: RedisOAuthAuthorizationRepository,
+    private readonly redisOauthStateRepo: OAuthStateRepository,
   ) {
     this.github = new arctic.GitHub(
       this.configService.getOrThrow('GITHUB_CLIENT_ID'),
@@ -31,10 +34,14 @@ export class GithubOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl(): Promise<URL> {
+  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
     const state = arctic.generateState();
 
-    await this.redisOauthStateRepo.save(state, {}, STATE_TTL_SECONDS);
+    await this.redisOauthStateRepo.save(
+      state,
+      { userId, intent, provider: this.provider, codeVerifier: null },
+      STATE_TTL_SECONDS,
+    );
 
     return this.github.createAuthorizationURL(state, ['user:email']);
   }
@@ -77,7 +84,7 @@ export class GithubOAuthProvider implements OAuthProvider {
     }
   }
 
-  async getIdentity(accessToken: string): Promise<OAuthIdentity> {
+  async getIdentityResume(accessToken: string): Promise<OAuthIdentityResume> {
     const [user, emails] = await Promise.all([
       fetch('https://api.github.com/user', {
         headers: {
@@ -96,14 +103,13 @@ export class GithubOAuthProvider implements OAuthProvider {
       emails.json() as Promise<GitHubEmail[]>,
     ]);
 
+    const primaryEmail = emailsData.find((email) => email.primary);
+
     return {
       provider: this.provider,
       providerUserId: userData.id.toString(),
-      email:
-        userData.email ??
-        emailsData.find((email) => email.primary)?.email ??
-        '',
-      emailVerified: true,
+      email: userData.email ?? primaryEmail?.email ?? '',
+      emailVerified: primaryEmail?.verified ?? false,
       username: userData.login,
       displayName: userData.name ?? userData.login,
       avatarUrl: userData.avatar_url,
@@ -111,7 +117,7 @@ export class GithubOAuthProvider implements OAuthProvider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  decodeIdToken(_idToken: string): OAuthIdentity | null {
+  decodeIdToken(_idToken: string): OAuthIdentityResume | null {
     return null;
   }
 }

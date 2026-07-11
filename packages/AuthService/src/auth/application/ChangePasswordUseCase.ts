@@ -1,6 +1,6 @@
 import { PasswordHistoryRepository } from './ports/user/PasswordHistoryRepository';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository, UnitOfWork } from './ports';
+import { UserRepository, UnitOfWork, Atomic } from './ports';
 import * as argon2 from 'argon2';
 
 @Injectable()
@@ -20,12 +20,19 @@ export class ChangePasswordUseCase {
 
     const newPasswordHash = await argon2.hash(newPassword);
 
-    return this.uof.runBatch([
+    const promises: Atomic<unknown>[] = [
       this.userRepo.update(userId, { passwordHash: newPasswordHash }),
-      this.passwordHistoryRepo.save({
-        userId,
-        passwordHash: user.passwordHash,
-      }),
-    ]) as unknown as Promise<void>;
+    ];
+
+    if (user.passwordHash) {
+      promises.push(
+        this.passwordHistoryRepo.save({
+          userId,
+          passwordHash: user.passwordHash,
+        }),
+      );
+    }
+
+    return this.uof.runBatch(promises) as unknown as Promise<void>;
   }
 }

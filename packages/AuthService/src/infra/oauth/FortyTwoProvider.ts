@@ -2,8 +2,9 @@ import * as arctic from 'arctic';
 import {
   OAuthTokens,
   OAuthProvider,
-  OAuthIdentity,
   STATE_TTL_SECONDS,
+  OAuthIdentityResume,
+  OAuthStateRepository,
 } from '../../auth/application/ports';
 import { FortyTwoUser } from './types/42';
 import { ConfigService } from '@nestjs/config';
@@ -12,8 +13,10 @@ import {
   UnauthorizedException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { OAuthProviderType } from '../../auth/application/contracts/auth.contracts';
-import { RedisOAuthAuthorizationRepository } from '../redis/repositories/RedisOAuthAuthorizationRepository';
+import {
+  IntentPath,
+  OAuthProviderType,
+} from '../../auth/application/contracts/auth.contracts';
 
 @Injectable()
 export class FortyTwoOAuthProvider implements OAuthProvider {
@@ -22,7 +25,7 @@ export class FortyTwoOAuthProvider implements OAuthProvider {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly redisOauthStateRepo: RedisOAuthAuthorizationRepository,
+    private readonly redisOauthStateRepo: OAuthStateRepository,
   ) {
     this.fortyTwo = new arctic.FortyTwo(
       this.configService.getOrThrow('FORTYTWO_CLIENT_ID'),
@@ -31,10 +34,14 @@ export class FortyTwoOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl(): Promise<URL> {
+  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
     const state = arctic.generateState();
 
-    await this.redisOauthStateRepo.save(state, {}, STATE_TTL_SECONDS); // 5 minutes
+    await this.redisOauthStateRepo.save(
+      state,
+      { userId, intent, provider: this.provider, codeVerifier: null },
+      STATE_TTL_SECONDS,
+    );
 
     return this.fortyTwo.createAuthorizationURL(state, ['public']);
   }
@@ -79,7 +86,7 @@ export class FortyTwoOAuthProvider implements OAuthProvider {
     }
   }
 
-  async getIdentity(accessToken: string): Promise<OAuthIdentity> {
+  async getIdentityResume(accessToken: string): Promise<OAuthIdentityResume> {
     const response = await fetch('https://api.intra.42.fr/v2/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -100,7 +107,7 @@ export class FortyTwoOAuthProvider implements OAuthProvider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  decodeIdToken(_idToken: string): OAuthIdentity | null {
+  decodeIdToken(_idToken: string): OAuthIdentityResume | null {
     return null;
   }
 }

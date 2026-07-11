@@ -1,8 +1,11 @@
 -- CreateEnum
-CREATE TYPE "oauth_provider" AS ENUM ('GOOGLE', 'GITHUB', 'MICROSOFT', 'APPLE', 'DISCORD', 'ECOLE42');
+CREATE TYPE "session_revoked_reason" AS ENUM ('LOGOUT', 'LOGOUT_ALL_DEVICES', 'REFRESH_TOKEN_REUSE_DETECTED');
 
 -- CreateEnum
-CREATE TYPE "login_failure_reason" AS ENUM ('INVALID_CREDENTIALS', 'ACCOUNT_LOCKED', 'MFA_INVALID', 'MFA_REQUIRED', 'MFA_NOT_CONFIGURED', 'INVALID_EMAIL', 'CAPTCHA_REQUIRED', 'CAPTCHA_INVALID', 'UNKNOWN');
+CREATE TYPE "oauth_provider" AS ENUM ('GOOGLE', 'GITHUB', 'DISCORD', 'ECOLE42');
+
+-- CreateEnum
+CREATE TYPE "login_failure_reason" AS ENUM ('INVALID_CREDENTIALS', 'MFA_NOT_CONFIGURED', 'CAPTCHA_INVALID', 'ACCOUNT_LOCKED', 'MFA_INVALID', 'MFA_REQUIRED', 'CAPTCHA_REQUIRED', 'INVALID_CHALLENGE_EMAIL', 'UNKNOWN');
 
 -- CreateEnum
 CREATE TYPE "mfa_type" AS ENUM ('TOTP', 'WEBAUTHN');
@@ -10,9 +13,10 @@ CREATE TYPE "mfa_type" AS ENUM ('TOTP', 'WEBAUTHN');
 -- CreateTable
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
+    "name" VARCHAR(100),
     "email" VARCHAR(320) NOT NULL,
-    "password_hash" VARCHAR(255) NOT NULL,
-    "email_verified" BOOLEAN NOT NULL DEFAULT false,
+    "password_hash" VARCHAR(255),
+    "email_verified" BOOLEAN DEFAULT false,
     "account_locked" BOOLEAN NOT NULL DEFAULT false,
     "failed_login_count" INTEGER NOT NULL DEFAULT 0,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
@@ -27,7 +31,8 @@ CREATE TABLE "users" (
 CREATE TABLE "devices" (
     "id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
-    "fingerprint_hash" VARCHAR(64) NOT NULL,
+    "last_user_agent" TEXT,
+    "fingerprint_hash" VARCHAR(64),
     "name" VARCHAR(100),
     "first_seen_at" TIMESTAMPTZ(6) NOT NULL,
     "last_seen_at" TIMESTAMPTZ(6) NOT NULL,
@@ -37,25 +42,13 @@ CREATE TABLE "devices" (
 );
 
 -- CreateTable
-CREATE TABLE "trusted_devices" (
-    "id" UUID NOT NULL,
-    "device_id" UUID NOT NULL,
-    "trusted_until" TIMESTAMPTZ(6),
-    "created_at" TIMESTAMPTZ(6) NOT NULL,
-    "revoked_at" TIMESTAMPTZ(6),
-    "reason" VARCHAR(100),
-
-    CONSTRAINT "trusted_devices_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "sessions" (
     "id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "device_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "revoked_at" TIMESTAMPTZ(6),
-    "revoked_reason" VARCHAR(100),
+    "revoked_reason" "session_revoked_reason",
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );
@@ -74,21 +67,28 @@ CREATE TABLE "refresh_tokens" (
     "revoked" BOOLEAN NOT NULL DEFAULT false,
     "revoked_at" TIMESTAMPTZ(6),
     "created_at" TIMESTAMPTZ(6) NOT NULL,
-    "last_used_at" TIMESTAMPTZ(6),
     "expires_at" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "refresh_tokens_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "oauth_accounts" (
+CREATE TABLE "oauth_identities" (
     "id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "provider" "oauth_provider" NOT NULL,
     "provider_user_id" VARCHAR(255) NOT NULL,
+    "email" VARCHAR(320),
+    "email_verified" BOOLEAN,
+    "username" VARCHAR(100),
+    "display_name" VARCHAR(100),
+    "avatar_url" TEXT,
+    "provider_access_token" TEXT,
+    "provider_refresh_token" TEXT,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL,
 
-    CONSTRAINT "oauth_accounts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "oauth_identities_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -104,11 +104,11 @@ CREATE TABLE "login_history" (
     "city" VARCHAR(100),
     "latitude" DOUBLE PRECISION,
     "longitude" DOUBLE PRECISION,
-    "asn" VARCHAR(100),
+    "asn" INTEGER,
     "org" VARCHAR(100),
     "isp" VARCHAR(100),
     "domain" VARCHAR(100),
-    "user_agent" TEXT NOT NULL,
+    "user_agent" TEXT,
     "risk_score" INTEGER NOT NULL DEFAULT 0,
     "captcha_required" BOOLEAN NOT NULL DEFAULT false,
     "mfa_required" BOOLEAN NOT NULL DEFAULT false,
@@ -212,22 +212,7 @@ CREATE INDEX "users_email_deleted_at_idx" ON "users"("email", "deleted_at");
 CREATE INDEX "devices_user_id_idx" ON "devices"("user_id");
 
 -- CreateIndex
-CREATE INDEX "devices_last_seen_at_idx" ON "devices"("last_seen_at");
-
--- CreateIndex
 CREATE INDEX "devices_user_id_last_seen_at_idx" ON "devices"("user_id", "last_seen_at");
-
--- CreateIndex
-CREATE UNIQUE INDEX "devices_user_id_fingerprint_hash_key" ON "devices"("user_id", "fingerprint_hash");
-
--- CreateIndex
-CREATE INDEX "trusted_devices_device_id_idx" ON "trusted_devices"("device_id");
-
--- CreateIndex
-CREATE INDEX "trusted_devices_trusted_until_idx" ON "trusted_devices"("trusted_until");
-
--- CreateIndex
-CREATE INDEX "trusted_devices_device_id_revoked_at_trusted_until_idx" ON "trusted_devices"("device_id", "revoked_at", "trusted_until");
 
 -- CreateIndex
 CREATE INDEX "sessions_user_id_idx" ON "sessions"("user_id");
@@ -266,10 +251,10 @@ CREATE INDEX "refresh_tokens_token_hash_idx" ON "refresh_tokens"("token_hash");
 CREATE INDEX "refresh_tokens_family_id_created_at_idx" ON "refresh_tokens"("family_id", "created_at");
 
 -- CreateIndex
-CREATE INDEX "oauth_accounts_user_id_idx" ON "oauth_accounts"("user_id");
+CREATE INDEX "oauth_identities_user_id_idx" ON "oauth_identities"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "oauth_accounts_provider_provider_user_id_key" ON "oauth_accounts"("provider", "provider_user_id");
+CREATE UNIQUE INDEX "oauth_identities_provider_provider_user_id_key" ON "oauth_identities"("provider", "provider_user_id");
 
 -- CreateIndex
 CREATE INDEX "login_history_user_id_idx" ON "login_history"("user_id");
@@ -341,9 +326,6 @@ CREATE INDEX "password_history_user_id_created_at_idx" ON "password_history"("us
 ALTER TABLE "devices" ADD CONSTRAINT "devices_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "trusted_devices" ADD CONSTRAINT "trusted_devices_device_id_fkey" FOREIGN KEY ("device_id") REFERENCES "devices"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -359,7 +341,7 @@ ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_session_id_fkey" FOR
 ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_parent_token_id_fkey" FOREIGN KEY ("parent_token_id") REFERENCES "refresh_tokens"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "oauth_accounts" ADD CONSTRAINT "oauth_accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "oauth_identities" ADD CONSTRAINT "oauth_identities_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "login_history" ADD CONSTRAINT "login_history_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

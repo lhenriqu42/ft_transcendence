@@ -6,6 +6,7 @@ import {
   DeviceRepository,
   RefreshTokenRepository,
   LoginHistoryRepository,
+  OAuthIdentityRepository,
   SessionHistoryRepository,
   PasswordHistoryRepository,
 } from '../../auth/application/ports';
@@ -15,6 +16,7 @@ import { PrismaDeviceRepository } from './repositories/PrismaDeviceRepository';
 import { PrismaSessionRepository } from './repositories/PrismaSessionRepository';
 import { PrismaRefreshTokenRepository } from './repositories/PrismaRefreshTokenRepository';
 import { PrismaLoginHistoryRepository } from './repositories/PrismaLoginHistoryRepository';
+import { PrismaOAuthIdentityRepository } from './repositories/PrismaOAuthIdentityRepository';
 import { PrismaPasswordHistoryRepository } from './repositories/PrismaPasswordHistoryRepository';
 
 @Global()
@@ -46,6 +48,10 @@ import { PrismaPasswordHistoryRepository } from './repositories/PrismaPasswordHi
       provide: PasswordHistoryRepository,
       useClass: PrismaPasswordHistoryRepository,
     },
+    {
+      provide: OAuthIdentityRepository,
+      useClass: PrismaOAuthIdentityRepository,
+    },
   ],
   exports: [
     UnitOfWork,
@@ -54,6 +60,7 @@ import { PrismaPasswordHistoryRepository } from './repositories/PrismaPasswordHi
     DeviceRepository,
     RefreshTokenRepository,
     LoginHistoryRepository,
+    OAuthIdentityRepository,
     SessionHistoryRepository,
     PasswordHistoryRepository,
   ],

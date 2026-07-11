@@ -1,19 +1,22 @@
 import * as arctic from 'arctic';
 import {
   Injectable,
-  InternalServerErrorException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  OAuthIdentity,
-  OAuthProvider,
   OAuthTokens,
+  OAuthProvider,
+  OAuthIdentityResume,
   STATE_TTL_SECONDS,
+  OAuthStateRepository,
 } from '../../auth/application/ports';
-import { OAuthProviderType } from '../../auth/application/contracts/auth.contracts';
-import { RedisOAuthAuthorizationRepository } from '../redis/repositories/RedisOAuthAuthorizationRepository';
 import { DiscordIdTokenClaims, DiscordUser } from './types/Discord';
+import {
+  IntentPath,
+  OAuthProviderType,
+} from '../../auth/application/contracts/auth.contracts';
 
 @Injectable()
 export class DiscordOAuthProvider implements OAuthProvider {
@@ -22,7 +25,7 @@ export class DiscordOAuthProvider implements OAuthProvider {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly redisOauthStateRepo: RedisOAuthAuthorizationRepository,
+    private readonly redisOauthStateRepo: OAuthStateRepository,
   ) {
     this.discord = new arctic.Discord(
       this.configService.getOrThrow('DISCORD_CLIENT_ID'),
@@ -31,11 +34,15 @@ export class DiscordOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl(): Promise<URL> {
+  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
     const state = arctic.generateState();
     const scopes = ['email', 'identify', 'openid'];
 
-    await this.redisOauthStateRepo.save(state, {}, STATE_TTL_SECONDS);
+    await this.redisOauthStateRepo.save(
+      state,
+      { userId, intent, provider: this.provider, codeVerifier: null },
+      STATE_TTL_SECONDS,
+    );
 
     return this.discord.createAuthorizationURL(state, null, scopes);
   }
@@ -80,7 +87,7 @@ export class DiscordOAuthProvider implements OAuthProvider {
     }
   }
 
-  async getIdentity(accessToken: string): Promise<OAuthIdentity> {
+  async getIdentityResume(accessToken: string): Promise<OAuthIdentityResume> {
     const response = await fetch('https://discord.com/api/users/@me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -100,7 +107,7 @@ export class DiscordOAuthProvider implements OAuthProvider {
     };
   }
 
-  decodeIdToken(idToken: string): OAuthIdentity | null {
+  decodeIdToken(idToken: string): OAuthIdentityResume | null {
     const claims = arctic.decodeIdToken(idToken) as DiscordIdTokenClaims;
     console.log('Decoded ID Token Claims:', claims);
 

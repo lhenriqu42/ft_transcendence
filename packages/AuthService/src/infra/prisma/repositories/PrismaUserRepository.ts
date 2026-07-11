@@ -16,6 +16,8 @@ export class PrismaUserRepository implements UserRepository {
       where: { email },
       select: {
         id: true,
+        name: true,
+        email: true,
         passwordHash: true,
         emailVerified: true,
         accountLocked: true,
@@ -31,6 +33,12 @@ export class PrismaUserRepository implements UserRepository {
         where: { email },
       })
       .then((count) => count > 0);
+  }
+
+  findByEmail(email: string): Atomic<User | null> {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
   }
 
   save(user: User): Atomic<User> {

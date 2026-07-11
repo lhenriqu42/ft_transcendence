@@ -1,34 +1,37 @@
-import { Injectable } from '@nestjs/common';
-
-import { OAuthProvider } from '../oauth/OAuthProvider';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { OAuthProviderType } from '../../contracts/auth.contracts';
+import { OAuthProvider } from '../oauth/OAuthProvider';
 
-import { FortyTwoOAuthProvider } from '../../../../infra/oauth/FortyTwoProvider';
 import { GithubOAuthProvider } from '../../../../infra/oauth/GithubProvider';
 import { GoogleOAuthProvider } from '../../../../infra/oauth/GoogleProvider';
 import { DiscordOAuthProvider } from '../../../../infra/oauth/DiscordProvider';
+import { FortyTwoOAuthProvider } from '../../../../infra/oauth/FortyTwoProvider';
 
 @Injectable()
 export class OAuthProviderFactory {
+  private readonly providers: Record<OAuthProviderType, OAuthProvider>;
+
   constructor(
-    private readonly fortyTwo: FortyTwoOAuthProvider,
     private readonly google: GoogleOAuthProvider,
     private readonly github: GithubOAuthProvider,
     private readonly discord: DiscordOAuthProvider,
-  ) {}
-
-  get(type: OAuthProviderType): OAuthProvider {
-    const providers: Record<OAuthProviderType, OAuthProvider> = {
+    private readonly fortyTwo: FortyTwoOAuthProvider,
+  ) {
+    this.providers = {
       ECOLE42: this.fortyTwo,
       GITHUB: this.github,
       GOOGLE: this.google,
       DISCORD: this.discord,
     };
+  }
 
-    const provider = providers[type];
+  get(type: OAuthProviderType): OAuthProvider {
+    const provider = this.providers[type];
 
     if (!provider) {
-      throw new Error(`OAuth provider ${type} not supported`);
+      throw new InternalServerErrorException(
+        `OAuth provider ${type} not supported`,
+      );
     }
 
     return provider;

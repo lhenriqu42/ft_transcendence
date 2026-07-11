@@ -55,7 +55,7 @@ export const ModelName = {
   Device: 'Device',
   Session: 'Session',
   RefreshToken: 'RefreshToken',
-  OauthAccount: 'OauthAccount',
+  OAuthIdentity: 'OAuthIdentity',
   LoginHistory: 'LoginHistory',
   MfaCredential: 'MfaCredential',
   TotpCredential: 'TotpCredential',
@@ -143,15 +143,23 @@ export const RefreshTokenScalarFieldEnum = {
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
 
 
-export const OauthAccountScalarFieldEnum = {
+export const OAuthIdentityScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   provider: 'provider',
   providerUserId: 'providerUserId',
-  createdAt: 'createdAt'
+  email: 'email',
+  emailVerified: 'emailVerified',
+  username: 'username',
+  displayName: 'displayName',
+  avatarUrl: 'avatarUrl',
+  providerAccessToken: 'providerAccessToken',
+  providerRefreshToken: 'providerRefreshToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type OauthAccountScalarFieldEnum = (typeof OauthAccountScalarFieldEnum)[keyof typeof OauthAccountScalarFieldEnum]
+export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)[keyof typeof OAuthIdentityScalarFieldEnum]
 
 
 export const LoginHistoryScalarFieldEnum = {

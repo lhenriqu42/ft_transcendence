@@ -16,15 +16,10 @@ import {
   RefreshTokenExpiredError,
   InvalidRefreshTokenError,
 } from '../../domain/errors/session.errors';
+import { AccessTokenPayload } from '../contracts/auth.contracts';
 
 const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 dias
 const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min
-
-interface AccessTokenPayload {
-  sub: string; // userId
-  sid: string; // sessionId
-  roles: string[];
-}
 
 @Injectable()
 export class SessionService {
@@ -45,10 +40,12 @@ export class SessionService {
   create(userId: string, deviceId: string) {
     const now = Date.now();
     const sessionId = randomUUID();
-    const payload = {
+    const payload: AccessTokenPayload = {
       sub: userId,
       sid: sessionId,
-      roles: [], // TODO: roles ainda não estão modeladas no schema
+      iat: Math.floor(now / 1000),
+      exp: Math.floor(now / 1000) + ACCESS_TOKEN_TTL_SECONDS,
+      roles: [],
     };
 
     const { jti, secret, raw: refreshToken } = this.issueRawToken();
@@ -147,6 +144,8 @@ export class SessionService {
     const payload: AccessTokenPayload = {
       sub: rotated.userId,
       sid: rotated.sessionId,
+      iat: Math.floor(now / 1000),
+      exp: Math.floor(now / 1000) + ACCESS_TOKEN_TTL_SECONDS,
       roles: [], // TODO: roles ainda não estão modeladas no schema
     };
 
@@ -201,9 +200,11 @@ export class SessionService {
   // -------------------------------------------------------------------
 
   private signAccessToken(payload: AccessTokenPayload): Promise<string> {
-    return new SignJWT({ ...payload })
+    return new SignJWT(payload)
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
+      .setIssuer('auth-service')
+      .setAudience('bff')
       .setExpirationTime(`${ACCESS_TOKEN_TTL_SECONDS}s`)
       .sign(this.JWTSecret);
   }

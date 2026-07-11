@@ -1,9 +1,4 @@
-import {
-  OAuthIdentity as OAuthIdentityContract,
-  OAuthProviderType,
-} from '../../contracts/auth.contracts';
-
-export type OAuthIdentity = OAuthIdentityContract;
+import { OAuthProviderType, IntentPath } from '../../contracts/auth.contracts';
 
 export interface OAuthTokens {
   accessToken: string;
@@ -19,6 +14,22 @@ export interface OAuthTokens {
   tokenType: string;
 }
 
+export interface OAuthIdentityResume {
+  provider: OAuthProviderType;
+
+  providerUserId: string;
+
+  email: string;
+
+  emailVerified?: boolean;
+
+  username?: string;
+
+  displayName?: string;
+
+  avatarUrl?: string;
+}
+
 export const STATE_TTL_SECONDS = 5 * 60; // 5 minutes
 
 export abstract class OAuthProvider {
@@ -28,7 +39,7 @@ export abstract class OAuthProvider {
    * Creates an authorization URL for the OAuth provider. This URL is used to redirect users to the provider's login page.
    * @returns A URL object representing the authorization URL.
    */
-  abstract createAuthorizationUrl(): Promise<URL>;
+  abstract createAuthorizationUrl(params: IntentPath): Promise<URL>;
 
   /**   * Validates the provided authorization code and state, and retrieves the corresponding OAuth tokens.
    * @param code The authorization code received from the OAuth provider after user authentication.
@@ -44,14 +55,14 @@ export abstract class OAuthProvider {
   /**
    * Retrieves the identity of the user associated with the provided OAuth tokens.
    * @param tokens The OAuth tokens obtained after successful authentication.
-   * @returns A promise that resolves to an OAuthIdentity object containing user information.
+   * @returns A promise that resolves to an OAuthIdentityResume object containing user information.
    */
-  abstract getIdentity(accessToken: string): Promise<OAuthIdentity>;
+  abstract getIdentityResume(accessToken: string): Promise<OAuthIdentityResume>;
 
   /**
    * Decodes the provided ID token to extract user identity information.
    * @param idToken The ID token to decode.
-   * @returns An OAuthIdentity object containing user information, or null if the token is invalid or cannot be decoded.
+   * @returns An OAuthIdentityResume object containing user information, or null if the token is invalid or cannot be decoded.
    */
-  abstract decodeIdToken(idToken: string): OAuthIdentity | null;
+  abstract decodeIdToken(idToken: string): OAuthIdentityResume | null;
 }

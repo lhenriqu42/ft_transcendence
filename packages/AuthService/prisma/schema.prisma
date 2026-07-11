@@ -21,13 +21,13 @@ datasource db {
 model User {
   id String @id @default(uuid()) @db.Uuid
 
-  name String @db.VarChar(100)
+  name String? @db.VarChar(100)
 
   email String @unique @db.VarChar(320) // unique já cria índice, não duplicar
 
-  passwordHash String @map("password_hash") @db.VarChar(255)
+  passwordHash String? @map("password_hash") @db.VarChar(255)
 
-  emailVerified Boolean @default(false) @map("email_verified")
+  emailVerified Boolean? @default(false) @map("email_verified")
 
   accountLocked Boolean @default(false) @map("account_locked")
 
@@ -44,7 +44,7 @@ model User {
   devices         Device[]
   sessions        Session[]
   refreshTokens   RefreshToken[]
-  oauthAccounts   OauthAccount[]
+  oauthIdentities OAuthIdentity[]
   loginHistory    LoginHistory[]
   mfaCredentials  MfaCredential[]
   recoveryCodes   RecoveryCode[]
@@ -193,7 +193,7 @@ enum OAuthProvider {
   @@map("oauth_provider")
 }
 
-model OauthAccount {
+model OAuthIdentity {
   id String @id @default(uuid()) @db.Uuid
 
   userId String @map("user_id") @db.Uuid
@@ -202,14 +202,32 @@ model OauthAccount {
 
   providerUserId String @map("provider_user_id") @db.VarChar(255)
 
+  email String? @db.VarChar(320)
+
+  emailVerified Boolean? @map("email_verified")
+
+  username String? @db.VarChar(100)
+
+  displayName String? @map("display_name") @db.VarChar(100)
+
+  avatarUrl String? @map("avatar_url") @db.Text
+
+  providerAccessToken String? @map("provider_access_token") @db.Text
+
+  providerRefreshToken String? @map("provider_refresh_token") @db.Text
+
   createdAt DateTime @map("created_at") @db.Timestamptz(6)
+
+  updatedAt DateTime @map("updated_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerUserId]) // já cria índice único, cobre buscas por provider isolado também
   @@index([userId])
-  @@map("oauth_accounts")
+  @@map("oauth_identities")
 }
+
+
 
 // ///////////////////////////////////////////////////////////
 // LOGIN HISTORY

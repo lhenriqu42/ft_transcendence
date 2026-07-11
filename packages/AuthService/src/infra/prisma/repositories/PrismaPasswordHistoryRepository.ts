@@ -1,6 +1,6 @@
+import { Atomic } from '../../../auth/application/ports';
 import { PasswordHistoryRepository } from '../../../auth/application/ports/user/PasswordHistoryRepository';
 import { PasswordHistory } from '../../../auth/domain/entities/password-history.entity';
-import { PrismaPromise } from '../generated/internal/prismaNamespace';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 
@@ -12,7 +12,7 @@ export class PrismaPasswordHistoryRepository
 
   save(
     entry: Omit<PasswordHistory, 'id' | 'createdAt'>,
-  ): PrismaPromise<PasswordHistory> {
+  ): Atomic<PasswordHistory> {
     return this.prismaService.passwordHistory.create({
       data: {
         userId: entry.userId,

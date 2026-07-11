@@ -60,10 +60,10 @@ export type Session = Prisma.SessionModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
- * Model OauthAccount
+ * Model OAuthIdentity
  * 
  */
-export type OauthAccount = Prisma.OauthAccountModel
+export type OAuthIdentity = Prisma.OAuthIdentityModel
 /**
  * Model LoginHistory
  * 

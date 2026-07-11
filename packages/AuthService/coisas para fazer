@@ -15,3 +15,16 @@ Para um sistema de autenticação robusto, eu faria duas melhorias principais:
 
 Trocar os fluxos "verificar e depois apagar" por uma operação atômica, usando GETDEL (quando o valor precisa ser lido) ou um script Lua (quando é necessário validar e consumir em uma única etapa).
 Reescrever deleteAllByUserId() como um script Lua para que a leitura do conjunto de sessões e a remoção das sessões e do índice ocorram em uma única operação atômica, eliminando a condição de corrida que pode deixar sessões órfãs.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Sessoes + OAUTH
+
+MFA
+
+RECAPTCHA
+
+Ter certeza que ha um redirect apos um erro em callback de OAuth, pois quem chama o callback eh o navegador direto e nao o JS.
+
+PRINCIPALMENTE ADICIONAR SCRIPTS LUA no REDIS:
+1. PEGAR UM VALOR DE USO UNICO E DELETAR ELE AO MESMO TEMPO (GETDEL)

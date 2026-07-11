@@ -1,22 +1,28 @@
 import { ConfigModule } from '@nestjs/config';
 import { RedisService } from './redis.service';
 import { Global, Module } from '@nestjs/common';
-import { RedisPasswordResetRepository } from './repositories/RedisPasswordResetRepository';
-import { RedisChallengeRepository } from './repositories/RedisChallengeRepository';
-import { RedisActiveSessionRepository } from './repositories/RedisActiveSessionRepository';
-import { RedisOAuthAuthorizationRepository } from './repositories/RedisOAuthAuthorizationRepository';
 import {
+  PendingLinkStore,
   ChallengeRepository,
+  OAuthStateRepository,
   ActiveSessionRepository,
   PasswordResetRepository,
 } from '../../auth/application/ports';
+import { RedisPendingLinkStore } from './repositories/RedisPendingLinkStore';
+import { RedisChallengeRepository } from './repositories/RedisChallengeRepository';
+import { RedisOAuthStateRepository } from './repositories/RedisOAuthStateRepository';
+import { RedisPasswordResetRepository } from './repositories/RedisPasswordResetRepository';
+import { RedisActiveSessionRepository } from './repositories/RedisActiveSessionRepository';
 
 @Global()
 @Module({
   imports: [ConfigModule],
   providers: [
     RedisService,
-    RedisOAuthAuthorizationRepository,
+    {
+      provide: OAuthStateRepository,
+      useClass: RedisOAuthStateRepository,
+    },
     {
       provide: ActiveSessionRepository,
       useClass: RedisActiveSessionRepository,
@@ -29,13 +35,18 @@ import {
       provide: PasswordResetRepository,
       useClass: RedisPasswordResetRepository,
     },
+    {
+      provide: PendingLinkStore,
+      useClass: RedisPendingLinkStore,
+    },
   ],
   exports: [
     RedisService,
+    PendingLinkStore,
     ChallengeRepository,
+    OAuthStateRepository,
     ActiveSessionRepository,
     PasswordResetRepository,
-    RedisOAuthAuthorizationRepository,
   ],
 })
 export class RedisModule {}
