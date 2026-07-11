@@ -123,7 +123,9 @@ export class AuthService {
     return this.parseResponse(response, { expectBody: false });
   }
 
-  async startOAuth(payload: CI.OAuthStartRequest): Promise<{ url: string }> {
+  async startOAuth(
+    payload: CI.OAuthStartRequest,
+  ): Promise<CI.OAuthStartResponse> {
     const response = await this.breaker.execute(() =>
       fetch(`${this.authServiceUrl}/auth/oauth`, {
         method: 'POST',
@@ -143,6 +145,23 @@ export class AuthService {
   ): Promise<CI.OAuthCallbackResponse> {
     const response = await this.breaker.execute(() =>
       fetch(`${this.authServiceUrl}/auth/oauth/callback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-internal-secret': this.signatureKey,
+        },
+        body: JSON.stringify(payload),
+      }),
+    );
+
+    return this.parseResponse(response);
+  }
+
+  async confirmOAuthLink(
+    payload: CI.OAuthConfirmLinkRequest,
+  ): Promise<CI.OAuthCallbackResponse> {
+    const response = await this.breaker.execute(() =>
+      fetch(`${this.authServiceUrl}/auth/oauth/confirm-link`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

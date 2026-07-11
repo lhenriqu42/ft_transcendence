@@ -2,13 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SESSION_REDIS } from '../redis/session.redis';
 import Redis from 'ioredis';
 
-type Session = {
-  sessionId: string;
+export interface ActiveSession {
+  id: string;
   userId: string;
   deviceId: string;
-  revoked?: boolean;
-  createdAt: number;
-};
+  ttlSeconds: number;
+}
 
 @Injectable()
 export class SessionValidatorService {
@@ -17,14 +16,12 @@ export class SessionValidatorService {
     private readonly redis: Redis,
   ) {}
 
-  async validate(sessionId: string): Promise<Session | null> {
+  async validate(sessionId: string): Promise<ActiveSession | null> {
     const raw = await this.redis.get(`session:${sessionId}`);
 
     if (!raw) return null;
 
-    const session = JSON.parse(raw) as Session;
-
-    if (session.revoked) return null;
+    const session = JSON.parse(raw) as ActiveSession;
 
     return session;
   }

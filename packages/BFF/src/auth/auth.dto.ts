@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import * as CI from './contracts/auth.contracts';
 
 export class RegisterDTO {
   @IsString()
@@ -74,4 +81,18 @@ export class OAuthCallbackQueryDTO {
   @IsOptional()
   @IsString()
   prompt?: string;
+}
+
+export class OAuthInitiateDTO {
+  @IsEnum(CI.OAuthProvider)
+  provider!: CI.OAuthProviderType;
+}
+
+export class OAuthConfirmLinkDTO {
+  @IsString()
+  @MinLength(6)
+  password!: string;
+
+  @IsString()
+  pendingToken!: string;
 }

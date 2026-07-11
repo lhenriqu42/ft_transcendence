@@ -1,3 +1,10 @@
+import { JWTPayload } from 'jose';
+
+export interface AccessTokenPayload extends JWTPayload {
+  sub: string;
+  sid: string;
+}
+
 export const OAuthProvider = {
   GOOGLE: 'GOOGLE',
   GITHUB: 'GITHUB',
@@ -94,7 +101,20 @@ export interface ResetPasswordResponse {
   message: string;
 }
 
+type LinkPath = {
+  intent: 'link';
+  userId: string;
+};
+
+type LoginPath = {
+  intent: 'login';
+  userId: null;
+};
+
+export type IntentPath = LinkPath | LoginPath;
+
 export interface OAuthStartRequest {
+  info: IntentPath;
   provider: OAuthProviderType;
 }
 
@@ -103,7 +123,7 @@ export interface OAuthStartResponse {
 }
 
 export interface OAuthCallbackRequest {
-  provider: OAuthProviderType;
+  sub: string | null;
   code: string;
   state: string;
 }
@@ -125,10 +145,18 @@ export interface OAuthIdentity {
 }
 
 export interface OAuthCallbackResponse {
-  accessToken: string;
-  refreshToken?: string;
-  expiresAt?: Date;
-  idToken?: string;
-  scopes: string[];
-  identity: OAuthIdentity;
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: boolean | null;
+  accountLocked: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  lastLoginAt: Date | null;
+  deletedAt: Date | null;
+}
+
+export interface OAuthConfirmLinkRequest {
+  pendingToken: string;
+  password: string;
 }

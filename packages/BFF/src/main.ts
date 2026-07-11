@@ -25,6 +25,11 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    origin: 'http://localhost:8080', // origem do seu front, ajuste a porta
+    credentials: true, // necessário se você usa cookies (httpOnly session)
+  });
+
   await app.listen({
     port: 3003,
     host: '0.0.0.0',

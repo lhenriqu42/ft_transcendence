@@ -1,14 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { jwtVerify } from 'jose';
 
-interface UserPayload {
-  sessionId: string;
-  sub: string;
-  email: string;
-  name: string;
-  iat: number;
-  exp: number;
+export interface AccessTokenPayload {
+  sub: string; // userId
+  sid: string; // sessionId
+  iat: number; // issued at
+  exp: number; // expiration time
+  roles: string[];
 }
 
 @Injectable()
@@ -21,13 +20,20 @@ export class JwtVerifier {
     );
   }
 
-  async verify(token: string): Promise<UserPayload> {
-    const { payload } = await jwtVerify<UserPayload>(token, this.secret, {
-      algorithms: ['HS256'],
-      issuer: 'auth-service',
-      audience: 'bff',
-    });
-
-    return payload;
+  async verify(token: string): Promise<AccessTokenPayload> {
+    try {
+      const { payload } = await jwtVerify<AccessTokenPayload>(
+        token,
+        this.secret,
+        {
+          algorithms: ['HS256'],
+          issuer: 'auth-service',
+          audience: 'bff',
+        },
+      );
+      return payload;
+    } catch {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

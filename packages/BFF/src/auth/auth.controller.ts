@@ -1,23 +1,28 @@
 import {
-  Body,
-  Controller,
   Get,
-  Post,
-  Query,
   Req,
   Res,
+  Body,
+  Post,
+  Query,
+  UseGuards,
+  Controller,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import * as CI from './contracts/auth.contracts';
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { extractBearer, JwtAuthGuard } from '../.shared/security/auth.guard';
 import {
-  RegisterDTO,
   LoginDTO,
-  ForgotPasswordDTO,
+  RegisterDTO,
   ResetPasswordDTO,
+  OAuthInitiateDTO,
+  ForgotPasswordDTO,
   OAuthCallbackQueryDTO,
+  OAuthConfirmLinkDTO,
 } from './auth.dto';
+import { JwtVerifier } from '../.shared/security/jwt-verifier.service';
 
 const COOKIE_OPTS = {
   httpOnly: true,
@@ -30,7 +35,10 @@ const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60; // espelha o AuthService
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtVerifier: JwtVerifier,
+  ) {}
 
   @Post('login')
   async login(
@@ -181,64 +189,66 @@ export class AuthController {
     });
   }
 
-  @Post('oauth/42')
-  async oauth42() {
+  // OAuth routes
+
+  @Post('oauth/login')
+  async oauthLogin(@Body() body: OAuthInitiateDTO) {
     return await this.authService.startOAuth({
-      provider: 'ECOLE42',
-    });
-  }
-  @Post('oauth/github')
-  async oauthGithub() {
-    return await this.authService.startOAuth({
-      provider: 'GITHUB',
-    });
-  }
-  @Post('oauth/google')
-  async oauthGoogle() {
-    return await this.authService.startOAuth({
-      provider: 'GOOGLE',
-    });
-  }
-  @Post('oauth/discord')
-  async oauthDiscord() {
-    return await this.authService.startOAuth({
-      provider: 'DISCORD',
+      info: {
+        userId: null,
+        intent: 'login',
+      },
+      provider: body.provider,
     });
   }
 
-  @Get('42/callback')
-  async oauth42Callback(@Query() query: OAuthCallbackQueryDTO) {
-    console.log('42 callback query:', query);
-    await this.authService.handleOAuthCallback({
-      provider: 'ECOLE42',
-      ...query,
+  @UseGuards(JwtAuthGuard)
+  @Post('oauth/link')
+  async oauthLink(
+    @Body()
+    body: OAuthInitiateDTO,
+
+    @Req()
+    req: FastifyRequest,
+  ) {
+    const userId = req.user?.jwtPayload.sub;
+
+    if (!userId) {
+      throw new UnauthorizedException(
+        'User ID is required for linking accounts',
+      );
+    }
+
+    return await this.authService.startOAuth({
+      info: {
+        userId,
+        intent: 'link',
+      },
+      provider: body.provider,
     });
   }
 
-  @Get('github/callback')
-  async oauthGithubCallback(@Query() query: OAuthCallbackQueryDTO) {
-    console.log('GitHub callback query:', query);
-    await this.authService.handleOAuthCallback({
-      provider: 'GITHUB',
+  @Get('oauth/callback')
+  async oauthCallback(
+    @Query()
+    query: OAuthCallbackQueryDTO,
+
+    @Req()
+    req: FastifyRequest,
+  ) {
+    const token = extractBearer(req);
+
+    return await this.authService.handleOAuthCallback({
       ...query,
+      sub: token ? (await this.jwtVerifier.verify(token)).sub : null,
     });
   }
 
-  @Get('google/callback')
-  async oauthGoogleCallback(@Query() query: OAuthCallbackQueryDTO) {
-    console.log('Google callback query:', query);
-    await this.authService.handleOAuthCallback({
-      provider: 'GOOGLE',
-      ...query,
-    });
-  }
-
-  @Get('discord/callback')
-  async oauthDiscordCallback(@Query() query: OAuthCallbackQueryDTO) {
-    console.log('Discord callback query:', query);
-    await this.authService.handleOAuthCallback({
-      provider: 'DISCORD',
-      ...query,
-    });
+  @Post('oauth/confirm-link')
+  async oauthConfirmLink(
+    @Body()
+    body: OAuthConfirmLinkDTO,
+  ) {
+    return this.authService.confirmOAuthLink(body);
   }
 }

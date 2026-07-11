@@ -3,7 +3,7 @@ import { SessionValidatorService } from './SessionValidator.service';
 import { JwtVerifier } from './jwt-verifier.service';
 import { FastifyRequest } from 'fastify';
 
-function extractBearer(req: FastifyRequest) {
+export function extractBearer(req: FastifyRequest) {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
     return null;
@@ -28,12 +28,12 @@ export class JwtAuthGuard implements CanActivate {
     const token = extractBearer(req);
     if (!token) return false;
     const payload = await this.jwtVerifier.verify(token);
-    const session = await this.sessionValidator.validate(payload.sessionId);
+    const session = await this.sessionValidator.validate(payload.sid);
 
     if (!session) return false;
 
     req.user = {
-      ...payload,
+      jwtPayload: payload,
       session,
     };
 
