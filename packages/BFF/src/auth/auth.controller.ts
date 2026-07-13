@@ -192,11 +192,20 @@ export class AuthController {
   // OAuth routes
 
   @Post('oauth/login')
-  async oauthLogin(@Body() body: OAuthInitiateDTO) {
+  async oauthLogin(@Body() body: OAuthInitiateDTO, @Req() req: FastifyRequest) {
+    const deviceId = req.cookies?.did;
+    const userAgent = req.headers['user-agent'];
+    const ip = req.ip;
+
     return await this.authService.startOAuth({
       info: {
-        userId: null,
         intent: 'login',
+        userId: null,
+
+        ip,
+        deviceId: deviceId ?? null,
+        userAgent: userAgent ?? null,
+        deviceFingerprint: body.fingerprint ?? null,
       },
       provider: body.provider,
     });
@@ -212,6 +221,7 @@ export class AuthController {
     req: FastifyRequest,
   ) {
     const userId = req.user?.jwtPayload.sub;
+    const ip = req.ip;
 
     if (!userId) {
       throw new UnauthorizedException(
@@ -221,8 +231,13 @@ export class AuthController {
 
     return await this.authService.startOAuth({
       info: {
-        userId,
         intent: 'link',
+        userId,
+        ip,
+
+        deviceId: null,
+        userAgent: null,
+        deviceFingerprint: null,
       },
       provider: body.provider,
     });
@@ -235,13 +250,46 @@ export class AuthController {
 
     @Req()
     req: FastifyRequest,
+
+    @Res({ passthrough: true })
+    reply: FastifyReply,
   ) {
     const token = extractBearer(req);
+    const deviceId = req.cookies?.did;
+    const ip = req.ip;
 
-    return await this.authService.handleOAuthCallback({
+    const response = await this.authService.handleOAuthCallback({
       ...query,
+      ip,
       sub: token ? (await this.jwtVerifier.verify(token)).sub : null,
+      deviceId: deviceId ?? null,
     });
+
+    if (response.intent === 'link') {
+      return { success: response.success };
+    }
+
+    reply.setCookie('r', response.refreshToken, {
+      ...COOKIE_OPTS,
+      maxAge: REFRESH_TOKEN_TTL_SECONDS,
+    });
+    reply.setCookie('sid', response.sessionId, {
+      ...COOKIE_OPTS,
+      maxAge: REFRESH_TOKEN_TTL_SECONDS,
+    });
+    reply.setCookie('uid', response.userId, {
+      ...COOKIE_OPTS,
+      maxAge: REFRESH_TOKEN_TTL_SECONDS,
+    });
+    reply.setCookie('did', response.deviceId, {
+      ...COOKIE_OPTS,
+      maxAge: 365 * 24 * 60 * 60, // 1 ano
+    });
+
+    return {
+      accessToken: response.accessToken,
+      expiresIn: response.expiresIn,
+    };
   }
 
   @Post('oauth/confirm-link')

@@ -86,6 +86,10 @@ export class OAuthCallbackQueryDTO {
 export class OAuthInitiateDTO {
   @IsEnum(CI.OAuthProvider)
   provider!: CI.OAuthProviderType;
+
+  @IsString()
+  @IsOptional()
+  fingerprint?: string;
 }
 
 export class OAuthConfirmLinkDTO {
