@@ -6,8 +6,10 @@ import {
 import * as argon2 from 'argon2';
 import * as CI from './contracts/auth.contracts';
 import { LoginError } from './exceptions/LoginError';
-import { SessionService } from './providers/session.service';
-import { LoginFailureReason } from '../../infra/prisma/generated/enums';
+import {
+  LoginFailureReason,
+  LoginMethod,
+} from '../../infra/prisma/generated/enums';
 import { LoginHistoryRepository } from './ports/session/LoginHistoryRepository';
 import {
   ChallengeRepository,
@@ -15,8 +17,9 @@ import {
   UserRepository,
   UnitOfWork,
 } from './ports';
+import { LoginCompletionService } from './providers/login-completion.service';
 
-const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min
+export const ACCESS_TOKEN_TTL_SECONDS = 15 * 60; // 15min
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 
 @Injectable()
@@ -25,10 +28,9 @@ export class LoginUseCase {
     private readonly uof: UnitOfWork,
     private readonly userRepo: UserRepository,
     private readonly deviceRepo: DeviceRepository,
-    private readonly sessionService: SessionService,
     private readonly challengeRepo: ChallengeRepository,
-
     private readonly loginHistoryRepo: LoginHistoryRepository,
+    private readonly completeLoginService: LoginCompletionService,
   ) {}
 
   async execute(body: CI.LoginRequest): Promise<CI.LoginResponse> {
@@ -38,15 +40,12 @@ export class LoginUseCase {
       throw new UnauthorizedException('Challenge expired or invalid');
     }
 
-    // Por enquanto nao usando o segundo retorno do createOrincrementLoginCount !!
-    const [devicePromise] = await this.deviceRepo.createOrincrementLoginCount({
+    const device = await this.deviceRepo.findOrCreate({
       userId: challenge.user.id,
       deviceId: challenge.deviceId,
       userAgent: challenge.userAgent,
       fingerprint: challenge.deviceFingerprint,
     });
-
-    const device = await devicePromise;
 
     try {
       if (challenge.user.accountLocked) {
@@ -133,50 +132,33 @@ export class LoginUseCase {
       //              LOGIN SUCCESS
       // ---------------------------------------------
 
-      const sessionResponse = this.sessionService.create(
-        challenge.user.id,
-        device.id,
-      );
-
-      const prismaPromises = [
-        ...sessionResponse.prismaPromises,
-
-        this.loginHistoryRepo.recordSuccess({
-          userId: challenge.user.id,
-          deviceId: device.id,
-          sessionId: sessionResponse.payload.sid,
-          ip: challenge.ipContext.ip,
-          userAgent: challenge.userAgent,
-          riskScore: challenge.riskScore,
-          country: challenge.ipContext.country,
-          city: challenge.ipContext.city,
-          latitude: challenge.ipContext.latitude,
-          longitude: challenge.ipContext.longitude,
-          asn: challenge.ipContext.connection?.asn,
-          org: challenge.ipContext.connection?.org,
-          isp: challenge.ipContext.connection?.isp,
-          domain: challenge.ipContext.connection?.domain,
-          captchaRequired: challenge.requiresCaptcha,
-          mfaRequired: challenge.requiresMFA,
-        }),
-      ] as const;
+      const loginCompletionResponse = this.completeLoginService.prepare({
+        userId: challenge.user.id,
+        deviceId: device.id,
+        method: LoginMethod.PASSWORD,
+        ipContext: challenge.ipContext,
+        userAgent: challenge.userAgent,
+        riskScore: challenge.riskScore,
+        captchaRequired: challenge.requiresCaptcha,
+        mfaRequired: challenge.requiresMFA,
+      });
 
       const promises = [
-        ...sessionResponse.promises,
+        ...loginCompletionResponse.promises,
         this.challengeRepo.delete(body.challengeId),
       ] as const;
 
       const [accessToken] = await Promise.all([
         ...promises,
-        this.uof.runBatch(prismaPromises),
+        this.uof.runBatch(loginCompletionResponse.prismaPromises),
       ]);
 
       return {
         userId: challenge.user.id,
         accessToken,
         deviceId: device.id,
-        refreshToken: sessionResponse.refreshToken,
-        sessionId: sessionResponse.payload.sid,
+        refreshToken: loginCompletionResponse.refreshToken,
+        sessionId: loginCompletionResponse.payload.sid,
         expiresIn: ACCESS_TOKEN_TTL_SECONDS,
       };
     } catch (error) {
@@ -187,17 +169,22 @@ export class LoginUseCase {
           ip: challenge.ipContext.ip,
           userAgent: challenge.userAgent,
           riskScore: challenge.riskScore,
-          country: challenge.ipContext.country,
-          city: challenge.ipContext.city,
-          latitude: challenge.ipContext.latitude,
-          longitude: challenge.ipContext.longitude,
-          asn: challenge.ipContext.connection?.asn,
-          org: challenge.ipContext.connection?.org,
-          isp: challenge.ipContext.connection?.isp,
-          domain: challenge.ipContext.connection?.domain,
+          country: challenge.ipContext.country ?? null,
+          city: challenge.ipContext.city ?? null,
+          latitude: challenge.ipContext.latitude ?? null,
+          longitude: challenge.ipContext.longitude ?? null,
+          asn: challenge.ipContext.connection?.asn ?? null,
+          org: challenge.ipContext.connection?.org ?? null,
+          isp: challenge.ipContext.connection?.isp ?? null,
+          domain: challenge.ipContext.connection?.domain ?? null,
           captchaRequired: challenge.requiresCaptcha,
           mfaRequired: challenge.requiresMFA,
           failureReason: error.reason,
+          method: LoginMethod.PASSWORD,
+          mfaMethod: null, // Mudar quando desenvolvermos o fluxo de MFA
+          mfaSuccess: null, // Mudar quando desenvolvermos o fluxo de MFA
+          oauthIdentityId: null,
+          oauthProvider: null,
         });
         throw error.httpException;
       }

@@ -64,7 +64,7 @@ export interface RefreshResponse {
 export interface LogoutRequest {
   sessionId: string;
   userId: string;
-  allDevices?: boolean; // false → encerra só a sessão atual
+  allDevices?: boolean;
 }
 
 export interface RegisterRequest {
@@ -104,11 +104,21 @@ export interface ResetPasswordResponse {
 type LinkPath = {
   intent: 'link';
   userId: string;
+  ip: string;
+
+  deviceId: null;
+  userAgent: null;
+  deviceFingerprint: null;
 };
 
 type LoginPath = {
   intent: 'login';
   userId: null;
+
+  ip: string;
+  deviceId: string | null;
+  userAgent: string | null;
+  deviceFingerprint: string | null;
 };
 
 export type IntentPath = LinkPath | LoginPath;
@@ -123,7 +133,9 @@ export interface OAuthStartResponse {
 }
 
 export interface OAuthCallbackRequest {
+  ip: string;
   sub: string | null;
+  deviceId: string | null;
   code: string;
   state: string;
 }
@@ -144,17 +156,24 @@ export interface OAuthIdentity {
   avatarUrl?: string;
 }
 
-export interface OAuthCallbackResponse {
-  id: string;
-  name: string | null;
-  email: string;
-  emailVerified: boolean | null;
-  accountLocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLoginAt: Date | null;
-  deletedAt: Date | null;
+export interface OAuthLoginPathResponse {
+  intent: 'login';
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
+  sessionId: string;
+  deviceId: string;
+  expiresIn: number;
 }
+
+export interface OAuthLinkPathResponse {
+  intent: 'link';
+  success: boolean;
+}
+
+export type OAuthCallbackResponse =
+  | OAuthLoginPathResponse
+  | OAuthLinkPathResponse;
 
 export interface OAuthConfirmLinkRequest {
   pendingToken: string;

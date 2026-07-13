@@ -1,5 +1,8 @@
 deixar as operacoes redis atomicas, e tentar deixar o prisma atomico tambem, inclusive os 2 juntos em cada caso de uso.
 
+PRINCIPALMENTE ADICIONAR SCRIPTS LUA no REDIS:
+1. PEGAR UM VALOR DE USO UNICO E DELETAR ELE AO MESMO TEMPO (GETDEL)
+
 Resumindo
 Método	Atomicamente seguro?
 ActiveSession.save	✅ Sim (MULTI/EXEC)
@@ -19,12 +22,20 @@ Reescrever deleteAllByUserId() como um script Lua para que a leitura do conjunto
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Sessoes + OAUTH
+Ter certeza que ha um redirect apos um erro em callback de OAuth, pois quem chama o callback eh o navegador direto e nao o JS.
+mudar onde o device vai ser montado com os 2 logins
+LoginHistory vai mudar tudo
+
 
 MFA
 
 RECAPTCHA
 
-Ter certeza que ha um redirect apos um erro em callback de OAuth, pois quem chama o callback eh o navegador direto e nao o JS.
 
-PRINCIPALMENTE ADICIONAR SCRIPTS LUA no REDIS:
-1. PEGAR UM VALOR DE USO UNICO E DELETAR ELE AO MESMO TEMPO (GETDEL)
+4. Fluxo OAuth não tem contexto de risco/IP nenhum
+Reparei dois furos relacionados:
+
+OAuthCallbackRequest não carrega ip/userAgent — só sub, deviceId, code, state. Então hoje é impossível preencher ip/country/city/asn no LoginHistory de um login OAuth, porque a informação nunca chega no AuthService. Você vai precisar adicionar ip: string (e talvez reaproveitar userAgent que já vem do estado salvo em OAuthStartRequest) no contrato e no controller do BFF (req.ip já está disponível ali, é só passar adiante).
+riskScore: 0 fixo no fluxo OAuth (era hardcoded no código quebrado, mantive como placeholder acima) significa que hoje um login OAuth nunca é avaliado pelo RiskEngineService — captcha/MFA nunca são exigidos nesse caminho, mesmo que seja um dispositivo/IP totalmente novo. Isso pode ser proposital (você já confia na autenticação do provider), mas vale uma decisão consciente: dá pra rodar o mesmo RiskEngineService.evaluate no OAuth (sem gate de captcha, já que é um redirect flow e não dá pra pedir captcha no meio do callback, mas ainda registrando o riskScore no histórico e, se quiser, negando login se o score for muito alto).
+
+Quer que eu já escreva as mudanças de contrato (OAuthCallbackRequest + OAuthStartRequest carregando IP) e o ajuste correspondente no oauth.controller/OAuthCallbackUseCase, ou prefere primeiro decidir se risk scoring entra no fluxo OAuth?

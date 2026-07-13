@@ -1,7 +1,7 @@
 import { Device } from '../../../domain/entities/device.entity';
 import { Atomic } from '../utils/Atomic';
 
-export type DataToIncrement = {
+export type DataToCreate = {
   userId: string;
   deviceId: string | null;
   userAgent: string | null;
@@ -10,17 +10,22 @@ export type DataToIncrement = {
 
 export abstract class DeviceRepository {
   /**
-   * Increments the login count for a device associated with a user.
-   * If the device does not exist, it will be created with an initial login count of 1.
+   * Finds a device associated with a user by its fingerprint. If the device does not exist, it creates a new device record.
    *
-   * @param user_id The ID of the user associated with the device.
-   * @param fingerprint The fingerprint of the device.
-   * @returns A promise that resolves to the updated device entity.
-   * @throws An error if the operation fails or if the device does not exist.
+   * @param data The data required to find or create the device.
+   * @returns A promise that resolves to the found or newly created device entity.
+   * @throws An error if the query or creation operation fails.
    */
-  abstract createOrincrementLoginCount(
-    data: DataToIncrement,
-  ): Promise<[Atomic<Device>, boolean]>;
+  abstract findOrCreate(data: DataToCreate): Promise<Device>;
+
+  /**
+   * Increments the login count for a device.
+   *
+   * @param deviceId The ID of the device for which to increment the login count.
+   * @returns A promise that resolves when the operation is complete.
+   * @throws An error if the update operation fails.
+   */
+  abstract incrementLoginCount(deviceId: string): Atomic<Device>;
 
   /**
    * Finds a device associated with a user by its fingerprint.

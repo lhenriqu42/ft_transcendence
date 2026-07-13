@@ -222,11 +222,12 @@ model OAuthIdentity {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  loginHistory LoginHistory[]
+
   @@unique([provider, providerUserId]) // já cria índice único, cobre buscas por provider isolado também
   @@index([userId])
   @@map("oauth_identities")
 }
-
 
 
 // ///////////////////////////////////////////////////////////
@@ -262,52 +263,52 @@ enum LoginFailureReason {
   @@map("login_failure_reason")
 }
 
+
+enum LoginMethod {
+  PASSWORD
+  OAUTH
+}
+
+enum MfaMethod {
+  TOTP
+  SMS
+  EMAIL
+}
+
 model LoginHistory {
   id String @id @default(uuid()) @db.Uuid
-
   userId String @map("user_id") @db.Uuid
 
-  deviceId String? @map("device_id") @db.Uuid
-
-  sessionId String? @map("session_id") @db.Uuid
-
-  success Boolean
-
-  failureReason LoginFailureReason? @map("failure_reason")
-
-  ip String @db.Inet
-
-  country String? @db.VarChar(100)
-
-  city String? @db.VarChar(100)
-
-  latitude Float? @db.DoublePrecision
-
-  longitude Float? @db.DoublePrecision
-
-  asn Int? @db.Integer
-
-  org String? @db.VarChar(100)
-
-  isp String? @db.VarChar(100)
-
-  domain String? @db.VarChar(100)
-
-  userAgent String? @map("user_agent") @db.Text
-
-  riskScore Int @default(0) @map("risk_score")
-
-  captchaRequired Boolean @default(false) @map("captcha_required")
+  method LoginMethod @map("method")           // como a identidade primária foi provada
+  oauthProvider OAuthProvider? @map("oauth_provider")
+  oauthIdentityId String? @map("oauth_identity_id") @db.Uuid
 
   mfaRequired Boolean @default(false) @map("mfa_required")
+  mfaMethod MfaMethod? @map("mfa_method")      // qual 2FA foi usado, se algum
+  mfaSuccess Boolean? @map("mfa_success")      // passou no 2FA? null = nem chegou a essa etapa
 
+  deviceId String? @map("device_id") @db.Uuid
+  sessionId String? @map("session_id") @db.Uuid
+  success Boolean
+  failureReason LoginFailureReason? @map("failure_reason")
+  ip String @db.Inet
+  country String? @db.VarChar(100)
+  city String? @db.VarChar(100)
+  latitude Float? @db.DoublePrecision
+  longitude Float? @db.DoublePrecision
+  asn Int? @db.Integer
+  org String? @db.VarChar(100)
+  isp String? @db.VarChar(100)
+  domain String? @db.VarChar(100)
+  userAgent String? @map("user_agent") @db.Text
+  riskScore Int @default(0) @map("risk_score")
+  captchaRequired Boolean @default(false) @map("captcha_required")
   createdAt DateTime @map("created_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-
   session Session? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  oauthIdentity OAuthIdentity? @relation(fields: [oauthIdentityId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([deviceId])
@@ -315,13 +316,11 @@ model LoginHistory {
   @@index([success])
   @@index([createdAt])
   @@index([ip])
-  // perf: "histórico do usuário" paginado por data — a query mais comum de tela
   @@index([userId, createdAt])
-  // perf: rate limiting / detecção de brute force por IP em janela de tempo
   @@index([ip, createdAt])
-  // perf: contagem de falhas recentes por usuário (bloqueio de conta, alertas)
-  // considerar índice parcial `WHERE success = false` via SQL raw na migration
   @@index([userId, success, createdAt])
+  // perf: analisar tentativas por método (ex: "quantas falhas de RECOVERY_CODE hoje?")
+  @@index([method, success, createdAt])
   @@map("login_history")
 }
 

@@ -165,6 +165,12 @@ export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)
 export const LoginHistoryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  method: 'method',
+  oauthProvider: 'oauthProvider',
+  oauthIdentityId: 'oauthIdentityId',
+  mfaRequired: 'mfaRequired',
+  mfaMethod: 'mfaMethod',
+  mfaSuccess: 'mfaSuccess',
   deviceId: 'deviceId',
   sessionId: 'sessionId',
   success: 'success',
@@ -181,7 +187,6 @@ export const LoginHistoryScalarFieldEnum = {
   userAgent: 'userAgent',
   riskScore: 'riskScore',
   captchaRequired: 'captchaRequired',
-  mfaRequired: 'mfaRequired',
   createdAt: 'createdAt'
 } as const
 

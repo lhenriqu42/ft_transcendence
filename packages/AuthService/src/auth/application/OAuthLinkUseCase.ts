@@ -31,7 +31,7 @@ export class OAuthLinkUseCase {
     prevUID,
     currUID,
     info,
-  }: Params): Promise<CI.OAuthCallbackResponse> {
+  }: Params): Promise<CI.OAuthLinkPathResponse> {
     const { identity, tokens } = info;
     if (!currUID) {
       throw new UnauthorizedException('currentUserId required for link');
@@ -77,7 +77,10 @@ export class OAuthLinkUseCase {
         );
       }
 
-      return user;
+      return {
+        intent: 'link',
+        success: true,
+      };
     }
 
     // identidade nova -> vincula ao usuário logado (currUID)
@@ -105,6 +108,9 @@ export class OAuthLinkUseCase {
       avatarUrl: identity.avatarUrl || null,
     });
 
-    return user;
+    return {
+      intent: 'link',
+      success: true,
+    };
   }
 }

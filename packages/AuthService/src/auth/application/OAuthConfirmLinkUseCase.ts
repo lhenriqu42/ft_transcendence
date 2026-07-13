@@ -55,15 +55,8 @@ export class OAuthConfirmLinkUseCase {
     });
 
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      accountLocked: user.accountLocked,
-      lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      deletedAt: user.deletedAt,
+      intent: 'link',
+      success: true,
     };
   }
 }

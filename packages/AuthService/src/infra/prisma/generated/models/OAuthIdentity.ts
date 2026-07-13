@@ -247,6 +247,7 @@ export type OAuthIdentityWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  loginHistory?: Prisma.LoginHistoryListRelationFilter
 }
 
 export type OAuthIdentityOrderByWithRelationInput = {
@@ -264,6 +265,7 @@ export type OAuthIdentityOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  loginHistory?: Prisma.LoginHistoryOrderByRelationAggregateInput
 }
 
 export type OAuthIdentityWhereUniqueInput = Prisma.AtLeast<{
@@ -285,6 +287,7 @@ export type OAuthIdentityWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  loginHistory?: Prisma.LoginHistoryListRelationFilter
 }, "id" | "provider_providerUserId">
 
 export type OAuthIdentityOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type OAuthIdentityCreateInput = {
   createdAt: Date | string
   updatedAt: Date | string
   user: Prisma.UserCreateNestedOneWithoutOauthIdentitiesInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutOauthIdentityInput
 }
 
 export type OAuthIdentityUncheckedCreateInput = {
@@ -355,6 +359,7 @@ export type OAuthIdentityUncheckedCreateInput = {
   providerRefreshToken?: string | null
   createdAt: Date | string
   updatedAt: Date | string
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutOauthIdentityInput
 }
 
 export type OAuthIdentityUpdateInput = {
@@ -371,6 +376,7 @@ export type OAuthIdentityUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutOauthIdentitiesNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutOauthIdentityNestedInput
 }
 
 export type OAuthIdentityUncheckedUpdateInput = {
@@ -387,6 +393,7 @@ export type OAuthIdentityUncheckedUpdateInput = {
   providerRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutOauthIdentityNestedInput
 }
 
 export type OAuthIdentityCreateManyInput = {
@@ -499,6 +506,11 @@ export type OAuthIdentityMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type OAuthIdentityNullableScalarRelationFilter = {
+  is?: Prisma.OAuthIdentityWhereInput | null
+  isNot?: Prisma.OAuthIdentityWhereInput | null
+}
+
 export type OAuthIdentityCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.OAuthIdentityCreateWithoutUserInput, Prisma.OAuthIdentityUncheckedCreateWithoutUserInput> | Prisma.OAuthIdentityCreateWithoutUserInput[] | Prisma.OAuthIdentityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.OAuthIdentityCreateOrConnectWithoutUserInput | Prisma.OAuthIdentityCreateOrConnectWithoutUserInput[]
@@ -545,6 +557,22 @@ export type EnumOAuthProviderFieldUpdateOperationsInput = {
   set?: $Enums.OAuthProvider
 }
 
+export type OAuthIdentityCreateNestedOneWithoutLoginHistoryInput = {
+  create?: Prisma.XOR<Prisma.OAuthIdentityCreateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedCreateWithoutLoginHistoryInput>
+  connectOrCreate?: Prisma.OAuthIdentityCreateOrConnectWithoutLoginHistoryInput
+  connect?: Prisma.OAuthIdentityWhereUniqueInput
+}
+
+export type OAuthIdentityUpdateOneWithoutLoginHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.OAuthIdentityCreateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedCreateWithoutLoginHistoryInput>
+  connectOrCreate?: Prisma.OAuthIdentityCreateOrConnectWithoutLoginHistoryInput
+  upsert?: Prisma.OAuthIdentityUpsertWithoutLoginHistoryInput
+  disconnect?: Prisma.OAuthIdentityWhereInput | boolean
+  delete?: Prisma.OAuthIdentityWhereInput | boolean
+  connect?: Prisma.OAuthIdentityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OAuthIdentityUpdateToOneWithWhereWithoutLoginHistoryInput, Prisma.OAuthIdentityUpdateWithoutLoginHistoryInput>, Prisma.OAuthIdentityUncheckedUpdateWithoutLoginHistoryInput>
+}
+
 export type OAuthIdentityCreateWithoutUserInput = {
   id?: string
   provider: $Enums.OAuthProvider
@@ -558,6 +586,7 @@ export type OAuthIdentityCreateWithoutUserInput = {
   providerRefreshToken?: string | null
   createdAt: Date | string
   updatedAt: Date | string
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutOauthIdentityInput
 }
 
 export type OAuthIdentityUncheckedCreateWithoutUserInput = {
@@ -573,6 +602,7 @@ export type OAuthIdentityUncheckedCreateWithoutUserInput = {
   providerRefreshToken?: string | null
   createdAt: Date | string
   updatedAt: Date | string
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutOauthIdentityInput
 }
 
 export type OAuthIdentityCreateOrConnectWithoutUserInput = {
@@ -620,6 +650,86 @@ export type OAuthIdentityScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"OAuthIdentity"> | Date | string
 }
 
+export type OAuthIdentityCreateWithoutLoginHistoryInput = {
+  id?: string
+  provider: $Enums.OAuthProvider
+  providerUserId: string
+  email?: string | null
+  emailVerified?: boolean | null
+  username?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  providerAccessToken?: string | null
+  providerRefreshToken?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  user: Prisma.UserCreateNestedOneWithoutOauthIdentitiesInput
+}
+
+export type OAuthIdentityUncheckedCreateWithoutLoginHistoryInput = {
+  id?: string
+  userId: string
+  provider: $Enums.OAuthProvider
+  providerUserId: string
+  email?: string | null
+  emailVerified?: boolean | null
+  username?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  providerAccessToken?: string | null
+  providerRefreshToken?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export type OAuthIdentityCreateOrConnectWithoutLoginHistoryInput = {
+  where: Prisma.OAuthIdentityWhereUniqueInput
+  create: Prisma.XOR<Prisma.OAuthIdentityCreateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedCreateWithoutLoginHistoryInput>
+}
+
+export type OAuthIdentityUpsertWithoutLoginHistoryInput = {
+  update: Prisma.XOR<Prisma.OAuthIdentityUpdateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedUpdateWithoutLoginHistoryInput>
+  create: Prisma.XOR<Prisma.OAuthIdentityCreateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedCreateWithoutLoginHistoryInput>
+  where?: Prisma.OAuthIdentityWhereInput
+}
+
+export type OAuthIdentityUpdateToOneWithWhereWithoutLoginHistoryInput = {
+  where?: Prisma.OAuthIdentityWhereInput
+  data: Prisma.XOR<Prisma.OAuthIdentityUpdateWithoutLoginHistoryInput, Prisma.OAuthIdentityUncheckedUpdateWithoutLoginHistoryInput>
+}
+
+export type OAuthIdentityUpdateWithoutLoginHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
+  providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutOauthIdentitiesNestedInput
+}
+
+export type OAuthIdentityUncheckedUpdateWithoutLoginHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider
+  providerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerAccessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type OAuthIdentityCreateManyUserInput = {
   id?: string
   provider: $Enums.OAuthProvider
@@ -648,6 +758,7 @@ export type OAuthIdentityUpdateWithoutUserInput = {
   providerRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutOauthIdentityNestedInput
 }
 
 export type OAuthIdentityUncheckedUpdateWithoutUserInput = {
@@ -663,6 +774,7 @@ export type OAuthIdentityUncheckedUpdateWithoutUserInput = {
   providerRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutOauthIdentityNestedInput
 }
 
 export type OAuthIdentityUncheckedUpdateManyWithoutUserInput = {
@@ -681,6 +793,35 @@ export type OAuthIdentityUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type OAuthIdentityCountOutputType
+ */
+
+export type OAuthIdentityCountOutputType = {
+  loginHistory: number
+}
+
+export type OAuthIdentityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  loginHistory?: boolean | OAuthIdentityCountOutputTypeCountLoginHistoryArgs
+}
+
+/**
+ * OAuthIdentityCountOutputType without action
+ */
+export type OAuthIdentityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OAuthIdentityCountOutputType
+   */
+  select?: Prisma.OAuthIdentityCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OAuthIdentityCountOutputType without action
+ */
+export type OAuthIdentityCountOutputTypeCountLoginHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoginHistoryWhereInput
+}
+
 
 export type OAuthIdentitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -697,6 +838,8 @@ export type OAuthIdentitySelect<ExtArgs extends runtime.Types.Extensions.Interna
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  loginHistory?: boolean | Prisma.OAuthIdentity$loginHistoryArgs<ExtArgs>
+  _count?: boolean | Prisma.OAuthIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["oAuthIdentity"]>
 
 export type OAuthIdentitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -752,6 +895,8 @@ export type OAuthIdentitySelectScalar = {
 export type OAuthIdentityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "provider" | "providerUserId" | "email" | "emailVerified" | "username" | "displayName" | "avatarUrl" | "providerAccessToken" | "providerRefreshToken" | "createdAt" | "updatedAt", ExtArgs["result"]["oAuthIdentity"]>
 export type OAuthIdentityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  loginHistory?: boolean | Prisma.OAuthIdentity$loginHistoryArgs<ExtArgs>
+  _count?: boolean | Prisma.OAuthIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OAuthIdentityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -764,6 +909,7 @@ export type $OAuthIdentityPayload<ExtArgs extends runtime.Types.Extensions.Inter
   name: "OAuthIdentity"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1174,6 +1320,7 @@ readonly fields: OAuthIdentityFieldRefs;
 export interface Prisma__OAuthIdentityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  loginHistory<T extends Prisma.OAuthIdentity$loginHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OAuthIdentity$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1614,6 +1761,30 @@ export type OAuthIdentityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many OAuthIdentities to delete.
    */
   limit?: number
+}
+
+/**
+ * OAuthIdentity.loginHistory
+ */
+export type OAuthIdentity$loginHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoginHistory
+   */
+  select?: Prisma.LoginHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoginHistory
+   */
+  omit?: Prisma.LoginHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoginHistoryInclude<ExtArgs> | null
+  where?: Prisma.LoginHistoryWhereInput
+  orderBy?: Prisma.LoginHistoryOrderByWithRelationInput | Prisma.LoginHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.LoginHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoginHistoryScalarFieldEnum | Prisma.LoginHistoryScalarFieldEnum[]
 }
 
 /**

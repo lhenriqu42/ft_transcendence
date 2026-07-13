@@ -34,12 +34,23 @@ export class GithubOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
+  async createAuthorizationUrl(path: IntentPath): Promise<URL> {
+    const { ip, deviceId, userId, intent, userAgent, deviceFingerprint } = path;
+
     const state = arctic.generateState();
 
     await this.redisOauthStateRepo.save(
       state,
-      { userId, intent, provider: this.provider, codeVerifier: null },
+      {
+        ip,
+        intent,
+        userId,
+        deviceId,
+        userAgent,
+        deviceFingerprint,
+        codeVerifier: null,
+        provider: this.provider,
+      },
       STATE_TTL_SECONDS,
     );
 

@@ -276,6 +276,27 @@ export type EnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
 }
 
+export type EnumLoginMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoginMethod | Prisma.EnumLoginMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel> | $Enums.LoginMethod
+}
+
+export type EnumOAuthProviderNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel> | $Enums.OAuthProvider | null
+}
+
+export type EnumMfaMethodNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaMethod | Prisma.EnumMfaMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel> | $Enums.MfaMethod | null
+}
+
 export type EnumLoginFailureReasonNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.LoginFailureReason | Prisma.EnumLoginFailureReasonFieldRefInput<$PrismaModel> | null
   in?: $Enums.LoginFailureReason[] | Prisma.ListEnumLoginFailureReasonFieldRefInput<$PrismaModel> | null
@@ -303,6 +324,36 @@ export type IntNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumLoginMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoginMethod | Prisma.EnumLoginMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoginMethodWithAggregatesFilter<$PrismaModel> | $Enums.LoginMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel>
+}
+
+export type EnumOAuthProviderNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOAuthProviderNullableWithAggregatesFilter<$PrismaModel> | $Enums.OAuthProvider | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel>
+}
+
+export type EnumMfaMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaMethod | Prisma.EnumMfaMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMfaMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.MfaMethod | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel>
 }
 
 export type EnumLoginFailureReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -662,6 +713,27 @@ export type NestedEnumOAuthProviderWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumOAuthProviderFilter<$PrismaModel>
 }
 
+export type NestedEnumLoginMethodFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoginMethod | Prisma.EnumLoginMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel> | $Enums.LoginMethod
+}
+
+export type NestedEnumOAuthProviderNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel> | $Enums.OAuthProvider | null
+}
+
+export type NestedEnumMfaMethodNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaMethod | Prisma.EnumMfaMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel> | $Enums.MfaMethod | null
+}
+
 export type NestedEnumLoginFailureReasonNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.LoginFailureReason | Prisma.EnumLoginFailureReasonFieldRefInput<$PrismaModel> | null
   in?: $Enums.LoginFailureReason[] | Prisma.ListEnumLoginFailureReasonFieldRefInput<$PrismaModel> | null
@@ -678,6 +750,36 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumLoginMethodWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoginMethod | Prisma.EnumLoginMethodFieldRefInput<$PrismaModel>
+  in?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoginMethod[] | Prisma.ListEnumLoginMethodFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoginMethodWithAggregatesFilter<$PrismaModel> | $Enums.LoginMethod
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLoginMethodFilter<$PrismaModel>
+}
+
+export type NestedEnumOAuthProviderNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OAuthProvider | Prisma.EnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  in?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.OAuthProvider[] | Prisma.ListEnumOAuthProviderFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOAuthProviderNullableWithAggregatesFilter<$PrismaModel> | $Enums.OAuthProvider | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOAuthProviderNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumMfaMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MfaMethod | Prisma.EnumMfaMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MfaMethod[] | Prisma.ListEnumMfaMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMfaMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.MfaMethod | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMfaMethodNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumLoginFailureReasonNullableWithAggregatesFilter<$PrismaModel = never> = {

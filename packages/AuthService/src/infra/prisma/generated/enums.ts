@@ -43,6 +43,23 @@ export const LoginFailureReason = {
 export type LoginFailureReason = (typeof LoginFailureReason)[keyof typeof LoginFailureReason]
 
 
+export const LoginMethod = {
+  PASSWORD: 'PASSWORD',
+  OAUTH: 'OAUTH'
+} as const
+
+export type LoginMethod = (typeof LoginMethod)[keyof typeof LoginMethod]
+
+
+export const MfaMethod = {
+  TOTP: 'TOTP',
+  SMS: 'SMS',
+  EMAIL: 'EMAIL'
+} as const
+
+export type MfaMethod = (typeof MfaMethod)[keyof typeof MfaMethod]
+
+
 export const MfaType = {
   TOTP: 'TOTP',
   WEBAUTHN: 'WEBAUTHN'

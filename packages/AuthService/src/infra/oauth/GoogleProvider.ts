@@ -34,14 +34,25 @@ export class GoogleOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
+  async createAuthorizationUrl(path: IntentPath): Promise<URL> {
+    const { ip, deviceId, userId, intent, userAgent, deviceFingerprint } = path;
+
     const state = arctic.generateState();
     const codeVerifier = arctic.generateCodeVerifier();
     const scopes = ['openid', 'profile', 'email'];
 
     await this.redisOauthStateRepo.save(
       state,
-      { userId, intent, codeVerifier, provider: this.provider },
+      {
+        ip,
+        intent,
+        userId,
+        deviceId,
+        userAgent,
+        codeVerifier,
+        deviceFingerprint,
+        provider: this.provider,
+      },
       STATE_TTL_SECONDS,
     );
 

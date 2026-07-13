@@ -1,7 +1,7 @@
 import { Device } from '../../../auth/domain/entities/device.entity';
 import { Atomic } from '../../../auth/application/ports/utils/Atomic';
 import {
-  DataToIncrement,
+  DataToCreate,
   DeviceRepository,
 } from '../../../auth/application/ports/session/DeviceRepository';
 import { PrismaService } from '../prisma.service';
@@ -12,9 +12,7 @@ import { createHash } from 'crypto';
 export class PrismaDeviceRepository implements DeviceRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createOrincrementLoginCount(
-    data: DataToIncrement,
-  ): Promise<[Atomic<Device>, boolean]> {
+  async findOrCreate(data: DataToCreate): Promise<Device> {
     const { userId, deviceId, fingerprint, userAgent } = data;
     const safeUserAgent = userAgent?.slice(0, 255) ?? null;
     const now = new Date();
@@ -27,39 +25,27 @@ export class PrismaDeviceRepository implements DeviceRepository {
       const existing = await this.prismaService.device.findFirst({
         where: { id: deviceId, userId },
       });
-
       if (existing) {
-        const fingerprintChanged =
-          fingerprintHash &&
-          existing.fingerprintHash &&
-          existing.fingerprintHash !== fingerprintHash;
-
-        return [
-          this.prismaService.device.update({
-            where: { id: deviceId },
-            data: {
-              lastSeenAt: now,
-              loginCount: { increment: 1 },
-              ...(safeUserAgent && { lastUserAgent: safeUserAgent }),
-            },
-          }),
-          !!fingerprintChanged,
-        ];
+        return existing;
       }
     }
 
-    return [
-      this.prismaService.device.create({
-        data: {
-          userId,
-          lastSeenAt: now,
-          firstSeenAt: now,
-          ...(safeUserAgent && { lastUserAgent: safeUserAgent }),
-          ...(fingerprintHash && { fingerprintHash }),
-        },
-      }),
-      false,
-    ];
+    return this.prismaService.device.create({
+      data: {
+        userId,
+        lastSeenAt: now,
+        firstSeenAt: now,
+        ...(safeUserAgent && { lastUserAgent: safeUserAgent }),
+        ...(fingerprintHash && { fingerprintHash }),
+      },
+    });
+  }
+
+  incrementLoginCount(deviceId: string): Atomic<Device> {
+    return this.prismaService.device.update({
+      where: { id: deviceId },
+      data: { loginCount: { increment: 1 } },
+    });
   }
 
   findById(userId: string, deviceId: string): Atomic<Device | null> {

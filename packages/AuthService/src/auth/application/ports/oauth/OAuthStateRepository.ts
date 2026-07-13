@@ -1,10 +1,14 @@
 import { OAuthProviderType } from '../../contracts/auth.contracts';
 
 export interface OAuthStateData {
+  ip: string;
   intent: 'link' | 'login';
   provider: OAuthProviderType;
   codeVerifier: string | null;
   userId: string | null;
+  deviceId: string | null;
+  userAgent: string | null;
+  deviceFingerprint: string | null;
 }
 
 export abstract class OAuthStateRepository {

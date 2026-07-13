@@ -43,6 +43,12 @@ export type LoginHistorySumAggregateOutputType = {
 export type LoginHistoryMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  method: $Enums.LoginMethod | null
+  oauthProvider: $Enums.OAuthProvider | null
+  oauthIdentityId: string | null
+  mfaRequired: boolean | null
+  mfaMethod: $Enums.MfaMethod | null
+  mfaSuccess: boolean | null
   deviceId: string | null
   sessionId: string | null
   success: boolean | null
@@ -59,13 +65,18 @@ export type LoginHistoryMinAggregateOutputType = {
   userAgent: string | null
   riskScore: number | null
   captchaRequired: boolean | null
-  mfaRequired: boolean | null
   createdAt: Date | null
 }
 
 export type LoginHistoryMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  method: $Enums.LoginMethod | null
+  oauthProvider: $Enums.OAuthProvider | null
+  oauthIdentityId: string | null
+  mfaRequired: boolean | null
+  mfaMethod: $Enums.MfaMethod | null
+  mfaSuccess: boolean | null
   deviceId: string | null
   sessionId: string | null
   success: boolean | null
@@ -82,13 +93,18 @@ export type LoginHistoryMaxAggregateOutputType = {
   userAgent: string | null
   riskScore: number | null
   captchaRequired: boolean | null
-  mfaRequired: boolean | null
   createdAt: Date | null
 }
 
 export type LoginHistoryCountAggregateOutputType = {
   id: number
   userId: number
+  method: number
+  oauthProvider: number
+  oauthIdentityId: number
+  mfaRequired: number
+  mfaMethod: number
+  mfaSuccess: number
   deviceId: number
   sessionId: number
   success: number
@@ -105,7 +121,6 @@ export type LoginHistoryCountAggregateOutputType = {
   userAgent: number
   riskScore: number
   captchaRequired: number
-  mfaRequired: number
   createdAt: number
   _all: number
 }
@@ -128,6 +143,12 @@ export type LoginHistorySumAggregateInputType = {
 export type LoginHistoryMinAggregateInputType = {
   id?: true
   userId?: true
+  method?: true
+  oauthProvider?: true
+  oauthIdentityId?: true
+  mfaRequired?: true
+  mfaMethod?: true
+  mfaSuccess?: true
   deviceId?: true
   sessionId?: true
   success?: true
@@ -144,13 +165,18 @@ export type LoginHistoryMinAggregateInputType = {
   userAgent?: true
   riskScore?: true
   captchaRequired?: true
-  mfaRequired?: true
   createdAt?: true
 }
 
 export type LoginHistoryMaxAggregateInputType = {
   id?: true
   userId?: true
+  method?: true
+  oauthProvider?: true
+  oauthIdentityId?: true
+  mfaRequired?: true
+  mfaMethod?: true
+  mfaSuccess?: true
   deviceId?: true
   sessionId?: true
   success?: true
@@ -167,13 +193,18 @@ export type LoginHistoryMaxAggregateInputType = {
   userAgent?: true
   riskScore?: true
   captchaRequired?: true
-  mfaRequired?: true
   createdAt?: true
 }
 
 export type LoginHistoryCountAggregateInputType = {
   id?: true
   userId?: true
+  method?: true
+  oauthProvider?: true
+  oauthIdentityId?: true
+  mfaRequired?: true
+  mfaMethod?: true
+  mfaSuccess?: true
   deviceId?: true
   sessionId?: true
   success?: true
@@ -190,7 +221,6 @@ export type LoginHistoryCountAggregateInputType = {
   userAgent?: true
   riskScore?: true
   captchaRequired?: true
-  mfaRequired?: true
   createdAt?: true
   _all?: true
 }
@@ -284,6 +314,12 @@ export type LoginHistoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type LoginHistoryGroupByOutputType = {
   id: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider: $Enums.OAuthProvider | null
+  oauthIdentityId: string | null
+  mfaRequired: boolean
+  mfaMethod: $Enums.MfaMethod | null
+  mfaSuccess: boolean | null
   deviceId: string | null
   sessionId: string | null
   success: boolean
@@ -300,7 +336,6 @@ export type LoginHistoryGroupByOutputType = {
   userAgent: string | null
   riskScore: number
   captchaRequired: boolean
-  mfaRequired: boolean
   createdAt: Date
   _count: LoginHistoryCountAggregateOutputType | null
   _avg: LoginHistoryAvgAggregateOutputType | null
@@ -330,6 +365,12 @@ export type LoginHistoryWhereInput = {
   NOT?: Prisma.LoginHistoryWhereInput | Prisma.LoginHistoryWhereInput[]
   id?: Prisma.UuidFilter<"LoginHistory"> | string
   userId?: Prisma.UuidFilter<"LoginHistory"> | string
+  method?: Prisma.EnumLoginMethodFilter<"LoginHistory"> | $Enums.LoginMethod
+  oauthProvider?: Prisma.EnumOAuthProviderNullableFilter<"LoginHistory"> | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
+  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
+  mfaMethod?: Prisma.EnumMfaMethodNullableFilter<"LoginHistory"> | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.BoolNullableFilter<"LoginHistory"> | boolean | null
   deviceId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   success?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -346,16 +387,22 @@ export type LoginHistoryWhereInput = {
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
-  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   device?: Prisma.XOR<Prisma.DeviceNullableScalarRelationFilter, Prisma.DeviceWhereInput> | null
   session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
+  oauthIdentity?: Prisma.XOR<Prisma.OAuthIdentityNullableScalarRelationFilter, Prisma.OAuthIdentityWhereInput> | null
 }
 
 export type LoginHistoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  method?: Prisma.SortOrder
+  oauthProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  oauthIdentityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mfaRequired?: Prisma.SortOrder
+  mfaMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  mfaSuccess?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   success?: Prisma.SortOrder
@@ -372,11 +419,11 @@ export type LoginHistoryOrderByWithRelationInput = {
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
-  mfaRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   device?: Prisma.DeviceOrderByWithRelationInput
   session?: Prisma.SessionOrderByWithRelationInput
+  oauthIdentity?: Prisma.OAuthIdentityOrderByWithRelationInput
 }
 
 export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -385,6 +432,12 @@ export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LoginHistoryWhereInput[]
   NOT?: Prisma.LoginHistoryWhereInput | Prisma.LoginHistoryWhereInput[]
   userId?: Prisma.UuidFilter<"LoginHistory"> | string
+  method?: Prisma.EnumLoginMethodFilter<"LoginHistory"> | $Enums.LoginMethod
+  oauthProvider?: Prisma.EnumOAuthProviderNullableFilter<"LoginHistory"> | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
+  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
+  mfaMethod?: Prisma.EnumMfaMethodNullableFilter<"LoginHistory"> | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.BoolNullableFilter<"LoginHistory"> | boolean | null
   deviceId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   success?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -401,16 +454,22 @@ export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
-  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   device?: Prisma.XOR<Prisma.DeviceNullableScalarRelationFilter, Prisma.DeviceWhereInput> | null
   session?: Prisma.XOR<Prisma.SessionNullableScalarRelationFilter, Prisma.SessionWhereInput> | null
+  oauthIdentity?: Prisma.XOR<Prisma.OAuthIdentityNullableScalarRelationFilter, Prisma.OAuthIdentityWhereInput> | null
 }, "id">
 
 export type LoginHistoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  method?: Prisma.SortOrder
+  oauthProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  oauthIdentityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mfaRequired?: Prisma.SortOrder
+  mfaMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  mfaSuccess?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   success?: Prisma.SortOrder
@@ -427,7 +486,6 @@ export type LoginHistoryOrderByWithAggregationInput = {
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
-  mfaRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.LoginHistoryCountOrderByAggregateInput
   _avg?: Prisma.LoginHistoryAvgOrderByAggregateInput
@@ -442,6 +500,12 @@ export type LoginHistoryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LoginHistoryScalarWhereWithAggregatesInput | Prisma.LoginHistoryScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"LoginHistory"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"LoginHistory"> | string
+  method?: Prisma.EnumLoginMethodWithAggregatesFilter<"LoginHistory"> | $Enums.LoginMethod
+  oauthProvider?: Prisma.EnumOAuthProviderNullableWithAggregatesFilter<"LoginHistory"> | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.UuidNullableWithAggregatesFilter<"LoginHistory"> | string | null
+  mfaRequired?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
+  mfaMethod?: Prisma.EnumMfaMethodNullableWithAggregatesFilter<"LoginHistory"> | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.BoolNullableWithAggregatesFilter<"LoginHistory"> | boolean | null
   deviceId?: Prisma.UuidNullableWithAggregatesFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.UuidNullableWithAggregatesFilter<"LoginHistory"> | string | null
   success?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
@@ -458,12 +522,16 @@ export type LoginHistoryScalarWhereWithAggregatesInput = {
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntWithAggregatesFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
-  mfaRequired?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LoginHistory"> | Date | string
 }
 
 export type LoginHistoryCreateInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
   ip: string
@@ -478,16 +546,22 @@ export type LoginHistoryCreateInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
   user: Prisma.UserCreateNestedOneWithoutLoginHistoryInput
   device?: Prisma.DeviceCreateNestedOneWithoutLoginHistoryInput
   session?: Prisma.SessionCreateNestedOneWithoutLoginHistoryInput
+  oauthIdentity?: Prisma.OAuthIdentityCreateNestedOneWithoutLoginHistoryInput
 }
 
 export type LoginHistoryUncheckedCreateInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   sessionId?: string | null
   success: boolean
@@ -504,12 +578,16 @@ export type LoginHistoryUncheckedCreateInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
 export type LoginHistoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
   ip?: Prisma.StringFieldUpdateOperationsInput | string
@@ -524,16 +602,22 @@ export type LoginHistoryUpdateInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutLoginHistoryNestedInput
   device?: Prisma.DeviceUpdateOneWithoutLoginHistoryNestedInput
   session?: Prisma.SessionUpdateOneWithoutLoginHistoryNestedInput
+  oauthIdentity?: Prisma.OAuthIdentityUpdateOneWithoutLoginHistoryNestedInput
 }
 
 export type LoginHistoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -550,13 +634,18 @@ export type LoginHistoryUncheckedUpdateInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryCreateManyInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   sessionId?: string | null
   success: boolean
@@ -573,12 +662,16 @@ export type LoginHistoryCreateManyInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
 export type LoginHistoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
   ip?: Prisma.StringFieldUpdateOperationsInput | string
@@ -593,13 +686,18 @@ export type LoginHistoryUpdateManyMutationInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -616,7 +714,6 @@ export type LoginHistoryUncheckedUpdateManyInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -633,6 +730,12 @@ export type LoginHistoryOrderByRelationAggregateInput = {
 export type LoginHistoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  method?: Prisma.SortOrder
+  oauthProvider?: Prisma.SortOrder
+  oauthIdentityId?: Prisma.SortOrder
+  mfaRequired?: Prisma.SortOrder
+  mfaMethod?: Prisma.SortOrder
+  mfaSuccess?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   success?: Prisma.SortOrder
@@ -649,7 +752,6 @@ export type LoginHistoryCountOrderByAggregateInput = {
   userAgent?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
-  mfaRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -663,6 +765,12 @@ export type LoginHistoryAvgOrderByAggregateInput = {
 export type LoginHistoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  method?: Prisma.SortOrder
+  oauthProvider?: Prisma.SortOrder
+  oauthIdentityId?: Prisma.SortOrder
+  mfaRequired?: Prisma.SortOrder
+  mfaMethod?: Prisma.SortOrder
+  mfaSuccess?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   success?: Prisma.SortOrder
@@ -679,13 +787,18 @@ export type LoginHistoryMaxOrderByAggregateInput = {
   userAgent?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
-  mfaRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type LoginHistoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  method?: Prisma.SortOrder
+  oauthProvider?: Prisma.SortOrder
+  oauthIdentityId?: Prisma.SortOrder
+  mfaRequired?: Prisma.SortOrder
+  mfaMethod?: Prisma.SortOrder
+  mfaSuccess?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   success?: Prisma.SortOrder
@@ -702,7 +815,6 @@ export type LoginHistoryMinOrderByAggregateInput = {
   userAgent?: Prisma.SortOrder
   riskScore?: Prisma.SortOrder
   captchaRequired?: Prisma.SortOrder
-  mfaRequired?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -839,6 +951,60 @@ export type LoginHistoryUncheckedUpdateManyWithoutSessionNestedInput = {
   deleteMany?: Prisma.LoginHistoryScalarWhereInput | Prisma.LoginHistoryScalarWhereInput[]
 }
 
+export type LoginHistoryCreateNestedManyWithoutOauthIdentityInput = {
+  create?: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput> | Prisma.LoginHistoryCreateWithoutOauthIdentityInput[] | Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput[]
+  connectOrCreate?: Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput | Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput[]
+  createMany?: Prisma.LoginHistoryCreateManyOauthIdentityInputEnvelope
+  connect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+}
+
+export type LoginHistoryUncheckedCreateNestedManyWithoutOauthIdentityInput = {
+  create?: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput> | Prisma.LoginHistoryCreateWithoutOauthIdentityInput[] | Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput[]
+  connectOrCreate?: Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput | Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput[]
+  createMany?: Prisma.LoginHistoryCreateManyOauthIdentityInputEnvelope
+  connect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+}
+
+export type LoginHistoryUpdateManyWithoutOauthIdentityNestedInput = {
+  create?: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput> | Prisma.LoginHistoryCreateWithoutOauthIdentityInput[] | Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput[]
+  connectOrCreate?: Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput | Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput[]
+  upsert?: Prisma.LoginHistoryUpsertWithWhereUniqueWithoutOauthIdentityInput | Prisma.LoginHistoryUpsertWithWhereUniqueWithoutOauthIdentityInput[]
+  createMany?: Prisma.LoginHistoryCreateManyOauthIdentityInputEnvelope
+  set?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  disconnect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  delete?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  connect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  update?: Prisma.LoginHistoryUpdateWithWhereUniqueWithoutOauthIdentityInput | Prisma.LoginHistoryUpdateWithWhereUniqueWithoutOauthIdentityInput[]
+  updateMany?: Prisma.LoginHistoryUpdateManyWithWhereWithoutOauthIdentityInput | Prisma.LoginHistoryUpdateManyWithWhereWithoutOauthIdentityInput[]
+  deleteMany?: Prisma.LoginHistoryScalarWhereInput | Prisma.LoginHistoryScalarWhereInput[]
+}
+
+export type LoginHistoryUncheckedUpdateManyWithoutOauthIdentityNestedInput = {
+  create?: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput> | Prisma.LoginHistoryCreateWithoutOauthIdentityInput[] | Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput[]
+  connectOrCreate?: Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput | Prisma.LoginHistoryCreateOrConnectWithoutOauthIdentityInput[]
+  upsert?: Prisma.LoginHistoryUpsertWithWhereUniqueWithoutOauthIdentityInput | Prisma.LoginHistoryUpsertWithWhereUniqueWithoutOauthIdentityInput[]
+  createMany?: Prisma.LoginHistoryCreateManyOauthIdentityInputEnvelope
+  set?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  disconnect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  delete?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  connect?: Prisma.LoginHistoryWhereUniqueInput | Prisma.LoginHistoryWhereUniqueInput[]
+  update?: Prisma.LoginHistoryUpdateWithWhereUniqueWithoutOauthIdentityInput | Prisma.LoginHistoryUpdateWithWhereUniqueWithoutOauthIdentityInput[]
+  updateMany?: Prisma.LoginHistoryUpdateManyWithWhereWithoutOauthIdentityInput | Prisma.LoginHistoryUpdateManyWithWhereWithoutOauthIdentityInput[]
+  deleteMany?: Prisma.LoginHistoryScalarWhereInput | Prisma.LoginHistoryScalarWhereInput[]
+}
+
+export type EnumLoginMethodFieldUpdateOperationsInput = {
+  set?: $Enums.LoginMethod
+}
+
+export type NullableEnumOAuthProviderFieldUpdateOperationsInput = {
+  set?: $Enums.OAuthProvider | null
+}
+
+export type NullableEnumMfaMethodFieldUpdateOperationsInput = {
+  set?: $Enums.MfaMethod | null
+}
+
 export type NullableEnumLoginFailureReasonFieldUpdateOperationsInput = {
   set?: $Enums.LoginFailureReason | null
 }
@@ -861,6 +1027,11 @@ export type NullableIntFieldUpdateOperationsInput = {
 
 export type LoginHistoryCreateWithoutUserInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
   ip: string
@@ -875,14 +1046,20 @@ export type LoginHistoryCreateWithoutUserInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
   device?: Prisma.DeviceCreateNestedOneWithoutLoginHistoryInput
   session?: Prisma.SessionCreateNestedOneWithoutLoginHistoryInput
+  oauthIdentity?: Prisma.OAuthIdentityCreateNestedOneWithoutLoginHistoryInput
 }
 
 export type LoginHistoryUncheckedCreateWithoutUserInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   sessionId?: string | null
   success: boolean
@@ -899,7 +1076,6 @@ export type LoginHistoryUncheckedCreateWithoutUserInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
@@ -935,6 +1111,12 @@ export type LoginHistoryScalarWhereInput = {
   NOT?: Prisma.LoginHistoryScalarWhereInput | Prisma.LoginHistoryScalarWhereInput[]
   id?: Prisma.UuidFilter<"LoginHistory"> | string
   userId?: Prisma.UuidFilter<"LoginHistory"> | string
+  method?: Prisma.EnumLoginMethodFilter<"LoginHistory"> | $Enums.LoginMethod
+  oauthProvider?: Prisma.EnumOAuthProviderNullableFilter<"LoginHistory"> | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
+  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
+  mfaMethod?: Prisma.EnumMfaMethodNullableFilter<"LoginHistory"> | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.BoolNullableFilter<"LoginHistory"> | boolean | null
   deviceId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.UuidNullableFilter<"LoginHistory"> | string | null
   success?: Prisma.BoolFilter<"LoginHistory"> | boolean
@@ -951,12 +1133,16 @@ export type LoginHistoryScalarWhereInput = {
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   riskScore?: Prisma.IntFilter<"LoginHistory"> | number
   captchaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
-  mfaRequired?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
 }
 
 export type LoginHistoryCreateWithoutDeviceInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
   ip: string
@@ -971,15 +1157,21 @@ export type LoginHistoryCreateWithoutDeviceInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
   user: Prisma.UserCreateNestedOneWithoutLoginHistoryInput
   session?: Prisma.SessionCreateNestedOneWithoutLoginHistoryInput
+  oauthIdentity?: Prisma.OAuthIdentityCreateNestedOneWithoutLoginHistoryInput
 }
 
 export type LoginHistoryUncheckedCreateWithoutDeviceInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   sessionId?: string | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
@@ -995,7 +1187,6 @@ export type LoginHistoryUncheckedCreateWithoutDeviceInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
@@ -1027,6 +1218,11 @@ export type LoginHistoryUpdateManyWithWhereWithoutDeviceInput = {
 
 export type LoginHistoryCreateWithoutSessionInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
   ip: string
@@ -1041,15 +1237,21 @@ export type LoginHistoryCreateWithoutSessionInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
   user: Prisma.UserCreateNestedOneWithoutLoginHistoryInput
   device?: Prisma.DeviceCreateNestedOneWithoutLoginHistoryInput
+  oauthIdentity?: Prisma.OAuthIdentityCreateNestedOneWithoutLoginHistoryInput
 }
 
 export type LoginHistoryUncheckedCreateWithoutSessionInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
@@ -1065,7 +1267,6 @@ export type LoginHistoryUncheckedCreateWithoutSessionInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
@@ -1095,8 +1296,41 @@ export type LoginHistoryUpdateManyWithWhereWithoutSessionInput = {
   data: Prisma.XOR<Prisma.LoginHistoryUpdateManyMutationInput, Prisma.LoginHistoryUncheckedUpdateManyWithoutSessionInput>
 }
 
-export type LoginHistoryCreateManyUserInput = {
+export type LoginHistoryCreateWithoutOauthIdentityInput = {
   id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
+  success: boolean
+  failureReason?: $Enums.LoginFailureReason | null
+  ip: string
+  country?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  asn?: number | null
+  org?: string | null
+  isp?: string | null
+  domain?: string | null
+  userAgent?: string | null
+  riskScore?: number
+  captchaRequired?: boolean
+  createdAt: Date | string
+  user: Prisma.UserCreateNestedOneWithoutLoginHistoryInput
+  device?: Prisma.DeviceCreateNestedOneWithoutLoginHistoryInput
+  session?: Prisma.SessionCreateNestedOneWithoutLoginHistoryInput
+}
+
+export type LoginHistoryUncheckedCreateWithoutOauthIdentityInput = {
+  id?: string
+  userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   sessionId?: string | null
   success: boolean
@@ -1113,12 +1347,69 @@ export type LoginHistoryCreateManyUserInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
+  createdAt: Date | string
+}
+
+export type LoginHistoryCreateOrConnectWithoutOauthIdentityInput = {
+  where: Prisma.LoginHistoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput>
+}
+
+export type LoginHistoryCreateManyOauthIdentityInputEnvelope = {
+  data: Prisma.LoginHistoryCreateManyOauthIdentityInput | Prisma.LoginHistoryCreateManyOauthIdentityInput[]
+  skipDuplicates?: boolean
+}
+
+export type LoginHistoryUpsertWithWhereUniqueWithoutOauthIdentityInput = {
+  where: Prisma.LoginHistoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LoginHistoryUpdateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedUpdateWithoutOauthIdentityInput>
+  create: Prisma.XOR<Prisma.LoginHistoryCreateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedCreateWithoutOauthIdentityInput>
+}
+
+export type LoginHistoryUpdateWithWhereUniqueWithoutOauthIdentityInput = {
+  where: Prisma.LoginHistoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LoginHistoryUpdateWithoutOauthIdentityInput, Prisma.LoginHistoryUncheckedUpdateWithoutOauthIdentityInput>
+}
+
+export type LoginHistoryUpdateManyWithWhereWithoutOauthIdentityInput = {
+  where: Prisma.LoginHistoryScalarWhereInput
+  data: Prisma.XOR<Prisma.LoginHistoryUpdateManyMutationInput, Prisma.LoginHistoryUncheckedUpdateManyWithoutOauthIdentityInput>
+}
+
+export type LoginHistoryCreateManyUserInput = {
+  id?: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
   mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
+  deviceId?: string | null
+  sessionId?: string | null
+  success: boolean
+  failureReason?: $Enums.LoginFailureReason | null
+  ip: string
+  country?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  asn?: number | null
+  org?: string | null
+  isp?: string | null
+  domain?: string | null
+  userAgent?: string | null
+  riskScore?: number
+  captchaRequired?: boolean
   createdAt: Date | string
 }
 
 export type LoginHistoryUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
   ip?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1133,14 +1424,20 @@ export type LoginHistoryUpdateWithoutUserInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   device?: Prisma.DeviceUpdateOneWithoutLoginHistoryNestedInput
   session?: Prisma.SessionUpdateOneWithoutLoginHistoryNestedInput
+  oauthIdentity?: Prisma.OAuthIdentityUpdateOneWithoutLoginHistoryNestedInput
 }
 
 export type LoginHistoryUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1157,12 +1454,17 @@ export type LoginHistoryUncheckedUpdateWithoutUserInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1179,13 +1481,18 @@ export type LoginHistoryUncheckedUpdateManyWithoutUserInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryCreateManyDeviceInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   sessionId?: string | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
@@ -1201,12 +1508,16 @@ export type LoginHistoryCreateManyDeviceInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
 export type LoginHistoryUpdateWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
   ip?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1221,15 +1532,21 @@ export type LoginHistoryUpdateWithoutDeviceInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutLoginHistoryNestedInput
   session?: Prisma.SessionUpdateOneWithoutLoginHistoryNestedInput
+  oauthIdentity?: Prisma.OAuthIdentityUpdateOneWithoutLoginHistoryNestedInput
 }
 
 export type LoginHistoryUncheckedUpdateWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
@@ -1245,13 +1562,18 @@ export type LoginHistoryUncheckedUpdateWithoutDeviceInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryUncheckedUpdateManyWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
@@ -1267,13 +1589,18 @@ export type LoginHistoryUncheckedUpdateManyWithoutDeviceInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryCreateManySessionInput = {
   id?: string
   userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  oauthIdentityId?: string | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
   deviceId?: string | null
   success: boolean
   failureReason?: $Enums.LoginFailureReason | null
@@ -1289,12 +1616,16 @@ export type LoginHistoryCreateManySessionInput = {
   userAgent?: string | null
   riskScore?: number
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt: Date | string
 }
 
 export type LoginHistoryUpdateWithoutSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
   ip?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1309,15 +1640,21 @@ export type LoginHistoryUpdateWithoutSessionInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutLoginHistoryNestedInput
   device?: Prisma.DeviceUpdateOneWithoutLoginHistoryNestedInput
+  oauthIdentity?: Prisma.OAuthIdentityUpdateOneWithoutLoginHistoryNestedInput
 }
 
 export type LoginHistoryUncheckedUpdateWithoutSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
@@ -1333,13 +1670,18 @@ export type LoginHistoryUncheckedUpdateWithoutSessionInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoginHistoryUncheckedUpdateManyWithoutSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  oauthIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
@@ -1355,7 +1697,114 @@ export type LoginHistoryUncheckedUpdateManyWithoutSessionInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riskScore?: Prisma.IntFieldUpdateOperationsInput | number
   captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LoginHistoryCreateManyOauthIdentityInput = {
+  id?: string
+  userId: string
+  method: $Enums.LoginMethod
+  oauthProvider?: $Enums.OAuthProvider | null
+  mfaRequired?: boolean
+  mfaMethod?: $Enums.MfaMethod | null
+  mfaSuccess?: boolean | null
+  deviceId?: string | null
+  sessionId?: string | null
+  success: boolean
+  failureReason?: $Enums.LoginFailureReason | null
+  ip: string
+  country?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  asn?: number | null
+  org?: string | null
+  isp?: string | null
+  domain?: string | null
+  userAgent?: string | null
+  riskScore?: number
+  captchaRequired?: boolean
+  createdAt: Date | string
+}
+
+export type LoginHistoryUpdateWithoutOauthIdentityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
   mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  success?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
+  ip?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  asn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutLoginHistoryNestedInput
+  device?: Prisma.DeviceUpdateOneWithoutLoginHistoryNestedInput
+  session?: Prisma.SessionUpdateOneWithoutLoginHistoryNestedInput
+}
+
+export type LoginHistoryUncheckedUpdateWithoutOauthIdentityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  success?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
+  ip?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  asn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LoginHistoryUncheckedUpdateManyWithoutOauthIdentityInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.EnumLoginMethodFieldUpdateOperationsInput | $Enums.LoginMethod
+  oauthProvider?: Prisma.NullableEnumOAuthProviderFieldUpdateOperationsInput | $Enums.OAuthProvider | null
+  mfaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mfaMethod?: Prisma.NullableEnumMfaMethodFieldUpdateOperationsInput | $Enums.MfaMethod | null
+  mfaSuccess?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  success?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  failureReason?: Prisma.NullableEnumLoginFailureReasonFieldUpdateOperationsInput | $Enums.LoginFailureReason | null
+  ip?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  asn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  org?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskScore?: Prisma.IntFieldUpdateOperationsInput | number
+  captchaRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1364,6 +1813,12 @@ export type LoginHistoryUncheckedUpdateManyWithoutSessionInput = {
 export type LoginHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  method?: boolean
+  oauthProvider?: boolean
+  oauthIdentityId?: boolean
+  mfaRequired?: boolean
+  mfaMethod?: boolean
+  mfaSuccess?: boolean
   deviceId?: boolean
   sessionId?: boolean
   success?: boolean
@@ -1380,16 +1835,22 @@ export type LoginHistorySelect<ExtArgs extends runtime.Types.Extensions.Internal
   userAgent?: boolean
   riskScore?: boolean
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
 
 export type LoginHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  method?: boolean
+  oauthProvider?: boolean
+  oauthIdentityId?: boolean
+  mfaRequired?: boolean
+  mfaMethod?: boolean
+  mfaSuccess?: boolean
   deviceId?: boolean
   sessionId?: boolean
   success?: boolean
@@ -1406,16 +1867,22 @@ export type LoginHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userAgent?: boolean
   riskScore?: boolean
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
 
 export type LoginHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  method?: boolean
+  oauthProvider?: boolean
+  oauthIdentityId?: boolean
+  mfaRequired?: boolean
+  mfaMethod?: boolean
+  mfaSuccess?: boolean
   deviceId?: boolean
   sessionId?: boolean
   success?: boolean
@@ -1432,16 +1899,22 @@ export type LoginHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userAgent?: boolean
   riskScore?: boolean
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
 
 export type LoginHistorySelectScalar = {
   id?: boolean
   userId?: boolean
+  method?: boolean
+  oauthProvider?: boolean
+  oauthIdentityId?: boolean
+  mfaRequired?: boolean
+  mfaMethod?: boolean
+  mfaSuccess?: boolean
   deviceId?: boolean
   sessionId?: boolean
   success?: boolean
@@ -1458,25 +1931,27 @@ export type LoginHistorySelectScalar = {
   userAgent?: boolean
   riskScore?: boolean
   captchaRequired?: boolean
-  mfaRequired?: boolean
   createdAt?: boolean
 }
 
-export type LoginHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "deviceId" | "sessionId" | "success" | "failureReason" | "ip" | "country" | "city" | "latitude" | "longitude" | "asn" | "org" | "isp" | "domain" | "userAgent" | "riskScore" | "captchaRequired" | "mfaRequired" | "createdAt", ExtArgs["result"]["loginHistory"]>
+export type LoginHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "method" | "oauthProvider" | "oauthIdentityId" | "mfaRequired" | "mfaMethod" | "mfaSuccess" | "deviceId" | "sessionId" | "success" | "failureReason" | "ip" | "country" | "city" | "latitude" | "longitude" | "asn" | "org" | "isp" | "domain" | "userAgent" | "riskScore" | "captchaRequired" | "createdAt", ExtArgs["result"]["loginHistory"]>
 export type LoginHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }
 export type LoginHistoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }
 export type LoginHistoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   device?: boolean | Prisma.LoginHistory$deviceArgs<ExtArgs>
   session?: boolean | Prisma.LoginHistory$sessionArgs<ExtArgs>
+  oauthIdentity?: boolean | Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>
 }
 
 export type $LoginHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1485,10 +1960,17 @@ export type $LoginHistoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     user: Prisma.$UserPayload<ExtArgs>
     device: Prisma.$DevicePayload<ExtArgs> | null
     session: Prisma.$SessionPayload<ExtArgs> | null
+    oauthIdentity: Prisma.$OAuthIdentityPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    method: $Enums.LoginMethod
+    oauthProvider: $Enums.OAuthProvider | null
+    oauthIdentityId: string | null
+    mfaRequired: boolean
+    mfaMethod: $Enums.MfaMethod | null
+    mfaSuccess: boolean | null
     deviceId: string | null
     sessionId: string | null
     success: boolean
@@ -1505,7 +1987,6 @@ export type $LoginHistoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     userAgent: string | null
     riskScore: number
     captchaRequired: boolean
-    mfaRequired: boolean
     createdAt: Date
   }, ExtArgs["result"]["loginHistory"]>
   composites: {}
@@ -1904,6 +2385,7 @@ export interface Prisma__LoginHistoryClient<T, Null = never, ExtArgs extends run
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   device<T extends Prisma.LoginHistory$deviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LoginHistory$deviceArgs<ExtArgs>>): Prisma.Prisma__DeviceClient<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   session<T extends Prisma.LoginHistory$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LoginHistory$sessionArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  oauthIdentity<T extends Prisma.LoginHistory$oauthIdentityArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LoginHistory$oauthIdentityArgs<ExtArgs>>): Prisma.Prisma__OAuthIdentityClient<runtime.Types.Result.GetResult<Prisma.$OAuthIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1935,6 +2417,12 @@ export interface Prisma__LoginHistoryClient<T, Null = never, ExtArgs extends run
 export interface LoginHistoryFieldRefs {
   readonly id: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly userId: Prisma.FieldRef<"LoginHistory", 'String'>
+  readonly method: Prisma.FieldRef<"LoginHistory", 'LoginMethod'>
+  readonly oauthProvider: Prisma.FieldRef<"LoginHistory", 'OAuthProvider'>
+  readonly oauthIdentityId: Prisma.FieldRef<"LoginHistory", 'String'>
+  readonly mfaRequired: Prisma.FieldRef<"LoginHistory", 'Boolean'>
+  readonly mfaMethod: Prisma.FieldRef<"LoginHistory", 'MfaMethod'>
+  readonly mfaSuccess: Prisma.FieldRef<"LoginHistory", 'Boolean'>
   readonly deviceId: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly sessionId: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly success: Prisma.FieldRef<"LoginHistory", 'Boolean'>
@@ -1951,7 +2439,6 @@ export interface LoginHistoryFieldRefs {
   readonly userAgent: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly riskScore: Prisma.FieldRef<"LoginHistory", 'Int'>
   readonly captchaRequired: Prisma.FieldRef<"LoginHistory", 'Boolean'>
-  readonly mfaRequired: Prisma.FieldRef<"LoginHistory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"LoginHistory", 'DateTime'>
 }
     
@@ -2389,6 +2876,25 @@ export type LoginHistory$sessionArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.SessionInclude<ExtArgs> | null
   where?: Prisma.SessionWhereInput
+}
+
+/**
+ * LoginHistory.oauthIdentity
+ */
+export type LoginHistory$oauthIdentityArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OAuthIdentity
+   */
+  select?: Prisma.OAuthIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OAuthIdentity
+   */
+  omit?: Prisma.OAuthIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OAuthIdentityInclude<ExtArgs> | null
+  where?: Prisma.OAuthIdentityWhereInput
 }
 
 /**

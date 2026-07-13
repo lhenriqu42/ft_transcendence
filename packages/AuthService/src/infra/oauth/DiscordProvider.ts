@@ -34,13 +34,24 @@ export class DiscordOAuthProvider implements OAuthProvider {
     );
   }
 
-  async createAuthorizationUrl({ userId, intent }: IntentPath): Promise<URL> {
+  async createAuthorizationUrl(path: IntentPath): Promise<URL> {
+    const { ip, userId, intent, deviceId, userAgent, deviceFingerprint } = path;
+
     const state = arctic.generateState();
     const scopes = ['email', 'identify', 'openid'];
 
     await this.redisOauthStateRepo.save(
       state,
-      { userId, intent, provider: this.provider, codeVerifier: null },
+      {
+        ip,
+        intent,
+        userId,
+        deviceId,
+        userAgent,
+        deviceFingerprint,
+        codeVerifier: null,
+        provider: this.provider,
+      },
       STATE_TTL_SECONDS,
     );
 

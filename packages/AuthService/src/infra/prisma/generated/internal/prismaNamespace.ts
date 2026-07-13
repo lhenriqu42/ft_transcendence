@@ -1426,6 +1426,12 @@ export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)
 export const LoginHistoryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  method: 'method',
+  oauthProvider: 'oauthProvider',
+  oauthIdentityId: 'oauthIdentityId',
+  mfaRequired: 'mfaRequired',
+  mfaMethod: 'mfaMethod',
+  mfaSuccess: 'mfaSuccess',
   deviceId: 'deviceId',
   sessionId: 'sessionId',
   success: 'success',
@@ -1442,7 +1448,6 @@ export const LoginHistoryScalarFieldEnum = {
   userAgent: 'userAgent',
   riskScore: 'riskScore',
   captchaRequired: 'captchaRequired',
-  mfaRequired: 'mfaRequired',
   createdAt: 'createdAt'
 } as const
 
@@ -1629,6 +1634,34 @@ export type EnumOAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'OAuthProvider[]'
  */
 export type ListEnumOAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OAuthProvider[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LoginMethod'
+ */
+export type EnumLoginMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoginMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'LoginMethod[]'
+ */
+export type ListEnumLoginMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoginMethod[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MfaMethod'
+ */
+export type EnumMfaMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'MfaMethod[]'
+ */
+export type ListEnumMfaMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MfaMethod[]'>
     
 
 

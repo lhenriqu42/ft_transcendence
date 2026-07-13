@@ -1,34 +1,18 @@
 import { Atomic } from '../utils/Atomic';
-import { LoginHistory } from '../../../domain/entities/login-history.entity';
 import { LoginFailureReason } from '../../../../infra/prisma/generated/enums';
+import { LoginHistory } from '../../../domain/entities/login-history.entity';
 
-export interface LoginHistorySuccessRecord {
-  userId: string;
-  deviceId?: string;
-  sessionId?: string;
+export type LoginHistorySuccessRecord = Omit<
+  LoginHistory,
+  'success' | 'createdAt' | 'failureReason' | 'id'
+>;
 
-  ip: string;
-  userAgent: string | null;
-
-  riskScore: number;
-
-  country?: string;
-  city?: string;
-  latitude?: number;
-  longitude?: number;
-  asn?: number;
-  org?: string;
-  isp?: string;
-  domain?: string;
-
-  captchaRequired: boolean;
-  mfaRequired: boolean;
-}
-
-export interface LoginHistoryFailureRecord
-  extends Omit<LoginHistorySuccessRecord, 'sessionId'> {
+export type LoginHistoryFailureRecord = Omit<
+  LoginHistorySuccessRecord,
+  'sessionId'
+> & {
   failureReason: LoginFailureReason;
-}
+};
 
 export abstract class LoginHistoryRepository {
   /**
